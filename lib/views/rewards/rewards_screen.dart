@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter/services.dart';
 
 
 import '../home/home_screen.dart';
@@ -50,117 +51,134 @@ class _RewardsScreenState extends State<RewardsScreen> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+@override
+Widget build(BuildContext context) {
+  return AnnotatedRegion<SystemUiOverlayStyle>(
+    value: const SystemUiOverlayStyle(
+      statusBarColor: Color(0xFFFFEEE0), // Match your header bg
+      statusBarIconBrightness: Brightness.dark,
+    ),
+    child: Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.only(bottom: 90),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // ✅ Replaced manual header with reusable ChaynHeader
-              ChayanHeader(title: 'Chayan Coins', onBackTap: () {  },),
+      body: Column(
+        children: [
+          // Header under the status bar
+          Container(
+            width: double.infinity,
+            color: const Color(0xFFFFEEE0),
+            child: SafeArea(
+              bottom: false,
+              child: ChayanHeader(title: 'Chayan Coins', onBackTap: () {}),
+            ),
+          ),
 
-              const SizedBox(height: 20),
+          // Scrollable content
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.only(bottom: 90),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
 
-              // Refer & Earn section
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const ReferAndEarnScreen()),
-                  );
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFFE0C7),
-                      borderRadius: BorderRadius.circular(12),
+                  const SizedBox(height: 20),
+
+                  /// --- Refer & Earn Section ---
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const ReferAndEarnScreen()),
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFE0C7),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: const [
+                                  Text(
+                                    'Refer & earn 100 coins',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  SizedBox(height: 8),
+                                  Text(
+                                    'Get 100 coins when your friend completes their first booking',
+                                    style: TextStyle(fontSize: 12),
+                                  ),
+                                  SizedBox(height: 8),
+                                  Text(
+                                    'Refer now',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Color(0xFF757575),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            SvgPicture.asset(
+                              'assets/icons/gifty.svg',
+                              height: 40,
+                              width: 40,
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
+                  ),
+
+                  const SizedBox(height: 30),
+
+                  /// --- Coin Balance Section ---
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: Row(
                       children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              Text(
-                                'Refer & earn 100 coins',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              SizedBox(height: 8),
-                              Text(
-                                'Get 100 coins when your friend completes their first booking',
-                                style: TextStyle(fontSize: 12),
-                              ),
-                              SizedBox(height: 8),
-                              Text(
-                                'Refer now',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Color(0xFF757575),
-                                ),
-                              ),
-                            ],
+                        Image.asset(
+                          'assets/icons/coins.png',
+                          height: 30,
+                          width: 30,
+                        ),
+                        const SizedBox(width: 10),
+                        const Text(
+                          'Chayan Coins',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
-                        const SizedBox(width: 8),
-                           SvgPicture.asset(
-                             'assets/icons/gifty.svg',
-                               height: 40,
-                               width: 40,
+                        const Spacer(),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: const Color(0x2BFF9437),
+                            borderRadius: BorderRadius.circular(6),
+                            border: Border.all(color: Colors.black12),
                           ),
+                          child: const Text(
+                            '100',
+                            style: TextStyle(
+                              color: Color(0xFFE47830),
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
-                ),
-              ),
-
-              const SizedBox(height: 30),
-
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Row(
-                  children: [
-                    Image.asset(
-                      'assets/icons/coins.png',
-                      height: 30,
-                      width: 30,
-                    ),
-                    const SizedBox(width: 10),
-                    const Text(
-                      'Chayan Coins',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const Spacer(),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: const Color(0x2BFF9437),
-                        borderRadius: BorderRadius.circular(6),
-                        border: Border.all(color: Colors.black12),
-                      ),
-                      child: const Text(
-                        '100',
-                        style: TextStyle(
-                          color: Color(0xFFE47830),
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
 
               const SizedBox(height: 10),
               const Padding(
@@ -229,13 +247,17 @@ class _RewardsScreenState extends State<RewardsScreen> {
                 child: Divider(thickness: 1, color: Colors.grey),
               ),
             ],
+              ),
+            ),
           ),
-        ),
+        ],
       ),
       bottomNavigationBar: CustomBottomNavBar(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,
       ),
+          ), // 👈 This is the closing of Scaffold
+
     );
   }
 }

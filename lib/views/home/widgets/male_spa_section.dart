@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../spa_men_all/spa_men_all_screen.dart';
+import '../../../services/MaleSpaScreen.dart';
 
 class MaleSpaSection extends StatelessWidget {
   const MaleSpaSection({super.key});
@@ -25,7 +25,7 @@ class MaleSpaSection extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => const MaleSpaAllScreen()),
+                  MaterialPageRoute(builder: (_) => MaleSpaScreen()),
                 );
               },
               child: const Padding(

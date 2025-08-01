@@ -79,11 +79,10 @@ class ChayanSathiScreen extends StatelessWidget {
             onBackTap: () => Navigator.pop(context),
           ),
 
-          const SizedBox(height: 16), // Give breathing room below header
 
           Expanded(
             child: GridView.builder(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 90),
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 90), // top padding moved here
               itemCount: saathiList.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,

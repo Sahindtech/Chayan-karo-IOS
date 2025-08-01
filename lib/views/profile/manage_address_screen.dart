@@ -1,8 +1,33 @@
 import 'package:flutter/material.dart';
-import '../../widgets/chayan_header.dart'; // update this import path based on your file structure
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../widgets/chayan_header.dart';
 
-class ManageAddressScreen extends StatelessWidget {
+class ManageAddressScreen extends StatefulWidget {
   const ManageAddressScreen({super.key});
+
+  @override
+  State<ManageAddressScreen> createState() => _ManageAddressScreenState();
+}
+
+class _ManageAddressScreenState extends State<ManageAddressScreen> {
+  String locationLabel = 'Home';
+  String address = 'Not Available';
+  String phone = '+91 0000000000'; // Optional – you can store phone if needed
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedAddress();
+  }
+
+  Future<void> _loadSavedAddress() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      locationLabel = prefs.getString('location_label') ?? 'Home';
+      address = prefs.getString('location_address') ?? 'Not Available';
+      phone = prefs.getString('user_phone') ?? '+91 0000000000'; // Optional
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -10,23 +35,21 @@ class ManageAddressScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          // Custom reusable header
           ChayanHeader(
             title: 'Manage Address',
-            onBack: () => Navigator.pop(context), onBackTap: () {  },
+            onBack: () => Navigator.pop(context),
+            onBackTap: () {},
           ),
 
-          // Main content
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Add Another Address
                   GestureDetector(
                     onTap: () {
-                      // TODO: Add functionality
+                      // TODO: Open address adding flow
                     },
                     child: Row(
                       children: const [
@@ -46,7 +69,6 @@ class ManageAddressScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
 
-                  // Address Card
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: const BoxDecoration(
@@ -62,9 +84,9 @@ class ManageAddressScreen extends StatelessWidget {
                           children: [
                             const Icon(Icons.home_filled, size: 20, color: Colors.black),
                             const SizedBox(width: 8),
-                            const Text(
-                              'Home',
-                              style: TextStyle(
+                            Text(
+                              locationLabel,
+                              style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
                                 fontFamily: 'Inter',
@@ -75,9 +97,9 @@ class ManageAddressScreen extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 8),
-                        const Text(
-                          'Plot no.209, Kavuri Hills, Madhapur, Telangana 500033\nPh: +91234567890',
-                          style: TextStyle(
+                        Text(
+                          '$address\nPh: $phone',
+                          style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
                             fontFamily: 'Inter',

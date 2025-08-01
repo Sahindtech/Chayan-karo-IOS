@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../appliances_repairs_all/appliances_repairs_all_screen.dart';
+import '../../../services/HomeRepairsScreen.dart';
 
 class AppliancesRepairsSection extends StatelessWidget {
   const AppliancesRepairsSection({super.key});
@@ -38,7 +38,7 @@ class AppliancesRepairsSection extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => const AppliancesRepairsAllScreen(),
+                      builder: (_) =>  HomeRepairsScreen(),
                     ),
                   );
                 },

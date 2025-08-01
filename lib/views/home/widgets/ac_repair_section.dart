@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../ac_repair_all/ac_repair_all_screen.dart';
+import '../../../services/ACServicesScreen.dart';
 
 class ACRepairSection extends StatelessWidget {
   const ACRepairSection({super.key});
@@ -26,7 +26,7 @@ class ACRepairSection extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => const ACRepairAllScreen(),
+                    builder: (_) => ACServicesScreen(),
                   ),
                 );
               },

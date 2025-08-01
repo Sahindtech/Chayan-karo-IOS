@@ -5,6 +5,8 @@ import '../chayan_sathi/chayan_sathi_screen.dart';
 import '../rewards/rewards_screen.dart';
 import '../../widgets/custom_bottom_nav_bar.dart';
 import 'upcoming_booking_screen.dart';
+import 'PreviousBookingScreen.dart';
+import 'feedback_screen.dart';
 
 class BookingScreen extends StatefulWidget {
   @override
@@ -39,7 +41,7 @@ class _BookingScreenState extends State<BookingScreen> {
   Widget buildTabBar() {
     return Container(
       color: Color(0xFFFFEDE0),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.only(left: 20, right: 20, top: 12, bottom: 12),
       child: SafeArea(
         bottom: false,
         child: Row(
@@ -62,7 +64,7 @@ class _BookingScreenState extends State<BookingScreen> {
                     Container(
                       margin: const EdgeInsets.only(top: 4),
                       height: 4,
-                      width: 60,
+                      width: 112,
                       decoration: BoxDecoration(
                         color: Color(0xFFE47830),
                         borderRadius: BorderRadius.circular(10),
@@ -88,7 +90,7 @@ class _BookingScreenState extends State<BookingScreen> {
                     Container(
                       margin: const EdgeInsets.only(top: 4),
                       height: 4,
-                      width: 60,
+                      width: 112,
                       decoration: BoxDecoration(
                         color: Color(0xFFE47830),
                         borderRadius: BorderRadius.circular(10),
@@ -135,23 +137,28 @@ class _BookingScreenState extends State<BookingScreen> {
       children: pin.split('').map((digit) {
         return Container(
           margin: EdgeInsets.only(left: 4),
-          width: 18,
-          height: 20,
+          width: 20,
+          height: 22,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: Colors.black,
+            color: Color(0xFF161616),
             borderRadius: BorderRadius.circular(4),
           ),
           child: Text(
             digit,
-            style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+              fontFamily: 'SF Pro',
+            ),
           ),
         );
       }).toList(),
     );
   }
 
-  Widget buildUpcomingCard() {
+    Widget buildUpcomingCard() {
     return GestureDetector(
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (_) => UpcomingBookingScreen()));
@@ -166,27 +173,70 @@ class _BookingScreenState extends State<BookingScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Salon for Woman',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: Color(0xFF161616))),
-            SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('• Diamond Facial', style: TextStyle(fontSize: 12, color: Color(0xFF555555))),
-                buildPinBoxes("3333"),
+                // Title
+                Text(
+                  'Salon for Woman',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'Inter',
+                    color: Color(0xFF161616),
+                  ),
+                ),
+                // "Your PIN" with boxes
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      'Your PIN',
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: Color(0xFF161616),
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    buildPinBoxes("3333"),
+                  ],
+                ),
               ],
             ),
-            SizedBox(height: 2),
-            Text('• Cleanup', style: TextStyle(fontSize: 12, color: Color(0xFF555555))),
             SizedBox(height: 12),
-            Text('Booking scheduled', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+            // Services
+            Text(
+              '• Diamond Facial',
+              style: TextStyle(fontSize: 12, color: Color(0xFF555555), fontWeight: FontWeight.w400),
+            ),
+            SizedBox(height: 2),
+            Text(
+              '• Cleanup',
+              style: TextStyle(fontSize: 12, color: Color(0xFF555555), fontWeight: FontWeight.w400),
+            ),
+            SizedBox(height: 12),
+            // Booking status
+            Text(
+              'Booking scheduled',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            ),
             SizedBox(height: 4),
-            Text.rich(TextSpan(
-              children: [
-                TextSpan(text: '22nd Nov, Tuesday / ', style: TextStyle(fontSize: 13)),
-                TextSpan(text: '07:30 PM', style: TextStyle(fontSize: 10)),
-              ],
-            )),
+            Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(
+                    text: '22nd Nov, Tuesday / ',
+                    style: TextStyle(fontSize: 13),
+                  ),
+                  TextSpan(
+                    text: '07:30 PM',
+                    style: TextStyle(fontSize: 10),
+                  ),
+                ],
+              ),
+            ),
             SizedBox(height: 4),
             Text(
               'When Your Chayan sathi arrives share your PIN',
@@ -197,6 +247,7 @@ class _BookingScreenState extends State<BookingScreen> {
       ),
     );
   }
+
 
   Widget buildPreviousCard() {
     return Container(
@@ -225,21 +276,41 @@ class _BookingScreenState extends State<BookingScreen> {
             ],
           ),
           SizedBox(height: 12),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFFE47830),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                ),
-                onPressed: () {},
-                child: Text('Share Feedback', style: TextStyle(fontSize: 12, color: Colors.white)),
-              ),
-              Text('View details', style: TextStyle(fontSize: 12, color: Color(0xFFE47830))),
-            ],
-          ),
+         Row(
+  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  children: [
+    ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Color(0xFFE47830),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      ),
+      onPressed: () {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => FeedbackScreen()),
+  );
+},
+      child: Text(
+        'Share Feedback',
+        style: TextStyle(fontSize: 12, color: Colors.white),
+      ),
+    ),
+    GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => PreviousBookingScreen()),
+        );
+      },
+      child: Text(
+        'View details',
+        style: TextStyle(fontSize: 12, color: Color(0xFFE47830)),
+      ),
+    ),
+  ],
+),
+
         ],
       ),
     );
@@ -248,7 +319,7 @@ class _BookingScreenState extends State<BookingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // keep full screen white
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           buildTabBar(),

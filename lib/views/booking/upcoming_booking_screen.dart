@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../widgets/chayan_header.dart';
+import 'cancel_booking_screen.dart';
+import 'showReschedulePopup.dart';
 
 class UpcomingBookingScreen extends StatelessWidget {
   const UpcomingBookingScreen({super.key});
@@ -128,7 +130,9 @@ class UpcomingBookingScreen extends StatelessWidget {
                         children: [
                           Expanded(
                             child: ElevatedButton(
-                              onPressed: () {},
+                             onPressed: () {
+                             Navigator.push(context, MaterialPageRoute(builder: (_) => CancelBookingScreen()));
+                             },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.black,
                                 padding: const EdgeInsets.symmetric(vertical: 14),
@@ -140,7 +144,7 @@ class UpcomingBookingScreen extends StatelessWidget {
                           const SizedBox(width: 12),
                           Expanded(
                             child: ElevatedButton(
-                              onPressed: () {},
+                            onPressed: () => showReschedulePopup(context),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFFE47830),
                                 padding: const EdgeInsets.symmetric(vertical: 14),
@@ -165,22 +169,26 @@ class UpcomingBookingScreen extends StatelessWidget {
   }
 
   Widget _actionButton(String label, String iconPath, Color color) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      height: 28,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: Row(
-        children: [
-          Image.asset(iconPath, width: 16, height: 16),
-          const SizedBox(width: 4),
-          Text(label, style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w700)),
-        ],
-      ),
-    );
-  }
+  return Container(
+    padding: const EdgeInsets.symmetric(horizontal: 8),
+    height: 28,
+    decoration: BoxDecoration(
+      color: color,
+      borderRadius: BorderRadius.circular(5),
+    ),
+    child: Row(
+      children: [
+        ColorFiltered(
+          colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+          child: Image.asset(iconPath, width: 16, height: 16),
+        ),
+        const SizedBox(width: 4),
+        Text(label, style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w700)),
+      ],
+    ),
+  );
+}
+
 
   Widget _bookingCard(String imagePath, String title, String duration, String subtitle) {
     return Container(
@@ -229,13 +237,17 @@ class UpcomingBookingScreen extends StatelessWidget {
   }
 
   Widget _infoRow(String iconPath, String text) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Image.asset(iconPath, width: 20, height: 20),
-        const SizedBox(width: 8),
-        Expanded(child: Text(text, style: const TextStyle(fontSize: 12, color: Color(0xFF757575)))),
-      ],
-    );
-  }
+  return Row(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      ColorFiltered(
+        colorFilter: const ColorFilter.mode(Colors.black, BlendMode.srcIn),
+        child: Image.asset(iconPath, width: 20, height: 20),
+      ),
+      const SizedBox(width: 8),
+      Expanded(child: Text(text, style: const TextStyle(fontSize: 12, color: Color(0xFF757575)))),
+    ],
+  );
+}
+
 }

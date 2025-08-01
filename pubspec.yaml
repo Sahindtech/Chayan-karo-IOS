@@ -38,6 +38,11 @@ dependencies:
   url_launcher: ^6.2.5
   share_plus: ^7.2.2
   flutter_svg: ^2.0.9
+  geolocator: ^10.1.0
+  geocoding: ^2.1.0
+  shared_preferences: ^2.2.2
+  flutter_map: ^6.1.0
+  latlong2: ^0.9.0
 
 
 
@@ -71,7 +76,7 @@ flutter:
   uses-material-design: true
   
   assets:
-    - assets/logo.jpg
+    - assets/icons/logo.png
     - assets/onboard1.jpg
     - assets/onboard2.jpg
     - assets/onboard3.jpg
@@ -93,6 +98,13 @@ flutter:
     - assets/z2.png
     - assets/z3.png
     - assets/z4.png
+    - assets/s1.jpg
+    - assets/s2.png
+    - assets/s3.png
+    - assets/s4.jpg
+    - assets/s5.png
+    - assets/icons/cash.png
+    - assets/icons/card.png
     - assets/icons/star.png
     - assets/icons/ac_service.png 
     - assets/icons/home_repairs.png 
@@ -129,6 +141,13 @@ flutter:
     - assets/icons/home.png
     - assets/icons/calendar.png
     - assets/icons/user.png
+    - assets/icons/cart.png
+    - assets/icons/homy.png
+    - assets/icons/sad.png
+    - assets/icons/package.svg
+    - assets/icons/cancel.svg
+    - assets/icons/feedtick.svg
+    - assets/single_use_product.jpg
     - assets/cleanup.png
     - assets/facial.png
     - assets/saathi1.png
@@ -164,6 +183,17 @@ flutter:
     - assets/icons/chayansafety.png
     - assets/icons/warranty.png
     - assets/icons/tick.png
+    - assets/ms1.webp
+    - assets/ms2.webp
+    - assets/ms3.webp
+    - assets/ms4.webp
+    - assets/ms5.webp
+    - assets/ms6.webp
+    - assets/ms7.webp
+    - assets/ms8.webp
+    - assets/ms9.webp
+    - assets/wet.webp
+
 
 
 

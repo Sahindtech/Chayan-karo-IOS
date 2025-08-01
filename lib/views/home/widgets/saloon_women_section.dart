@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../saloon_women_all/saloon_women_all_screen.dart';
+import '../../../services/saloonservicescreen.dart';
 
 class SaloonWomenSection extends StatelessWidget {
   const SaloonWomenSection({super.key});
@@ -47,7 +47,7 @@ class SaloonWomenSection extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => const SaloonWomenAllScreen(),
+                    builder: (_) => const SalonServiceScreen(),
                   ),
                 );
               },
