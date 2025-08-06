@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../../widgets/chayan_header.dart';
 import 'BookingCancelledScreen.dart';
 import 'showReschedulePopup.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
 
 class CancelBookingScreen extends StatefulWidget {
   const CancelBookingScreen({super.key});
@@ -50,7 +52,7 @@ class _CancelBookingScreenState extends State<CancelBookingScreen> {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(14),
                               child: Image.asset(
-                                'assets/cleanup.png',
+                                'assets/cleanup.webp',
                                 width: 100,
                                 height: 100,
                                 fit: BoxFit.cover,
@@ -213,7 +215,7 @@ class _CancelBookingScreenState extends State<CancelBookingScreen> {
     return Container(width: 4, height: 4, decoration: BoxDecoration(color: Color(0xFF757575), shape: BoxShape.circle));
   }
 
-  void _showBottomPopup(BuildContext context) {
+ void _showBottomPopup(BuildContext context) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
@@ -221,97 +223,104 @@ class _CancelBookingScreenState extends State<CancelBookingScreen> {
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
     builder: (context) {
-      return Container(
-        width: MediaQuery.of(context).size.width,
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Image.asset('assets/icons/sad.png', width: 40, height: 40),
-            const SizedBox(height: 16),
-            const Text(
-              'Are you sure about cancelling   this booking ?',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: 'Inter',
-                fontSize: 18,
-                fontWeight: FontWeight.w400,
-                color: Color(0xFF161616),
-              ),
+      return SafeArea( // ✅ Ensures proper visibility of buttons
+        child: Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
             ),
-            const SizedBox(height: 10),
-            const Text(
-              'You can always reschedule it',
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w400,
-                color: Color(0xFF717171),
-                fontFamily: 'Inter',
-              ),
-            ),
-            const SizedBox(height: 24),
-            Row(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => BookingCancelledScreen()),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      elevation: 0,
-                    ),
-                    child: const Text(
-                      'Cancel anyway',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white,
-                        fontFamily: 'Inter',
-                      ),
-                    ),
+                SvgPicture.asset('assets/icons/sad.svg', width: 40, height: 40),
+                const SizedBox(height: 16),
+                const Text(
+                  'Are you sure about cancelling   this booking ?',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
+                    color: Color(0xFF161616),
                   ),
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context); // close current popup
-                      showReschedulePopup(context); // show reschedule popup
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFFE47830),
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      elevation: 0,
-                    ),
-                    child: const Text(
-                      'Reschedule',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white,
-                        fontFamily: 'Inter',
-                      ),
-                    ),
+                const SizedBox(height: 10),
+                const Text(
+                  'You can always reschedule it',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                    color: Color(0xFF717171),
+                    fontFamily: 'Inter',
                   ),
                 ),
+                const SizedBox(height: 24),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => BookingCancelledScreen()),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          elevation: 0,
+                        ),
+                        child: const Text(
+                          'Cancel anyway',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white,
+                            fontFamily: 'Inter',
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context); // close current popup
+                          showReschedulePopup(context); // show reschedule popup
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFFE47830),
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          elevation: 0,
+                        ),
+                        child: const Text(
+                          'Reschedule',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white,
+                            fontFamily: 'Inter',
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
               ],
-            )
-          ],
+            ),
+          ),
         ),
       );
     },

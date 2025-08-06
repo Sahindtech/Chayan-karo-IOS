@@ -31,104 +31,109 @@ class _RescheduleContentState extends State<_RescheduleContent> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: 530,
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Select date and time',
-            style: TextStyle(
-              fontFamily: 'SF Pro Display',
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: Colors.black,
-            ),
+    return SafeArea(
+  bottom: true,
+  top: false, // don't affect top design
+  child: Container(
+    width: MediaQuery.of(context).size.width,
+    height: 530,
+    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+    decoration: const BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Select date and time',
+          style: TextStyle(
+            fontFamily: 'SF Pro Display',
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+            color: Colors.black,
           ),
-          const SizedBox(height: 4),
-          const Text(
-            'Your service will take approx. 45 mins',
-            style: TextStyle(
-              fontFamily: 'SF Pro Display',
-              fontSize: 14,
-              color: Color(0xFF7D7F88),
-            ),
+        ),
+        const SizedBox(height: 4),
+        const Text(
+          'Your service will take approx. 45 mins',
+          style: TextStyle(
+            fontFamily: 'SF Pro Display',
+            fontSize: 14,
+            color: Color(0xFF7D7F88),
           ),
-          const SizedBox(height: 24),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: dates.map((d) {
-              bool isSelected = selectedDate == d['date'];
-              return GestureDetector(
-                onTap: () {
-                  setState(() {
-                    selectedDate = d['date'];
-                  });
-                },
-                child: _buildDateChip(d['day']!, d['date']!, isSelected),
-              );
-            }).toList(),
-          ),
-          const SizedBox(height: 24),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: times.map((t) {
-              bool isSelected = selectedTime == t;
-              return GestureDetector(
-                onTap: () {
-                  setState(() {
-                    selectedTime = t;
-                  });
-                },
-                child: _buildTimeChip(t, isSelected),
-              );
-            }).toList(),
-          ),
-          const Spacer(),
-          SizedBox(
-            width: double.infinity,
-            height: 50,
-            child: ElevatedButton(
-              onPressed: (selectedDate != null && selectedTime != null)
-                  ? () {
-                      Navigator.pop(context);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) =>  ChayanSathiScreen(),
-                        ),
-                      );
-                    }
-                  : null,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: selectedDate != null && selectedTime != null
-                    ? const Color(0xFFE47830)
-                    : const Color(0xFFEFEFEF),
-                foregroundColor: selectedDate != null && selectedTime != null
-                    ? Colors.white
-                    : const Color(0xFFB3B3B3),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              child: const Text(
-                'Proceed to checkout',
-                style: TextStyle(
-                  fontFamily: 'SF Pro Display',
-                  fontSize: 16,
-                ),
+        ),
+        const SizedBox(height: 24),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: dates.map((d) {
+            bool isSelected = selectedDate == d['date'];
+            return GestureDetector(
+              onTap: () {
+                setState(() {
+                  selectedDate = d['date'];
+                });
+              },
+              child: _buildDateChip(d['day']!, d['date']!, isSelected),
+            );
+          }).toList(),
+        ),
+        const SizedBox(height: 24),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: times.map((t) {
+            bool isSelected = selectedTime == t;
+            return GestureDetector(
+              onTap: () {
+                setState(() {
+                  selectedTime = t;
+                });
+              },
+              child: _buildTimeChip(t, isSelected),
+            );
+          }).toList(),
+        ),
+        const Spacer(),
+        SizedBox(
+          width: double.infinity,
+          height: 50,
+          child: ElevatedButton(
+            onPressed: (selectedDate != null && selectedTime != null)
+                ? () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => ChayanSathiScreen(),
+                      ),
+                    );
+                  }
+                : null,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: selectedDate != null && selectedTime != null
+                  ? const Color(0xFFE47830)
+                  : const Color(0xFFEFEFEF),
+              foregroundColor: selectedDate != null && selectedTime != null
+                  ? Colors.white
+                  : const Color(0xFFB3B3B3),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
               ),
             ),
+            child: const Text(
+              'Proceed to checkout',
+              style: TextStyle(
+                fontFamily: 'SF Pro Display',
+                fontSize: 16,
+              ),
+            ),
           ),
-        ],
-      ),
-    );
+        ),
+      ],
+    ),
+  ),
+);
+
   }
 
   Widget _buildDateChip(String day, String date, bool isSelected) {

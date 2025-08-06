@@ -1,6 +1,9 @@
+import 'package:chayankaro/services/SearchScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
 
 
 
@@ -73,40 +76,41 @@ class _HomeScreenState extends State<HomeScreen> {
   );
 }
 
-  final List<Map<String, String>> categories = [
-    {'title': 'Female Saloon', 'icon': 'assets/icons/female_saloon.png'},
-    {'title': 'Female Spa', 'icon': 'assets/icons/female_spa.png'},
-    {'title': 'Male Saloon', 'icon': 'assets/icons/male_saloon.png'},
-    {'title': 'Male Spa', 'icon': 'assets/icons/male_spa.png'},
-    {'title': 'Hair & Skin', 'icon': 'assets/icons/hair_skin.png'},
-    {'title': 'Home Repairs', 'icon': 'assets/icons/home_repairs.png'},
-    {'title': 'Cleaning', 'icon': 'assets/icons/cleaning.png'},
-    {'title': 'AC Services', 'icon': 'assets/icons/ac_service.png'},
-  ];
+final List<Map<String, String>> categories = [
+  {'title': 'Female Saloon', 'icon': 'assets/icons/female_saloon.svg'},
+  {'title': 'Female Spa', 'icon': 'assets/icons/female_spa.svg'},
+  {'title': 'Male Saloon', 'icon': 'assets/icons/male_saloon.svg'},
+  {'title': 'Male Spa', 'icon': 'assets/icons/male_spa.svg'},
+  {'title': 'Hair & Skin', 'icon': 'assets/icons/hair_skin.svg'},
+  {'title': 'Home Repairs', 'icon': 'assets/icons/home_repairs.svg'},
+  {'title': 'Cleaning', 'icon': 'assets/icons/cleaning.svg'},
+  {'title': 'AC Services', 'icon': 'assets/icons/ac_service.svg'},
+];
+
 
   final List<Map<String, dynamic>> goToServices = [
     {
       'title': 'Beauty & Wellness (Men)',
       'subtitle': '10 services',
-      'images': ['assets/m1.jpg', 'assets/m2.jpg', 'assets/m3.jpg', 'assets/m4.jpg'],
+      'images': ['assets/m1.webp', 'assets/m2.webp', 'assets/m3.webp', 'assets/m4.webp'],
     },
     {
       'title': 'Appliance and Repair',
       'subtitle': '4 services',
-      'images': ['assets/a1.jpg', 'assets/a2.jpg', 'assets/a3.jpg', 'assets/a4.jpg'],
+      'images': ['assets/a1.webp', 'assets/a2.webp', 'assets/a3.webp', 'assets/a4.webp'],
     },
     {
       'title': 'Carpenter & Plumber',
       'subtitle': '2 services',
-      'images': ['assets/c1.png', 'assets/c2.png', 'assets/c3.png', 'assets/c4.png'],
+      'images': ['assets/c1.webp', 'assets/c2.webp', 'assets/c3.webp', 'assets/c4.webp'],
     },
   ];
 
   final List<Map<String, String>> mostUsedServices = [
-    {'image': 'assets/z1.png', 'title': 'Window AC frame Installation'},
-    {'image': 'assets/z2.png', 'title': 'Women Salon Services'},
-    {'image': 'assets/z3.png', 'title': 'Home Deep Cleaning'},
-    {'image': 'assets/z4.png', 'title': 'Spa for Men'},
+    {'image': 'assets/z1.webp', 'title': 'Window AC frame Installation'},
+    {'image': 'assets/z2.webp', 'title': 'Women Salon Services'},
+    {'image': 'assets/z3.webp', 'title': 'Home Deep Cleaning'},
+    {'image': 'assets/z4.webp', 'title': 'Spa for Men'},
   ];
 
   void _onItemTapped(int index) {
@@ -162,8 +166,8 @@ Widget build(BuildContext context) {
                       children: [
                         Row(
                           children: [
-                            Image.asset(
-                              'assets/icons/homy.png',
+                           SvgPicture.asset(
+                              'assets/icons/homy.svg',
                               width: 40,
                               height: 40,
                               color: Colors.black,
@@ -178,8 +182,8 @@ Widget build(BuildContext context) {
                             context,
                             MaterialPageRoute(builder: (_) => const CartScreen()),
                           ),
-                          child: Image.asset(
-                            'assets/icons/cart.png',
+                          child: SvgPicture.asset(
+                            'assets/icons/cart.svg',
                             width: 40,
                             height: 40,
                             color: Colors.black,
@@ -189,23 +193,33 @@ Widget build(BuildContext context) {
                     ),
                   ),
 
-                  // Search Bar
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Search for services',
-                        prefixIcon: const Icon(Icons.search),
-                        filled: true,
-                        fillColor: const Color(0xFFF8F6F2),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide.none,
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(vertical: 0),
-                      ),
-                    ),
-                  ),
+                 GestureDetector(
+  onTap: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => SearchScreen()), // Replace with your actual screen
+    );
+  },
+  child: AbsorbPointer( // Prevent the TextField from receiving focus
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: TextField(
+        decoration: InputDecoration(
+          hintText: 'Search for services',
+          prefixIcon: const Icon(Icons.search),
+          filled: true,
+          fillColor: const Color(0xFFF8F6F2),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide.none,
+          ),
+          contentPadding: const EdgeInsets.symmetric(vertical: 0),
+        ),
+      ),
+    ),
+  ),
+),
+
                 ],
               ),
             ),
@@ -275,7 +289,7 @@ Widget build(BuildContext context) {
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Image.asset(cat['icon']!, width: 45, height: 45),
+                                  SvgPicture.asset(cat['icon']!, width: 45, height: 45),
                                   const SizedBox(height: 6),
                                   SizedBox(
                                     width: 56,
@@ -359,7 +373,7 @@ Widget build(BuildContext context) {
                               bottomRight: Radius.circular(12),
                             ),
                             child: Image.asset(
-                              'assets/banner_woman.png',
+                              'assets/banner_woman.webp',
                               height: 120,
                               width: 100,
                               fit: BoxFit.cover,

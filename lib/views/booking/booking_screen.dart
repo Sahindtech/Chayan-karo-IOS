@@ -39,71 +39,74 @@ class _BookingScreenState extends State<BookingScreen> {
   }
 
   Widget buildTabBar() {
-    return Container(
-      color: Color(0xFFFFEDE0),
-      padding: const EdgeInsets.only(left: 20, right: 20, top: 12, bottom: 12),
-      child: SafeArea(
-        bottom: false,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            GestureDetector(
-              onTap: () => setState(() => showUpcoming = true),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Upcoming',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: showUpcoming ? Color(0xFFE47830) : Color(0xFFA2A2A2),
+  return Container(
+    color: const Color(0xFFFFEDE0),
+    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+    child: SafeArea(
+      bottom: false,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // Upcoming tab (left)
+          GestureDetector(
+            onTap: () => setState(() => showUpcoming = true),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Upcoming',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: showUpcoming ? const Color(0xFFE47830) : const Color(0xFFA2A2A2),
+                  ),
+                ),
+                if (showUpcoming)
+                  Container(
+                    margin: const EdgeInsets.only(top: 4),
+                    width: 76, // slightly wider than text
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFE47830),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  if (showUpcoming)
-                    Container(
-                      margin: const EdgeInsets.only(top: 4),
-                      height: 4,
-                      width: 112,
-                      decoration: BoxDecoration(
-                        color: Color(0xFFE47830),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                ],
-              ),
+              ],
             ),
-            GestureDetector(
-              onTap: () => setState(() => showUpcoming = false),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    'Previous',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      color: !showUpcoming ? Color(0xFFE47830) : Color(0xFFA2A2A2),
+          ),
+
+          // Previous tab (right)
+          GestureDetector(
+            onTap: () => setState(() => showUpcoming = false),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  'Previous',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    color: !showUpcoming ? const Color(0xFFE47830) : const Color(0xFFA2A2A2),
+                  ),
+                ),
+                if (!showUpcoming)
+                  Container(
+                    margin: const EdgeInsets.only(top: 4),
+                    width: 72, // similar width for visual balance
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFE47830),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  if (!showUpcoming)
-                    Container(
-                      margin: const EdgeInsets.only(top: 4),
-                      height: 4,
-                      width: 112,
-                      decoration: BoxDecoration(
-                        color: Color(0xFFE47830),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                ],
-              ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
 
   Widget buildFilterChips() {
     return Padding(

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -37,15 +39,16 @@ Widget build(BuildContext context) {
             padding: const EdgeInsets.only(top: 64, bottom: 16),
             child: Center(
               child: Container(
-                width: 340,
-                height: 240,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage("assets/icons/logo.png"),
-                    fit: BoxFit.contain,
-                  ),
-                ),
-              ),
+  width: 340,
+  height: 240,
+  alignment: Alignment.center, // Optional: to center the SVG
+  child: SvgPicture.asset(
+    "assets/icons/logo.svg",
+    fit: BoxFit.contain,
+    width: 340,
+    height: 240,
+  ),
+),
             ),
           ),
 

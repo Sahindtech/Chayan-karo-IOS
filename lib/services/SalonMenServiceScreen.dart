@@ -1,3 +1,4 @@
+import 'package:chayankaro/views/cart/cart_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -5,7 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 class SalonMenServiceScreen extends StatelessWidget {
   const SalonMenServiceScreen({super.key});
 
-  @override
+@override
 Widget build(BuildContext context) {
   // Set status bar color to match header
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -17,39 +18,51 @@ Widget build(BuildContext context) {
     backgroundColor: Colors.white,
     body: Stack(
       children: [
-        SingleChildScrollView(
-          padding: const EdgeInsets.only(bottom: 120), // match bottom nav height
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Add top padding equal to status bar height manually
-              Container(
-                color: const Color(0xFFFFEEE0),
-                padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-                child: _buildHeader(context),
-              ),
-              const SizedBox(height: 12),
-              _buildTopBanner(),
-              const SizedBox(height: 12),
-              _buildSalonInfoBlock(),
-              const SizedBox(height: 16),
-              _buildDiscountCards(),
-              const SizedBox(height: 16),
-              _buildCustomPackageSection(),
-              const SizedBox(height: 16),
-              _buildCategoryGrid(),
-              const SizedBox(height: 16),
-              _buildServiceCards(),
-              const SizedBox(height: 16),
-            ],
+        Padding(
+          padding: const EdgeInsets.only(top: 74), // 54 (header) + 20 (gap)
+          child: SingleChildScrollView(
+            padding: EdgeInsets.only(
+              bottom: 120 + MediaQuery.of(context).viewPadding.bottom + 8,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 12),
+                _buildTopBanner(),
+                const SizedBox(height: 12),
+                _buildSalonInfoBlock(),
+                const SizedBox(height: 16),
+                _buildDiscountCards(),
+                const SizedBox(height: 16),
+                _buildCustomPackageSection(),
+                const SizedBox(height: 16),
+                _buildCategoryGrid(),
+                const SizedBox(height: 16),
+                _buildServiceCards(),
+                const SizedBox(height: 16),
+              ],
+            ),
           ),
         ),
+
+        // Sticky header on top
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          child: Container(
+            color: const Color(0xFFFFEEE0),
+            padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+            child: _buildHeader(context),
+          ),
+        ),
+
+        // Bottom bar
         _buildBottomBar(),
       ],
     ),
   );
 }
-
   Widget _buildHeader(BuildContext context) {
   return Container(
     width: double.infinity,
@@ -88,12 +101,20 @@ Widget build(BuildContext context) {
             ),
           ),
           const SizedBox(width: 8),
-          const Image(
-            image: AssetImage('assets/icons/cart.png'),
-            width: 32,
-            height: 32,
-            color: Colors.black,
-          ),
+            GestureDetector(
+             onTap: () {
+              Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => CartScreen()), // Replace with your actual cart screen class
+              );
+             },
+             child: SvgPicture.asset(
+  'assets/icons/cart.svg',
+  width: 40,
+  height: 40,
+  color: Colors.black,
+),
+           ),
         ],
       ),
     ),
@@ -149,10 +170,10 @@ Widget build(BuildContext context) {
               padding: const EdgeInsets.only(left: 12), // Add padding to push it inward
               child: Row(
                 children: [
-                  Image.asset(
-                    'assets/icons/warranty.png',
-                    width: 16,
-                    height: 16,
+                   SvgPicture.asset(
+                    'assets/icons/warranty.svg',
+                    width: 20,
+                    height: 20,
                     color:Colors.black,
                   ),
                   const SizedBox(width: 4),
@@ -171,19 +192,23 @@ Widget build(BuildContext context) {
           ],
         ),
         const SizedBox(height: 4),
-        Row(
+         Row(
           children: [
-            const Text("4.8 (23k)", style: TextStyle(fontSize: 14)),
+             SvgPicture.asset('assets/icons/star.svg', width: 18,height: 18, color: Colors.black),
             const SizedBox(width: 6),
-            Image.asset('assets/icons/star.png', width: 18, color: Colors.black),
+            const Text("4.8 (23k)", style: TextStyle(fontSize: 14)),
           ],
         ),
         const SizedBox(height: 4),
         Row(
           children: [
+                Container(
+                  width: 20,
+                  height: 20,
+                  alignment: Alignment.center,
+                  child: SvgPicture.asset('assets/icons/tick.svg', color: Colors.black),
+                  ),            const SizedBox(width: 6),
             const Text("354 jobs completed", style: TextStyle(fontSize: 14)),
-            const SizedBox(width: 6),
-            Image.asset('assets/icons/tick.png', width: 18, color: Colors.black),
           ],
         ),
       ],
@@ -195,12 +220,12 @@ Widget build(BuildContext context) {
 Widget _buildDiscountCards() {
   final List<Map<String, String>> offers = [
     {
-      'icon': 'assets/icons/cash.png',
+      'icon': 'assets/icons/cash.svg',
       'title': 'Save 15% on every order',
       'subtitle': 'Get Plus now',
     },
     {
-      'icon': 'assets/icons/card.png',
+      'icon': 'assets/icons/card.svg',
       'title': 'CRED Pay',
       'subtitle': 'Upto Rs. 100 cashback',
     },
@@ -222,7 +247,7 @@ Widget _buildDiscountCards() {
           ),
           child: Row(
             children: [
-              Image.asset(
+               SvgPicture.asset(
                 offer['icon']!,
                 width: 28,
                 height: 28,
@@ -285,8 +310,8 @@ Widget _buildCustomPackageSection() {
             children: [
               SvgPicture.asset(
                 'assets/icons/package.svg',
-                width: 40,
-                height: 40,
+                width: 58,
+                height: 62,
               ),
               const SizedBox(width: 12),
               Column(
@@ -440,53 +465,59 @@ Widget _buildCategoryGrid() {
 
 
 Widget _buildBottomBar() {
-    return Positioned(
-      bottom: 0,
-      left: 0,
-      right: 0,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12,
-              offset: Offset(0, -2),
-              blurRadius: 6,
-            )
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text("2 items", style: TextStyle(fontSize: 12, color: Colors.grey)),
-                SizedBox(height: 4),
-                Text("₹400",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-              ],
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-              decoration: BoxDecoration(
-                color: const Color(0xFFE47830),
-                borderRadius: BorderRadius.circular(30),
+  return Positioned(
+    bottom: 0,
+    left: 0,
+    right: 0,
+    child: Builder(
+      builder: (context) {
+        final bottomPadding = MediaQuery.of(context).viewPadding.bottom;
+
+        return Container(
+          padding: EdgeInsets.fromLTRB(16, 12, 16, (bottomPadding > 0 ? bottomPadding : 16) + 8),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                offset: Offset(0, -2),
+                blurRadius: 6,
+              )
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  Text("2 items", style: TextStyle(fontSize: 12, color: Colors.grey)),
+                  SizedBox(height: 4),
+                  Text("₹400",
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                ],
               ),
-              child: const Text(
-                "Add to Cart",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                decoration: BoxDecoration(
+                  color: Color(0xFFE47830),
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: const Text(
+                  "Add to Cart",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14),
+                ),
+              )
+            ],
+          ),
+        );
+      },
+    ),
+  );
+}
 
     
  Widget _buildServiceCards() {
@@ -602,7 +633,7 @@ Widget _buildBottomBar() {
                             const SizedBox(height: 4),
                             Row(
                               children: [
-                                Image.asset('assets/icons/star.png',
+                                 SvgPicture.asset('assets/icons/star.svg',
                                     width: 18,  color: Colors.black,),
                                 const SizedBox(width: 4),
                                 Text(
@@ -771,7 +802,7 @@ Widget _buildBottomBar() {
                             const SizedBox(height: 4),
                             Row(
                               children: [
-                                Image.asset('assets/icons/star.png',
+                                 SvgPicture.asset('assets/icons/star.svg',
                                     width: 18,  color: Colors.black,),
                                 const SizedBox(width: 4),
                                 Text(

@@ -46,10 +46,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     String otp = _otpControllers.map((e) => e.text).join();
     if (otp.length == 4) {
       // TODO: Replace this with real login logic
-Navigator.pushReplacement(
-  context,
-  MaterialPageRoute(builder: (_) => const LocationPopupScreen()),
-);    } else {
+Navigator.pushReplacementNamed(context, '/home');    } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Please enter the 4-digit OTP")),
       );

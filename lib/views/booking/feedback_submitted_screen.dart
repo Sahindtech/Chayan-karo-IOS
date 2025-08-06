@@ -34,8 +34,8 @@ class FeedbackSubmittedScreen extends StatelessWidget {
             SvgPicture.asset(
               'assets/icons/feedtick.svg',
               semanticsLabel: 'Feedback Tick',
-              width: 100,
-              height: 100,
+              width: 120,
+              height: 120,
             ),
             const SizedBox(height: 32),
             const Text(
@@ -87,17 +87,17 @@ class FeedbackSubmittedScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   _buildSocialIcon(
-                    iconPath: 'assets/icons/insta.png',
+                    iconPath: 'assets/icons/insta.svg',
                     onTap: () => _launchUrl(instagramUrl),
                   ),
                   const SizedBox(width: 24),
                   _buildSocialIcon(
-                    iconPath: 'assets/icons/fb.png',
+                    iconPath: 'assets/icons/fb.svg',
                     onTap: () => _launchUrl(facebookUrl),
                   ),
                   const SizedBox(width: 24),
                   _buildSocialIcon(
-                    iconPath: 'assets/icons/youtube.png',
+                    iconPath: 'assets/icons/youtube.svg',
                     onTap: () => _launchUrl(youtubeUrl),
                   ),
                 ],
@@ -107,7 +107,7 @@ class FeedbackSubmittedScreen extends StatelessWidget {
             const Text(
               'Our Social Links',
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 14,
                 fontFamily: 'Inter',
                 fontWeight: FontWeight.w500,
               ),
@@ -125,7 +125,7 @@ class FeedbackSubmittedScreen extends StatelessWidget {
   }) {
     return InkWell(
       onTap: onTap,
-      child: Image.asset(iconPath, width: 28),
+      child: SvgPicture.asset(iconPath, width: 35),
     );
   }
 }

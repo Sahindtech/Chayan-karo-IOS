@@ -9,21 +9,21 @@ class SaloonWomenSection extends StatelessWidget {
     final List<Map<String, String>> items = [
       {
         'title1': 'Bleach & Detan',
-        'image1': 'assets/saloon_bleach.png',
+        'image1': 'assets/saloon_bleach.webp',
         'title2': 'Facial & Cleanup',
-        'image2': 'assets/saloon_facial.png',
+        'image2': 'assets/saloon_facial.webp',
       },
       {
         'title1': 'Pedicure',
-        'image1': 'assets/saloon_pedicure.png',
+        'image1': 'assets/saloon_pedicure.webp',
         'title2': 'Threading',
-        'image2': 'assets/saloon_threading.png',
+        'image2': 'assets/saloon_threading.webp',
       },
       {
         'title1': 'Waxing',
-        'image1': 'assets/saloon_waxing.png',
+        'image1': 'assets/saloon_waxing.webp',
         'title2': 'Manicure',
-        'image2': 'assets/saloon_manicure.jpg',
+        'image2': 'assets/saloon_manicure.webp',
       },
     ];
 

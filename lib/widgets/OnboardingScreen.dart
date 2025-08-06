@@ -10,9 +10,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   int _currentPage = 0;
 
   final List<String> _images = [
-    "assets/onboard1.jpg",
-    "assets/onboard2.jpg",
-    "assets/onboard3.jpg",
+    "assets/onboard1.webp",
+    "assets/onboard2.webp",
+    "assets/onboard3.webp",
   ];
 
   final List<Widget> _titles = [
@@ -148,39 +148,42 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ),
           ),
 
-          // Forward Arrow Button
-          Positioned(
-            bottom: 50,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: GestureDetector(
-                onTap: _nextPage,
-                child: Container(
-                  padding: EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Color(0xFFFF6F00),
-                  ),
-                  child: Icon(Icons.arrow_forward, color: Colors.white, size: 28),
-                ),
-              ),
+          // Bottom Controls wrapped with SafeArea
+Positioned(
+  bottom: 0,
+  left: 0,
+  right: 0,
+  child: SafeArea(
+    minimum: const EdgeInsets.only(bottom: 28), // adds spacing inside SafeArea
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Arrow Button
+        GestureDetector(
+          onTap: _nextPage,
+          child: Container(
+            padding: EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Color(0xFFFF6F00),
             ),
+            child: Icon(Icons.arrow_forward, color: Colors.white, size: 28),
           ),
+        ),
+        SizedBox(height: 12),
+        // Page Dots
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List.generate(
+            _images.length,
+            (index) => buildDot(index),
+          ),
+        ),
+      ],
+    ),
+  ),
+),
 
-          // Page Indicator Dots
-          Positioned(
-            bottom: 20,
-            left: 0,
-            right: 0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(
-                _images.length,
-                (index) => buildDot(index),
-              ),
-            ),
-          ),
         ],
       ),
     );

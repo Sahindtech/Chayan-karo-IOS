@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'widgets/ReviewSubmittedPopup.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
 import '../profile/profile_screen.dart';
+import 'package:url_launcher/url_launcher.dart'; // Make sure this is imported
 import '../../widgets/chayan_header.dart'; // ✅ Use correct path to header widget
 
 class RatingScreen extends StatefulWidget {
@@ -27,6 +30,21 @@ class _RatingScreenState extends State<RatingScreen> {
       ),
     );
   }
+
+// URLs
+final String instagramUrl = 'https://www.instagram.com/chayankaro?igsh=MWZyOHVhNHV0ZmNrZw==';
+final String facebookUrl = 'https://www.facebook.com/profile.php?id=61575011660245';
+final String youtubeUrl = 'https://youtube.com/@chayankaroindia?si=WT0Ga2xEr6hUSsVg';
+
+// Helper to launch URLs
+void _launchURL(String url) async {
+  if (await canLaunchUrl(Uri.parse(url))) {
+    await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+  } else {
+    throw 'Could not launch $url';
+  }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +94,7 @@ class _RatingScreenState extends State<RatingScreen> {
                             index < selectedRating ? Icons.star : Icons.star_border,
                             color: index < selectedRating
                                 ? const Color(0xFFED491F)
-                                : Colors.white,
+                                :const Color(0xFFD9D9D9), // unfilled color
                             size: 28,
                           ),
                           onPressed: () {
@@ -165,27 +183,50 @@ class _RatingScreenState extends State<RatingScreen> {
                   Column(
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CircleAvatar(
-                            radius: 17.5,
-                            backgroundColor: Colors.white,
-                            backgroundImage: const AssetImage('assets/icons/insta.png'),
-                          ),
-                          const SizedBox(width: 8),
-                          CircleAvatar(
-                            radius: 21,
-                            backgroundColor: Colors.white,
-                            backgroundImage: const AssetImage('assets/icons/fb.png'),
-                          ),
-                          const SizedBox(width: 8),
-                          CircleAvatar(
-                            radius: 19,
-                            backgroundColor: Colors.white,
-                            backgroundImage: const AssetImage('assets/icons/youtube.png'),
-                          ),
-                        ],
-                      ),
+  mainAxisAlignment: MainAxisAlignment.center,
+children: [
+  GestureDetector(
+    onTap: () => _launchURL(instagramUrl),
+    child: CircleAvatar(
+      radius: 17.5,
+      backgroundColor: Colors.white,
+      child: SvgPicture.asset(
+        'assets/icons/insta.svg',
+        width: 35,
+        height: 35,
+      ),
+    ),
+  ),
+  const SizedBox(width: 8),
+  GestureDetector(
+    onTap: () => _launchURL(facebookUrl),
+    child: CircleAvatar(
+      radius: 21,
+      backgroundColor: Colors.white,
+      child: SvgPicture.asset(
+        'assets/icons/fb.svg',
+        width: 35,
+        height: 35,
+      ),
+    ),
+  ),
+  const SizedBox(width: 8),
+  GestureDetector(
+    onTap: () => _launchURL(youtubeUrl),
+    child: CircleAvatar(
+      radius: 19,
+      backgroundColor: Colors.white,
+      child: SvgPicture.asset(
+        'assets/icons/youtube.svg',
+        width: 35,
+        height: 35,
+      ),
+    ),
+  ),
+],
+
+),
+
                       const SizedBox(height: 10),
                       const Text(
                         'Our Social Links',

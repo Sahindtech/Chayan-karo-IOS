@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
 
 class HorizontalServiceScroll extends StatelessWidget {
   final List<Map<String, String>> services;
@@ -53,8 +55,8 @@ class HorizontalServiceScroll extends StatelessWidget {
                 const SizedBox(height: 4),
                 Row(
                   children: [
-                    Image.asset(
-                      'assets/icons/star.png',
+                    SvgPicture.asset(
+                      'assets/icons/star.svg',
                       height: 14,
                       width: 14,
                       color: Colors.black,

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../widgets/custom_bottom_nav_bar.dart';
 import '../../widgets/common_top_bar.dart'; // ✅ new import
+import 'package:flutter_svg/flutter_svg.dart';
+
 
 class AllMostUsedServicesScreen extends StatelessWidget {
   final List<Map<String, String>> mostUsedServices;
@@ -80,8 +82,8 @@ class AllMostUsedServicesScreen extends StatelessWidget {
                                 const SizedBox(height: 4),
                                 Row(
                                   children: [
-                                    Image.asset(
-                                      'assets/icons/star.png',
+                                    SvgPicture.asset(
+                                      'assets/icons/star.svg',
                                       height: 14,
                                       width: 14,
                                       color: Colors.black,

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../widgets/chayan_header.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
 
 class PreviousBookingScreen extends StatelessWidget {
   const PreviousBookingScreen({Key? key}) : super(key: key);
@@ -33,14 +35,14 @@ class PreviousBookingScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               _bookingCard(
-                imageAsset: 'assets/ac_services.png',
+                imageAsset: 'assets/ac_services.webp',
                 title: 'AC Service',
                 duration: '1 hrs',
                 details: 'Includes general cleaning',
               ),
               const SizedBox(height: 16),
               _bookingCard(
-                imageAsset: 'assets/ac_installation.jpg',
+                imageAsset: 'assets/ac_installation.webp',
                 title: 'AC Installation',
                 duration: '30 mins',
                 details: 'Includes lorem',
@@ -255,7 +257,7 @@ class PreviousBookingScreen extends StatelessWidget {
           children: [
             Row(
               children: [
-                Image.asset('assets/icons/home.png', width: 20, height: 20,  color: Colors.black,),
+                SvgPicture.asset('assets/icons/home.svg', width: 20, height: 20,  color: Colors.black,),
                 const SizedBox(width: 8),
                 const Text(
                   'Home',
@@ -279,7 +281,7 @@ class PreviousBookingScreen extends StatelessWidget {
             const SizedBox(height: 8),
             Row(
               children: [
-                Image.asset('assets/icons/calendar.png', width: 18, height: 18,  color: Colors.black,),
+                SvgPicture.asset('assets/icons/calendar.svg', width: 18, height: 18,  color: Colors.black,),
                 const SizedBox(width: 6),
                 const Text('Sat, Apr 09 - 07:30 PM',
                     style: TextStyle(
@@ -292,7 +294,7 @@ class PreviousBookingScreen extends StatelessWidget {
             const SizedBox(height: 8),
             Row(
               children: [
-                Image.asset('assets/icons/user.png', width: 20, height: 20,  color: Colors.black,),
+                SvgPicture.asset('assets/icons/user.svg', width: 20, height: 20,  color: Colors.black,),
                 const SizedBox(width: 6),
                 const Text('Sumit Gupta, (180+ work), 4.5 rating',
                     style: TextStyle(

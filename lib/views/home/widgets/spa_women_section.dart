@@ -66,15 +66,15 @@ class SpaWomenSection extends StatelessWidget {
 
 final List<Map<String, String>> _items = [
   {
-    'imagePath': 'assets/spa_massage.png',
+    'imagePath': 'assets/spa_massage.webp',
     'label': 'Full Body Massage',
   },
   {
-    'imagePath': 'assets/spa_scrub.png',
+    'imagePath': 'assets/spa_scrub.webp',
     'label': 'Body Scrub',
   },
   {
-    'imagePath': 'assets/spa_steam.png',
+    'imagePath': 'assets/spa_steam.webp',
     'label': 'Steam Therapy',
   },
 ];
@@ -96,48 +96,37 @@ class _SpaWomenCard extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: const Color(0xFFFFD9BE), width: 1),
+        image: DecorationImage(
+          image: AssetImage(imagePath),
+          fit: BoxFit.cover,
+        ),
       ),
-      child: Stack(
-        children: [
-          // Background Image
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Image.asset(
-              imagePath,
-              width: 144,
-              height: 164,
-              fit: BoxFit.cover,
+      child: Align(
+        alignment: Alignment.bottomLeft,
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 6),
+          decoration: const BoxDecoration(
+            color: Color(0xFFFFD9BE),
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(10),
+              bottomRight: Radius.circular(10),
             ),
           ),
-
-          // Label at bottom inside image
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              height: 22,
-              alignment: Alignment.center,
-              decoration: const BoxDecoration(
-                color: Color(0xFFFFD9BE),
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(10),
-                  bottomRight: Radius.circular(10),
-                ),
-              ),
-              child: Text(
-                label,
-                style: const TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'Inter',
-                ),
-                textAlign: TextAlign.center,
-              ),
+          child: Text(
+            label,
+            style: const TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.w600,
+              fontFamily: 'Inter',
             ),
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
-        ],
+        ),
       ),
     );
   }
 }
+

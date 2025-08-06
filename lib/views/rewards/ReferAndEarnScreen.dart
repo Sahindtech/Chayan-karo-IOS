@@ -8,6 +8,8 @@ import '../profile/profile_screen.dart';
 import '../chayan_sathi/chayan_sathi_screen.dart';
 import '../../widgets/custom_bottom_nav_bar.dart';
 import '../../widgets/chayan_header.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
 
 class ReferAndEarnScreen extends StatefulWidget {
   const ReferAndEarnScreen({super.key});
@@ -57,18 +59,21 @@ class _ReferAndEarnScreenState extends State<ReferAndEarnScreen> {
               color: const Color(0xFFFFEEE0),
             ),
             SafeArea(
-              child: Column(
-                children: [
-                  const SizedBox(height: 10),
-                  ChayanHeader(
-                    title: 'Refer & Earn',
-                    onBackTap: () => Navigator.pop(context),
-                  ),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+  child: Column( // ✅ this is required for Expanded to work
+    children: [
+      const SizedBox(height: 10),
+      ChayanHeader(
+        title: 'Refer & Earn',
+        onBackTap: () => Navigator.pop(context),
+      ),
+      Expanded( // ✅ legal inside Column
+        child: SingleChildScrollView(
+          child: Container(
+            color: Colors.white,
+            padding: const EdgeInsets.only(top: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
                           Container(
                             width: double.infinity,
                             decoration: const BoxDecoration(
@@ -109,8 +114,8 @@ class _ReferAndEarnScreenState extends State<ReferAndEarnScreen> {
                                       ),
                                     ),
                                     const SizedBox(width: 10),
-                                    Image.asset(
-                                      'assets/reward_giftbox.png',
+                                    SvgPicture.asset(
+                                      'assets/icons/Gift.svg',
                                       width: 80,
                                       height: 80,
                                       fit: BoxFit.contain,
@@ -171,57 +176,59 @@ class _ReferAndEarnScreenState extends State<ReferAndEarnScreen> {
                             ),
                           ),
                           const SizedBox(height: 24),
-                          const Center(
-                            child: Text(
-                              'Terms and conditions        FAQs',
-                              style: TextStyle(
-                                fontSize: 11,
-                                color: Color(0xFF0C3998),
-                                letterSpacing: 0.55,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 24),
-                          const Center(
-                            child: Column(
-                              children: [
-                                Text(
-                                  'You are yet to earn any scratch cards',
-                                  style: TextStyle(
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.w600,
-                                    letterSpacing: 0.5,
-                                  ),
-                                ),
-                                SizedBox(height: 4),
-                                Opacity(
-                                  opacity: 0.75,
-                                  child: Text(
-                                    'Start referring to get surprises',
-                                    style: TextStyle(fontSize: 13),
-                                  ),
-                                ),
-                                SizedBox(height: 8),
-                                Text(
-                                  '......................................................................................',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                SizedBox(height: 8),
-                                Text(
-                                  'Earn 100 coins on every successful referral',
-                                  style: TextStyle(fontSize: 12),
-                                ),
-                              ],
-                            ),
-                          ),
+                          Center(
+  child: Column(
+    children: [
+      const Text(
+        'You are yet to earn any scratch cards',
+        style: TextStyle(
+          fontSize: 17,
+          fontWeight: FontWeight.w600,
+          letterSpacing: 0.5,
+        ),
+      ),
+      const SizedBox(height: 4),
+      const Opacity(
+        opacity: 0.75,
+        child: Text(
+          'Start referring to get surprises',
+          style: TextStyle(fontSize: 13),
+        ),
+      ),
+      const SizedBox(height: 8),
+      const Text(
+        '......................................................................................',
+        style: TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      const SizedBox(height: 8),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SvgPicture.asset(
+            'assets/icons/gifty.svg',
+            width: 37,
+            height: 37,
+          ),
+          const SizedBox(width: 6),
+          const Text(
+            'Earn 100 coins on every successful referral',
+            style: TextStyle(fontSize: 12),
+          ),
+        ],
+      ),
+    ],
+  ),
+),
+
                           const SizedBox(height: 60),
                         ],
                       ),
                     ),
                   ),
+      ),
                 ],
               ),
             ),

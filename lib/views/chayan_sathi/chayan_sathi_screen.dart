@@ -5,6 +5,8 @@ import '../booking/booking_screen.dart';
 import '../rewards/rewards_screen.dart';
 import '../../widgets/custom_bottom_nav_bar.dart';
 import '../../widgets/chayan_header.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
 
 class ChayanSathiScreen extends StatelessWidget {
   final List<Map<String, dynamic>> saathiList = [
@@ -12,37 +14,37 @@ class ChayanSathiScreen extends StatelessWidget {
       "name": "Anita Kumari",
       "rating": "4.8",
       "jobs": "354",
-      "image": "assets/saathi1.png",
+      "image": "assets/saathi1.webp",
     },
     {
       "name": "Ansh Kumar",
       "rating": "4.8",
       "jobs": "354",
-      "image": "assets/saathi2.png",
+      "image": "assets/saathi2.webp",
     },
     {
       "name": "Sunil Kumar",
       "rating": "4.8",
       "jobs": "354",
-      "image": "assets/saathi3.png",
+      "image": "assets/saathi3.webp",
     },
     {
       "name": "Anita Kumari",
       "rating": "4.8",
       "jobs": "354",
-      "image": "assets/saathi1.png",
+      "image": "assets/saathi1.webp",
     },
     {
       "name": "Sunil Kumar",
       "rating": "4.8",
       "jobs": "354",
-      "image": "assets/saathi3.png",
+      "image": "assets/saathi3.webp",
     },
     {
       "name": "Anita Kumari",
       "rating": "4.8",
       "jobs": "354",
-      "image": "assets/saathi1.png",
+      "image": "assets/saathi1.webp",
     },
   ];
 
@@ -99,82 +101,89 @@ class ChayanSathiScreen extends StatelessWidget {
                     color: Colors.white,
                   ),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      ClipRRect(
-                        borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
-                        child: Image.asset(
-                          saathi["image"],
-                          height: 140,
-                          width: double.infinity,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        saathi["name"],
-                        style: const TextStyle(
-                          fontFamily: 'SFProSemibold',
-                          fontSize: 14,
-                          color: Colors.black,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
+  crossAxisAlignment: CrossAxisAlignment.start,
+  children: [
+    ClipRRect(
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
+      child: Image.asset(
+        saathi["image"],
+        height: 140,
+        width: double.infinity,
+        fit: BoxFit.contain,
+      ),
+    ),
+    const SizedBox(height: 8),
+    Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Text(
+        saathi["name"],
+        style: const TextStyle(
+          fontFamily: 'SFProSemibold',
+          fontSize: 14,
+          color: Colors.black,
+        ),
+      ),
+    ),
+    const SizedBox(height: 6),
 
-                      // ✅ Tick icon line (jobs completed) comes FIRST
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/icons/tick.png',
-                            width: 14,
-                            height: 14,
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            "${saathi["jobs"]} jobs completed",
-                            style: const TextStyle(
-                              fontFamily: 'SFPro',
-                              fontSize: 12,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ],
-                      ),
+    // Jobs row
+    Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Row(
+        children: [
+           SvgPicture.asset(
+            'assets/icons/tick.svg',
+            width: 14,
+            height: 14,
+          ),
+          const SizedBox(width: 4),
+          Text(
+            "${saathi["jobs"]} jobs completed",
+            style: const TextStyle(
+              fontFamily: 'SFPro',
+              fontSize: 12,
+              color: Colors.black,
+            ),
+          ),
+        ],
+      ),
+    ),
+    const SizedBox(height: 4),
 
-                      const SizedBox(height: 4),
+    // Rating row
+    Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Row(
+        children: [
+           SvgPicture.asset(
+            'assets/icons/star.svg',
+            width: 14,
+            height: 14,
+            color: Colors.black,
+          ),
+          const SizedBox(width: 4),
+          Text(
+            "${saathi["rating"]}",
+            style: const TextStyle(
+              fontFamily: 'SFPro',
+              fontSize: 12,
+              color: Colors.black,
+            ),
+          ),
+          const Text(
+            " (23k)",
+            style: TextStyle(
+              fontFamily: 'SFPro',
+              fontSize: 12,
+              color: Colors.black,
+            ),
+          ),
+        ],
+      ),
+    ),
+  ],
+),
 
-                      // ✅ Star icon (rating) comes SECOND
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/icons/star.png',
-                            width: 14,
-                            height: 14,
-                            color: Colors.black,
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            "${saathi["rating"]}",
-                            style: const TextStyle(
-                              fontFamily: 'SFPro',
-                              fontSize: 12,
-                              color: Colors.black,
-                            ),
-                          ),
-                          const Text(
-                            " (23k)",
-                            style: TextStyle(
-                              fontFamily: 'SFPro',
-                              fontSize: 12,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
                 );
               },
             ),

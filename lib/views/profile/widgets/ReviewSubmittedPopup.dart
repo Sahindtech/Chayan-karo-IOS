@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
 
 class ReviewSubmittedPopup extends StatelessWidget {
   final VoidCallback onOkay;
@@ -98,7 +100,11 @@ class ReviewSubmittedPopup extends StatelessWidget {
                       color: Color(0xFFC3FFD2),
                     ),
                   ),
-                  const Icon(Icons.check, size: 40, color: Colors.green),
+SvgPicture.asset(
+  'assets/icons/gtick.svg',
+  width: 90,
+  height: 100,
+),
                 ],
               ),
             ),

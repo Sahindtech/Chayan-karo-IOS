@@ -66,15 +66,15 @@ class MaleSpaSection extends StatelessWidget {
 
 final List<Map<String, String>> _maleSpaItems = [
   {
-    'imagePath': 'assets/spa_men_swedish.jpg',
+    'imagePath': 'assets/spa_men_swedish.webp',
     'label': 'Swedish Massage',
   },
   {
-    'imagePath': 'assets/spa_men_backrelief.jpg',
+    'imagePath': 'assets/spa_men_backrelief.webp',
     'label': 'Back Relief',
   },
   {
-    'imagePath': 'assets/spa_men_bodypolish.jpg',
+    'imagePath': 'assets/spa_men_bodypolish.webp',
     'label': 'Body Polish',
   },
 ];

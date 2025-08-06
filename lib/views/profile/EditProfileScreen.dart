@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../widgets/chayan_header.dart'; // Make sure this is the correct path
+import 'package:flutter_svg/flutter_svg.dart';
+
 
 class EditProfileScreen extends StatelessWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
@@ -33,7 +35,7 @@ class EditProfileScreen extends StatelessWidget {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(62),
                         image: const DecorationImage(
-                          image: AssetImage('assets/icons/userprofile.png'),
+                          image: AssetImage('assets/userprofile.webp'),
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -75,32 +77,35 @@ class EditProfileScreen extends StatelessWidget {
                     profileField(label: 'Mobile Number', value: '+91 7355640235'),
                     profileField(label: 'Gender', value: 'Male'),
 
-                    const Spacer(),
+                   Spacer(),
 
-                    // Save Changes Button
-                    SizedBox(
-                      width: double.infinity,
-                      height: 47,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFE47830),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        child: const Text(
-                          'Save changes',
-                          style: TextStyle(
-                            fontFamily: 'SF Pro Display',
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            letterSpacing: 0.32,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
+SafeArea(
+  minimum: const EdgeInsets.only(bottom: 16),
+  child: SizedBox(
+    width: double.infinity,
+    height: 47,
+    child: ElevatedButton(
+      onPressed: () {},
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color(0xFFE47830),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+      child: const Text(
+        'Save changes',
+        style: TextStyle(
+          fontFamily: 'SF Pro Display',
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+          letterSpacing: 0.32,
+          color: Colors.white,
+        ),
+      ),
+    ),
+  ),
+),
+
                     const SizedBox(height: 20),
                   ],
                 ),
@@ -140,8 +145,8 @@ class EditProfileScreen extends StatelessWidget {
                 ),
               ),
             ),
-            Image.asset(
-              'assets/icons/check.png',
+           SvgPicture.asset(
+              'assets/icons/check.svg',
               width: 18,
               height: 18,
             ),

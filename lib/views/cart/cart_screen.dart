@@ -7,6 +7,8 @@ import '../rewards/rewards_screen.dart';
 import '../chayan_sathi/chayan_sathi_screen.dart';
 import '../../widgets/custom_bottom_nav_bar.dart';
 import '../../widgets/chayan_header.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
 
 class CartScreen extends StatefulWidget {
   const CartScreen({Key? key}) : super(key: key);
@@ -83,16 +85,17 @@ class _CartScreenState extends State<CartScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                          width: 110,
-                          height: 110,
-                          decoration: const ShapeDecoration(
-                            image: DecorationImage(
-                              image: AssetImage("assets/cart_empty.png"),
-                              fit: BoxFit.cover,
-                            ),
-                            shape: OvalBorder(),
-                          ),
-                        ),
+  width: 110,
+  height: 110,
+  child: ClipOval(
+    child: SvgPicture.asset(
+      "assets/icons/cart_empty.svg",
+      fit: BoxFit.cover,
+      width: 110,
+      height: 110,
+    ),
+  ),
+),
                         const SizedBox(height: 20),
                         const Text(
                           'Your Cart is Empty',

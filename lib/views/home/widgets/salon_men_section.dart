@@ -51,15 +51,15 @@ class SalonMenSection extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             children: const [
               _SalonMenTile(
-                imagePath: 'assets/salon_men_haircut_beard.jpg',
+                imagePath: 'assets/salon_men_haircut_beard.webp',
                 label: 'Haircut & Beard Styling',
               ),
               _SalonMenTile(
-                imagePath: 'assets/salon_men_haircolor_spa.jpg',
+                imagePath: 'assets/salon_men_haircolor_spa.webp',
                 label: 'Hair Colour & Hair Spa',
               ),
               _SalonMenTile(
-                imagePath: 'assets/salon_men_facial_cleanup.jpg',
+                imagePath: 'assets/salon_men_facial_cleanup.webp',
                 label: 'Facial & Cleanup',
               ),
             ],

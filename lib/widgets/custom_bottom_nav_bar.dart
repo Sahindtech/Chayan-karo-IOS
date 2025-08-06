@@ -1,106 +1,138 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
 
 class CustomBottomNavBar extends StatelessWidget {
   final int selectedIndex;
   final Function(int) onItemTapped;
 
- const CustomBottomNavBar({
-  Key? key,
-  required this.selectedIndex,
-  required this.onItemTapped,
-}) : super(key: key);
+  const CustomBottomNavBar({
+    Key? key,
+    required this.selectedIndex,
+    required this.onItemTapped,
+  }) : super(key: key);
 
+ @override
+Widget build(BuildContext context) {
+  final bottomPadding = MediaQuery.of(context).padding.bottom;
 
-  @override
-  Widget build(BuildContext context) {
-    return BottomAppBar(
+  return Container(
+    padding: EdgeInsets.only(bottom: bottomPadding > 0 ? bottomPadding : 8),
+    decoration: BoxDecoration(
       color: const Color(0xFFFFFEFD),
-      elevation: 10,
-      child: SizedBox(
-        height: 72,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _buildNavItem('assets/icons/chayansathi.png', 'Chayan Sathi', 0),
-            _buildNavItem('assets/icons/bookings.png', 'Bookings', 1),
-            _buildCenterNavItem('assets/icons/chayankaro.jpg', 2),
-            _buildNavItem('assets/icons/rewards.png', 'Rewards', 3),
-            _buildNavItem('assets/icons/profile.png', 'Profile', 4),
-          ],
+      border: const Border(
+        top: BorderSide(
+          color: Color(0xFFFA9441),
+          width: 0.5,
         ),
       ),
-    );
-  }
-
-  Widget _buildNavItem(String iconPath, String label, int index) {
-    final bool isActive = selectedIndex == index;
-
-    return GestureDetector(
-      onTap: () => onItemTapped(index),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.easeInOut,
-        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            AnimatedScale(
-              scale: isActive ? 1.3 : 1.0,
-              duration: const Duration(milliseconds: 200),
-              curve: Curves.easeInOut,
-              child: Image.asset(
-                iconPath,
-                width: 24,
-                height: 24,
-                color: isActive ? Colors.black : Colors.grey.shade500,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 10,
-                color: isActive ? Colors.black : Colors.grey.shade600,
-                fontFamily: 'SF Pro',
-                fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
-              ),
-            ),
-          ],
+      boxShadow: const [
+        BoxShadow(
+          color: Color(0x3F000000),
+          blurRadius: 4,
+          offset: Offset(0, -1),
         ),
-      ),
-    );
-  }
+      ],
+    ),
+    child: SizedBox(
+      height: 70,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+       children: [
+  _buildNavItem('assets/icons/chayansathi.svg', 'Chayan Sathi', 0),
+  _buildNavItem('assets/icons/bookings.svg', 'Bookings', 1),
+  _buildCenterNavItem('assets/icons/chayankaro.jpg', 'Chayan Karo', 2),
+  _buildNavItem('assets/icons/rewards.svg', 'Rewards', 3),
+  _buildNavItem('assets/icons/profile.svg', 'Profile', 4),
+],
 
- Widget _buildCenterNavItem(String iconPath, int index) {
+      ),
+    ),
+  );
+}
+
+
+ Widget _buildNavItem(String iconPath, String label, int index) {
   final bool isActive = selectedIndex == index;
 
   return GestureDetector(
     onTap: () => onItemTapped(index),
-    child: AnimatedScale(
-      // Reduced zoom scale from 1.4 → 1.2 for smoother animation
-      scale: isActive ? 1.2 : 1.0,
-      duration: const Duration(milliseconds: 200),
-      curve: Curves.easeInOut,
-      child: Container(
-        width: 42, // reduced from 48
-        height: 42, // reduced from 48
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 6,
-              offset: Offset(0, 3),
-            ),
-          ],
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ColorFiltered(
+          colorFilter: isActive
+              ? const ColorFilter.mode(Colors.transparent, BlendMode.multiply)
+              : const ColorFilter.mode(Colors.black, BlendMode.srcIn),
+          child: iconPath.endsWith('.svg')
+              ? SvgPicture.asset(
+                  iconPath,
+                  width: 40,
+                  height: 40,
+                  color: isActive ? null : Colors.black,
+                )
+              : Image.asset(
+                  iconPath,
+                  width: 40,
+                  height: 40,
+                  fit: BoxFit.cover,
+                ),
         ),
-        child: ClipOval(
-          child: Image.asset(
-            iconPath,
-            fit: BoxFit.cover,
+        const SizedBox(height: 2),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 8,
+            height: 2,
+            fontFamily: 'SF Pro',
+            fontWeight: FontWeight.w500,
+            color: Colors.black,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ],
+    ),
+  );
+}
+
+
+ Widget _buildCenterNavItem(String iconPath, String label, int index) {
+  final bool isActive = selectedIndex == index;
+
+  return GestureDetector(
+    onTap: () => onItemTapped(index),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          height: 40,
+          child: Center(
+            child: Container(
+              width: 24.45,
+              height: 23.8,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(2),
+                image: DecorationImage(
+                  image: AssetImage(iconPath),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
           ),
         ),
-      ),
+        const SizedBox(height: 2),
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 8,
+            height: 2,
+            fontFamily: 'SF Pro',
+            fontWeight: FontWeight.w500,
+            color: Colors.black,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ],
     ),
   );
 }

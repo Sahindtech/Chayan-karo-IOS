@@ -1,7 +1,10 @@
 import 'package:flutter/gestures.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../widgets/chayan_header.dart';
+
 
 class HelpScreen extends StatefulWidget {
   const HelpScreen({Key? key}) : super(key: key);
@@ -14,27 +17,27 @@ class _HelpScreenState extends State<HelpScreen> {
   final List<HelpTopic> topics = [
     HelpTopic(
       title: 'Account',
-      iconPath: 'assets/icons/profile.png',
+      iconPath: 'assets/icons/profile.svg',
       content: '...',
     ),
     HelpTopic(
       title: 'Getting started with Chayan Karo',
-      iconPath: 'assets/icons/about.png',
+      iconPath: 'assets/icons/about.svg',
       content: '...',
     ),
     HelpTopic(
       title: 'Payment & Chayan Coin',
-      iconPath: 'assets/icons/coins.png',
+      iconPath: 'assets/icons/coins.svg',
       content: '...',
     ),
     HelpTopic(
       title: 'Chayan Safety',
-      iconPath: 'assets/icons/chayansafety.png',
+      iconPath: 'assets/icons/chayansafety.svg',
       content: '...',
     ),
     HelpTopic(
       title: 'Claim Warranty',
-      iconPath: 'assets/icons/warranty.png',
+      iconPath: 'assets/icons/warranty.svg',
       content: '...',
     ),
   ];
@@ -106,7 +109,7 @@ class HelpExpansionTile extends StatelessWidget {
       tilePadding: EdgeInsets.zero,
       leading: ColorFiltered(
         colorFilter: const ColorFilter.mode(Colors.black, BlendMode.srcIn),
-        child: Image.asset(
+        child: SvgPicture.asset(
           topic.iconPath,
           height: 26,
           width: 26,

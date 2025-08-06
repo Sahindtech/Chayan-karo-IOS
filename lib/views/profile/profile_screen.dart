@@ -1,3 +1,5 @@
+import 'package:chayankaro/views/booking/PaymentScreen.dart';
+import 'package:chayankaro/views/booking/Summaryscreen.dart';
 import 'package:chayankaro/views/rewards/ReferAndEarnScreen.dart';
 import 'package:flutter/material.dart';
 import '../home/home_screen.dart';
@@ -42,65 +44,79 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  Widget buildQuickAction(String label, String iconPath) {
-    return Container(
-      width: 97,
-      height: 90,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: const Color(0xB5E47830)),
+Widget buildQuickAction(String label, String iconAssetPath) {
+  return Container(
+    width: 97,
+    height: 100,
+    decoration: ShapeDecoration(
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        side: const BorderSide(
+          width: 1,
+          color: Color(0xB5E47830),
+        ),
         borderRadius: BorderRadius.circular(15),
       ),
+    ),
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CircleAvatar(
-            backgroundColor: const Color(0xFFFFEDE0),
-            radius: 20,
-            child: Image.asset(
-              iconPath,
-              width: 24,
-              height: 24,
-              fit: BoxFit.contain,
+          Container(
+            width: 30,
+            height: 30,
+            decoration: const ShapeDecoration(
+              shape: OvalBorder(),
+            ),
+            child: SvgPicture.asset(
+              iconAssetPath,
+              width: 30,
+              height: 30,
+              fit: BoxFit.cover,
             ),
           ),
           const SizedBox(height: 8),
-          Text(
-            label,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontFamily: 'Inter',
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: Color(0xFF161616),
+          Expanded(
+            child: Text(
+              label,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                color: Color(0xFF161616),
+                fontSize: 14,
+                fontFamily: 'Inter',
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
 
   Widget buildListItem(String iconPath, String label, {VoidCallback? onTap}) {
-    return ListTile(
-      leading: CircleAvatar(
-        backgroundColor: const Color(0xFFFFF2E6),
-        child: ColorFiltered(
-          colorFilter: const ColorFilter.mode(Colors.black, BlendMode.srcIn),
-          child: Image.asset(iconPath, width: 20, height: 20),
-        ),
+  return ListTile(
+    leading: SvgPicture.asset(
+      iconPath,
+      width: 20,
+      height: 20,
+      color: Colors.black
+    ),
+    title: Text(
+      label,
+      style: const TextStyle(
+        fontFamily: 'Inter',
+        fontWeight: FontWeight.w500,
+        fontSize: 16,
       ),
-      title: Text(
-        label,
-        style: const TextStyle(
-          fontFamily: 'Inter',
-          fontWeight: FontWeight.w500,
-          fontSize: 16,
-        ),
-      ),
-      trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-      onTap: onTap,
-    );
-  }
+    ),
+    trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+    onTap: onTap,
+  );
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +134,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   children: [
                     const CircleAvatar(
                       radius: 40,
-                      backgroundImage: AssetImage('assets/icons/userprofile.png'),
+                      backgroundImage: AssetImage('assets/userprofile.webp'),
                     ),
                     const SizedBox(width: 16),
                     Column(
@@ -175,43 +191,44 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ],
                 ),
                 const SizedBox(height: 24),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (_) => BookingScreen()));
-                      },
-                      child: buildQuickAction("My Bookings", 'assets/icons/bookings.png'),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (_) => const RewardsScreen()));
-                      },
-                      child: buildQuickAction("My Chayan Coins", 'assets/icons/coins.png'),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (_) => const HelpScreen()));
-                      },
-                      child: buildQuickAction("Help & Support", 'assets/icons/help.png'),
-                    ),
-                  ],
-                ),
+               Row(
+  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  children: [
+    GestureDetector(
+  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => BookingScreen())),
+  child: buildQuickAction("My Bookings", 'assets/icons/bookings.svg'),
+),
+GestureDetector(
+  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const RewardsScreen())),
+  child: buildQuickAction("My Chayan Coins", 'assets/icons/coins.svg'),
+),
+GestureDetector(
+  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const HelpScreen())),
+  child: buildQuickAction("Help & Support", 'assets/icons/help.svg'),
+),
+
+  ],
+),
+
                 const SizedBox(height: 24),
                 const Divider(color: Color(0xFFEBEBEB)),
-                buildListItem('assets/icons/location.png', "Manage Address", onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => const ManageAddressScreen()));
+                buildListItem('assets/icons/location.svg', "Manage Address", onTap: () {
+  Navigator.push(context, MaterialPageRoute(builder: (_) => const ManageAddressScreen()));
+}),
+buildListItem('assets/icons/refer.svg', "Refer & Earn", onTap: () {
+  Navigator.push(context, MaterialPageRoute(builder: (_) => const ReferAndEarnScreen()));
+}),
+buildListItem('assets/icons/rate.svg', "Rate us", onTap: () {
+  Navigator.push(context, MaterialPageRoute(builder: (_) => RatingScreen()));
+}),
+buildListItem('assets/icons/about.svg', "About Chayan karo Services", onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => PaymentScreen()));
                 }),
-                buildListItem('assets/icons/refer.png', "Refer & Earn", onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => const ReferAndEarnScreen()));
+buildListItem('assets/icons/settings.svg', "Settings", onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => SummaryScreen()));
                 }),
-                buildListItem('assets/icons/rate.png', "Rate us", onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => RatingScreen()));
-                }),
-                buildListItem('assets/icons/about.png', "About Chayan karo Services"),
-                buildListItem('assets/icons/settings.png', "Settings"),
-                buildListItem('assets/icons/logout.png', "Logout"),
+buildListItem('assets/icons/logout.svg', "Logout"),
+
                 const SizedBox(height: 20),
                 Container(
   padding: const EdgeInsets.all(20),
@@ -249,8 +266,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       // Move the gift icon to the right
       SvgPicture.asset(
         'assets/icons/gifty.svg',
-        height: 40,
-        width: 40,
+        height: 57,
+        width: 57,
       ),
     ],
   ),

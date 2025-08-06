@@ -146,8 +146,8 @@ Widget build(BuildContext context) {
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: Row(
                       children: [
-                        Image.asset(
-                          'assets/icons/coins.png',
+                        SvgPicture.asset(
+                          'assets/icons/coins.svg',
                           height: 30,
                           width: 30,
                         ),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
 
 class ServiceBottomSheet extends StatelessWidget {
   final String title;
@@ -91,8 +93,8 @@ class ServiceBottomSheet extends StatelessWidget {
                             const SizedBox(height: 4),
                             Row(
                               children: [
-                                Image.asset(
-                                  'assets/icons/star.png',
+                                SvgPicture.asset(
+                                  'assets/icons/star.svg',
                                   width: 14,
                                   height: 14,
                                   color: Colors.black, 
