@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
 import '../home/home_screen.dart';
 import '../booking/booking_screen.dart';
@@ -85,41 +86,39 @@ class _CartScreenState extends State<CartScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-  width: 110,
-  height: 110,
+  width: 110.w,
+  height: 110.h,
   child: ClipOval(
     child: SvgPicture.asset(
       "assets/icons/cart_empty.svg",
       fit: BoxFit.cover,
-      width: 110,
-      height: 110,
+      width: 110.w,
+      height: 110.h,
     ),
   ),
 ),
-                        const SizedBox(height: 20),
-                        const Text(
-                          'Your Cart is Empty',
+                        SizedBox(height: 20.h),
+                        Text('Your Cart is Empty',
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 20.sp,
                             fontWeight: FontWeight.w600,
                             fontFamily: 'SF Pro',
                             color: Colors.black,
                           ),
                         ),
-                        const SizedBox(height: 5),
-                        const Opacity(
-                          opacity: 0.8,
+                        SizedBox(height: 5.h),
+                        Opacity(opacity: 0.8,
                           child: Text(
                             'Let’s add some services',
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 20.sp,
                               fontWeight: FontWeight.w400,
                               fontFamily: 'SF Pro',
                               color: Colors.black,
                             ),
                           ),
                         ),
-                        const SizedBox(height: 30),
+                        SizedBox(height: 30.h),
                         GestureDetector(
                           onTap: () {
                             Navigator.pushReplacement(
@@ -128,20 +127,19 @@ class _CartScreenState extends State<CartScreen> {
                             );
                           },
                           child: Container(
-                            width: 175,
-                            height: 45,
+                            width: 175.w,
+                            height: 45.h,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(8),
                               border: Border.all(
                                 color: const Color(0xFFE47830),
-                                width: 2,
+                                width: 2.w,
                               ),
                             ),
                             alignment: Alignment.center,
-                            child: const Text(
-                              'Explore Services',
+                            child: Text('Explore Services',
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 16.sp,
                                 fontWeight: FontWeight.w500,
                                 fontFamily: 'SF Pro',
                                 color: Color(0xFFE47830),

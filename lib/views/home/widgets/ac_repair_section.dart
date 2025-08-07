@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../services/ACServicesScreen.dart';
 
 class ACRepairSection extends StatelessWidget {
@@ -13,10 +14,9 @@ class ACRepairSection extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              'AC Repair',
+            Text('AC Repair',
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.w600,
                 fontFamily: 'SF Pro',
               ),
@@ -30,12 +30,11 @@ class ACRepairSection extends StatelessWidget {
                   ),
                 );
               },
-              child: const Padding(
-                padding: EdgeInsets.only(right: 16),
+              child: Padding(padding: EdgeInsets.only(right: 16.r),
                 child: Text(
                   'View all >',
                   style: TextStyle(
-                    fontSize: 13,
+                    fontSize: 13.sp,
                     color: Color(0xFFFF6F00),
                   ),
                 ),
@@ -43,11 +42,11 @@ class ACRepairSection extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12.h),
 
         // Scrollable Cards
         SizedBox(
-          height: 200,
+          height: 200.h,
           child: ListView(
             scrollDirection: Axis.horizontal,
             children: const [
@@ -87,12 +86,12 @@ class _ACRepairCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(right: 12),
-      width: 144,
-      height: 180,
+      margin: EdgeInsets.only(right: 12.r),
+      width: 144.w,
+      height: 180.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: const Color(0xFFFFD9BE), width: 1),
+        border: Border.all(color: Color(0xFFFFD9BE), width: 1.w),
         image: DecorationImage(
           image: AssetImage(imagePath),
           fit: BoxFit.cover,
@@ -112,8 +111,7 @@ class _ACRepairCard extends StatelessWidget {
           ),
           child: Text(
             title,
-            style: const TextStyle(
-              fontSize: 10,
+            style: TextStyle(fontSize: 10.sp,
               fontWeight: FontWeight.w600,
               fontFamily: 'Inter',
               color: Colors.black,

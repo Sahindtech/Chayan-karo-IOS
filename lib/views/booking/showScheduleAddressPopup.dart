@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'showReschedulePopup.dart';
 
 void showScheduleAddressPopup(BuildContext context) {
-  showModalBottomSheet(
-    context: context,
-    isScrollControlled: true,
-    backgroundColor: Colors.transparent,
-    builder: (context) {
-      return const _ScheduleAddressSheet();
-    },
-  );
+ showModalBottomSheet(
+  context: context,
+  isScrollControlled: true,
+  backgroundColor: Colors.transparent,
+  builder: (context) {
+    return SafeArea(
+      child: Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: const _ScheduleAddressSheet(),
+      ),
+    );
+  },
+);
+
 }
 
 class _ScheduleAddressSheet extends StatefulWidget {
@@ -26,10 +35,9 @@ class _ScheduleAddressSheetState extends State<_ScheduleAddressSheet> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 330, // Adjusted height to match screenshot
+      height: 330.h, // Adjusted height to match screenshot
       width: double.infinity,
-      decoration: const BoxDecoration(
-        color: Colors.white,
+      decoration: BoxDecoration(color: Colors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       child: Padding(
@@ -38,15 +46,14 @@ class _ScheduleAddressSheetState extends State<_ScheduleAddressSheet> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             /// Title
-            const Text(
-              'Select address',
+            Text('Select address',
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.w700,
               ),
             ),
 
-            const SizedBox(height: 8),
+            SizedBox(height: 8.h),
 
             /// Add new address (below title)
             GestureDetector(
@@ -54,13 +61,13 @@ class _ScheduleAddressSheetState extends State<_ScheduleAddressSheet> {
                 // Add address logic here
               },
               child: Row(
-                children: const [
+                children:  [
                   Icon(Icons.add, color: Color(0xFFFF7900), size: 18),
-                  SizedBox(width: 4),
+                  SizedBox(width: 4.w),
                   Text(
                     'Add new address',
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.w500,
                       color: Color(0xFFFF7900),
                     ),
@@ -69,9 +76,9 @@ class _ScheduleAddressSheetState extends State<_ScheduleAddressSheet> {
               ),
             ),
 
-            const SizedBox(height: 16),
-            const Divider(height: 1),
-            const SizedBox(height: 12),
+            SizedBox(height: 16.h),
+            Divider(height: 1.h),
+            SizedBox(height: 12.h),
 
             /// Address Card
             GestureDetector(
@@ -89,7 +96,7 @@ class _ScheduleAddressSheetState extends State<_ScheduleAddressSheet> {
                       setState(() => isSelected = true);
                     },
                   ),
-                  const SizedBox(width: 4),
+                  SizedBox(width: 4.w),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,34 +105,31 @@ class _ScheduleAddressSheetState extends State<_ScheduleAddressSheet> {
                           children: [
                             SvgPicture.asset(
                               'assets/icons/homy.svg',
-                              width: 20,
-                              height: 20,
+                              width: 20.w,
+                              height: 20.h,
                               color: Colors.black,
                             ),
-                            const SizedBox(width: 6),
-                            const Text(
-                              'Home',
+                            SizedBox(width: 6.w),
+                            Text('Home',
                               style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 14.sp,
                                 fontWeight: FontWeight.w500,
                                 color: Colors.black,
                               ),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 6),
-                        const Text(
-                          'Plot no.209, Kavuri Hills, Madhapur, Telangana 500033',
+                        SizedBox(height: 6.h),
+                        Text('Plot no.209, Kavuri Hills, Madhapur, Telangana 500033',
                           style: TextStyle(
-                            fontSize: 13,
+                            fontSize: 13.sp,
                             color: Colors.black,
                           ),
                         ),
-                        const SizedBox(height: 4),
-                        const Text(
-                          'Ph: +91234567890',
+                        SizedBox(height: 4.h),
+                        Text('Ph: +91234567890',
                           style: TextStyle(
-                            fontSize: 13,
+                            fontSize: 13.sp,
                             color: Colors.black,
                           ),
                         ),
@@ -141,7 +145,7 @@ class _ScheduleAddressSheetState extends State<_ScheduleAddressSheet> {
             /// Proceed Button
             SizedBox(
               width: double.infinity,
-              height: 48,
+              height: 48.h,
               child: ElevatedButton(
                 onPressed: isSelected
                     ? () {
@@ -161,7 +165,7 @@ class _ScheduleAddressSheetState extends State<_ScheduleAddressSheet> {
                   'Proceed',
                   style: TextStyle(
                     color: isSelected ? Colors.white : Colors.black54,
-                    fontSize: 16,
+                    fontSize: 16.sp,
                     fontWeight: FontWeight.w600,
                   ),
                 ),

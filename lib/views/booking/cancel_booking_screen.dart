@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../widgets/chayan_header.dart';
 import 'BookingCancelledScreen.dart';
 import 'showReschedulePopup.dart';
@@ -34,18 +35,18 @@ class _CancelBookingScreenState extends State<CancelBookingScreen> {
 
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.only(bottom: 20),
+                padding: EdgeInsets.only(bottom: 20.r),
                 child: Column(
                   children: [
                     // Booking Card
                     Padding(
-                      padding: const EdgeInsets.all(16),
+                      padding: EdgeInsets.all(16.r),
                       child: Container(
-                        height: 132,
-                        padding: const EdgeInsets.all(12),
+                        height: 132.h,
+                        padding: EdgeInsets.all(12.r),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: Color(0xFFF3F3F3), width: 2),
+                          border: Border.all(color: Color(0xFFF3F3F3), width: 2.w),
                         ),
                         child: Row(
                           children: [
@@ -53,12 +54,12 @@ class _CancelBookingScreenState extends State<CancelBookingScreen> {
                               borderRadius: BorderRadius.circular(14),
                               child: Image.asset(
                                 'assets/cleanup.webp',
-                                width: 100,
-                                height: 100,
+                                width: 100.w,
+                                height: 100.h,
                                 fit: BoxFit.cover,
                               ),
                             ),
-                            SizedBox(width: 16),
+                            SizedBox(width: 16.w),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,14 +67,14 @@ class _CancelBookingScreenState extends State<CancelBookingScreen> {
                                 children: [
                                   Text('Diamond Facial',
                                       style: TextStyle(
-                                          fontSize: 14,
+                                          fontSize: 14.sp,
                                           fontWeight: FontWeight.w700,
                                           fontFamily: 'Inter',
                                           color: Color(0xFF161616))),
-                                  SizedBox(height: 8),
-                                  Row(children: [_dot(), SizedBox(width: 8), Text('2 hrs', style: _subTextStyle())]),
-                                  SizedBox(height: 6),
-                                  Row(children: [_dot(), SizedBox(width: 8), Text('Includes dummy info', style: _subTextStyle())]),
+                                  SizedBox(height: 8.h),
+                                  Row(children: [_dot(), SizedBox(width: 8.w), Text('2 hrs', style: _subTextStyle())]),
+                                  SizedBox(height: 6.h),
+                                  Row(children: [_dot(), SizedBox(width: 8.w), Text('Includes dummy info', style: _subTextStyle())]),
                                 ],
                               ),
                             ),
@@ -90,7 +91,7 @@ class _CancelBookingScreenState extends State<CancelBookingScreen> {
                       child: Text(
                         'REASON FOR CANCELLATION',
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 12.sp,
                           fontWeight: FontWeight.w700,
                           fontFamily: 'Inter',
                           color: Color(0xFF757575),
@@ -112,8 +113,8 @@ class _CancelBookingScreenState extends State<CancelBookingScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
-                                width: 18,
-                                height: 18,
+                                width: 18.w,
+                                height: 18.h,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   border: Border.all(color: Color(0xFF757575)),
@@ -121,8 +122,8 @@ class _CancelBookingScreenState extends State<CancelBookingScreen> {
                                 child: selectedIndex == index
                                     ? Center(
                                         child: Container(
-                                          width: 10,
-                                          height: 10,
+                                          width: 10.w,
+                                          height: 10.h,
                                           decoration: BoxDecoration(
                                             color: Color(0xFFE47830),
                                             shape: BoxShape.circle,
@@ -131,12 +132,12 @@ class _CancelBookingScreenState extends State<CancelBookingScreen> {
                                       )
                                     : SizedBox.shrink(),
                               ),
-                              SizedBox(width: 8),
+                              SizedBox(width: 8.w),
                               Expanded(
                                 child: Text(
                                   reasons[index],
                                   style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 14.sp,
                                     fontFamily: 'Inter',
                                     color: Color(0xFF161616),
                                   ),
@@ -152,8 +153,8 @@ class _CancelBookingScreenState extends State<CancelBookingScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
                       child: Container(
-                        height: 150,
-                        padding: EdgeInsets.all(12),
+                        height: 150.h,
+                        padding: EdgeInsets.all(12.r),
                         decoration: BoxDecoration(
                           color: Color(0xFFF3F3F3),
                           borderRadius: BorderRadius.circular(20),
@@ -162,7 +163,7 @@ class _CancelBookingScreenState extends State<CancelBookingScreen> {
                         child: Text(
                           'Describe a problem / comment',
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 14.sp,
                             color: Color(0xFFABABAB),
                             fontFamily: 'Inter',
                           ),
@@ -180,7 +181,7 @@ class _CancelBookingScreenState extends State<CancelBookingScreen> {
               child: GestureDetector(
                 onTap: selectedIndex != null ? () => _showBottomPopup(context) : null,
                 child: Container(
-                  height: 47,
+                  height: 47.h,
                   width: double.infinity,
                   decoration: BoxDecoration(
                     color: selectedIndex != null ? Color(0xFFE47830) : Color(0xFFD7D7D7),
@@ -191,7 +192,7 @@ class _CancelBookingScreenState extends State<CancelBookingScreen> {
                     'Cancel Now',
                     style: TextStyle(
                       color: selectedIndex != null ? Colors.white : Color(0xFF858585),
-                      fontSize: 16,
+                      fontSize: 16.sp,
                       fontFamily: 'SF Pro Display',
                       fontWeight: FontWeight.w400,
                       letterSpacing: 0.32,
@@ -200,7 +201,7 @@ class _CancelBookingScreenState extends State<CancelBookingScreen> {
                 ),
               ),
             ),
-            SizedBox(height: 12),
+            SizedBox(height: 12.h),
           ],
         ),
       ),
@@ -208,11 +209,11 @@ class _CancelBookingScreenState extends State<CancelBookingScreen> {
   }
 
   TextStyle _subTextStyle() {
-    return TextStyle(fontSize: 14, fontFamily: 'Inter', color: Color(0xFF757575));
+    return TextStyle(fontSize: 14.sp, fontFamily: 'Inter', color: Color(0xFF757575));
   }
 
   Widget _dot() {
-    return Container(width: 4, height: 4, decoration: BoxDecoration(color: Color(0xFF757575), shape: BoxShape.circle));
+    return Container(width: 4.w, height: 4.h, decoration: BoxDecoration(color: Color(0xFF757575), shape: BoxShape.circle));
   }
 
  void _showBottomPopup(BuildContext context) {
@@ -231,36 +232,33 @@ class _CancelBookingScreenState extends State<CancelBookingScreen> {
           child: Container(
             width: MediaQuery.of(context).size.width,
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-            decoration: const BoxDecoration(
-              color: Colors.white,
+            decoration: BoxDecoration(color: Colors.white,
               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SvgPicture.asset('assets/icons/sad.svg', width: 40, height: 40),
-                const SizedBox(height: 16),
-                const Text(
-                  'Are you sure about cancelling   this booking ?',
+                SvgPicture.asset('assets/icons/sad.svg', width: 40.w, height: 40.h),
+                SizedBox(height: 16.h),
+                Text('Are you sure about cancelling this booking ?',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: 'Inter',
-                    fontSize: 18,
+                    fontSize: 18.sp,
                     fontWeight: FontWeight.w400,
                     color: Color(0xFF161616),
                   ),
                 ),
-                const SizedBox(height: 10),
-                const Text(
-                  'You can always reschedule it',
+                SizedBox(height: 10.h),
+                Text('You can always reschedule it',
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 12.sp,
                     fontWeight: FontWeight.w400,
                     color: Color(0xFF717171),
                     fontFamily: 'Inter',
                   ),
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: 24.h),
                 Row(
                   children: [
                     Expanded(
@@ -279,10 +277,9 @@ class _CancelBookingScreenState extends State<CancelBookingScreen> {
                           ),
                           elevation: 0,
                         ),
-                        child: const Text(
-                          'Cancel anyway',
+                        child: Text('Cancel anyway',
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.w500,
                             color: Colors.white,
                             fontFamily: 'Inter',
@@ -290,7 +287,7 @@ class _CancelBookingScreenState extends State<CancelBookingScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12.w),
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
@@ -305,10 +302,9 @@ class _CancelBookingScreenState extends State<CancelBookingScreen> {
                           ),
                           elevation: 0,
                         ),
-                        child: const Text(
-                          'Reschedule',
+                        child: Text('Reschedule',
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.w500,
                             color: Colors.white,
                             fontFamily: 'Inter',

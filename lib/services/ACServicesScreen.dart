@@ -1,4 +1,5 @@
 import 'package:chayankaro/views/cart/cart_screen.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -17,27 +18,27 @@ Widget build(BuildContext context) {
     body: Stack(
       children: [
         Padding(
-          padding: const EdgeInsets.only(top: 74), // 54 (header) + 20 (gap)
+          padding: EdgeInsets.only(top: 74.r), // 54 (header) + 20 (gap)
           child: SingleChildScrollView(
             padding: EdgeInsets.only(
-              bottom: 120 + MediaQuery.of(context).viewPadding.bottom + 8,
+              bottom: 120.r + MediaQuery.of(context).viewPadding.bottom + 8,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 12),
+                SizedBox(height: 12.h),
                 _buildTopBanner(),
-                const SizedBox(height: 12),
+                SizedBox(height: 12.h),
                 _buildSalonInfoBlock(),
-                const SizedBox(height: 16),
+                SizedBox(height: 16.h),
                 _buildDiscountCards(),
-                const SizedBox(height: 16),
+                SizedBox(height: 16.h),
                 _buildCustomPackageSection(),
-                const SizedBox(height: 16),
+                SizedBox(height: 16.h),
                 _buildCategoryGrid(),
-                const SizedBox(height: 16),
+                SizedBox(height: 16.h),
                 _buildServiceCards(),
-                const SizedBox(height: 16),
+                SizedBox(height: 16.h),
               ],
             ),
           ),
@@ -45,9 +46,9 @@ Widget build(BuildContext context) {
 
         // Sticky header on top
         Positioned(
-          top: 0,
-          left: 0,
-          right: 0,
+          top: 0.r,
+          left: 0.r,
+          right: 0.r,
           child: Container(
             color: const Color(0xFFFFEEE0),
             padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
@@ -64,7 +65,7 @@ Widget build(BuildContext context) {
   Widget _buildHeader(BuildContext context) {
   return Container(
     width: double.infinity,
-    height: 48,
+    height: 48.h,
     decoration: BoxDecoration(
       color: const Color(0xFFFFEEE0),
       boxShadow: [
@@ -85,12 +86,11 @@ Widget build(BuildContext context) {
             onTap: () => Navigator.pop(context),
             child: const Icon(Icons.arrow_back_ios_new, size: 20),
           ),
-          const SizedBox(width: 8),
-          const Expanded(
-            child: Text(
+          SizedBox(width: 8.w),
+          Expanded(child: Text(
               "AC Services",
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.w600,
                 fontFamily: 'Inter',
                 color: Colors.black,
@@ -98,7 +98,7 @@ Widget build(BuildContext context) {
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          const SizedBox(width: 8),
+          SizedBox(width: 8.w),
             GestureDetector(
              onTap: () {
               Navigator.push(
@@ -108,8 +108,8 @@ Widget build(BuildContext context) {
              },
              child: SvgPicture.asset(
   'assets/icons/cart.svg',
-  width: 40,
-  height: 40,
+  width: 40.w,
+  height: 40.h,
   color: Colors.black,
 ),
            ),
@@ -128,20 +128,19 @@ Widget build(BuildContext context) {
           Image.asset(
             'assets/single_use_product.webp',
             width: double.infinity,
-            height: 160,
+            height: 160.h,
             fit: BoxFit.cover,
           ),
           Positioned(
-            bottom: 12,
-            left: 12,
+            bottom: 12.r,
+            left: 12.r,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
                 color: Colors.black.withOpacity(0.6),
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: const Text(
-                "Single use products",
+              child: Text("Single use products",
                 style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ),
@@ -160,26 +159,24 @@ Widget build(BuildContext context) {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              "AC Services",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            Text("AC Services",
+              style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 12), // Add padding to push it inward
+              padding: EdgeInsets.only(left: 12.r), // Add padding to push it inward
               child: Row(
                 children: [
                  SvgPicture.asset(
                     'assets/icons/warranty.svg',
-                    width: 20,
-                    height: 20,
+                    width: 20.w,
+                    height: 20.h,
                     color:Colors.black,
                   ),
-                  const SizedBox(width: 4),
-                  const Text(
-                    'CK safe',
+                  SizedBox(width: 4.w),
+                  Text('CK safe',
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: 12,
+                      fontSize: 12.sp,
                       fontFamily: 'Inter',
                       fontWeight: FontWeight.w600,
                     ),
@@ -189,24 +186,24 @@ Widget build(BuildContext context) {
             ),
           ],
         ),
-        const SizedBox(height: 4),
+        SizedBox(height: 4.h),
          Row(
           children: [
-            SvgPicture.asset('assets/icons/star.svg', width: 18,height: 18, color: Colors.black),
-            const SizedBox(width: 6),
-            const Text("4.8 (23k)", style: TextStyle(fontSize: 14)),
+            SvgPicture.asset('assets/icons/star.svg', width: 18.w,height: 18.h, color: Colors.black),
+            SizedBox(width: 6.w),
+            Text("4.8 (23k)", style: TextStyle(fontSize: 14.sp)),
           ],
         ),
-        const SizedBox(height: 4),
+        SizedBox(height: 4.h),
         Row(
           children: [
                 Container(
-                  width: 20,
-                  height: 20,
+                  width: 20.w,
+                  height: 20.h,
                   alignment: Alignment.center,
                   child: SvgPicture.asset('assets/icons/tick.svg', color: Colors.black),
-                  ),            const SizedBox(width: 6),
-            const Text("354 jobs completed", style: TextStyle(fontSize: 14)),
+                  ),            SizedBox(width: 6.w),
+            Text("354 jobs completed", style: TextStyle(fontSize: 14.sp)),
           ],
         ),
       ],
@@ -230,14 +227,14 @@ Widget _buildDiscountCards() {
   ];
 
   return SizedBox(
-    height: 100, // Increased to allow full text rendering
+    height: 100.h, // Increased to allow full text rendering
     child: ListView.separated(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       scrollDirection: Axis.horizontal,
       itemBuilder: (context, index) {
         final offer = offers[index];
         return Container(
-          width: 240, // Gives extra space for text lines
+          width: 240.w, // Gives extra space for text lines
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
           decoration: BoxDecoration(
             color: const Color(0xFFF6F6F6),
@@ -247,11 +244,11 @@ Widget _buildDiscountCards() {
             children: [
                SvgPicture.asset(
                 offer['icon']!,
-                width: 28,
-                height: 28,
+                width: 28.w,
+                height: 28.h,
                 color: Colors.black, // This applies a black tint
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12.w),
               Flexible( // Allows Column to expand based on content
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -259,18 +256,16 @@ Widget _buildDiscountCards() {
                   children: [
                     Text(
                       offer['title']!,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14,
+                      style: TextStyle(fontWeight: FontWeight.w600,
+                        fontSize: 14.sp,
                       ),
                       softWrap: true,
                       maxLines: 2, // Let long titles wrap
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4.h),
                     Text(
                       offer['subtitle']!,
-                      style: const TextStyle(
-                        fontSize: 12,
+                      style: TextStyle(fontSize: 12.sp,
                         color: Colors.black54,
                       ),
                       softWrap: true,
@@ -282,7 +277,7 @@ Widget _buildDiscountCards() {
           ),
         );
       },
-      separatorBuilder: (_, __) => const SizedBox(width: 12),
+      separatorBuilder: (_, __) => SizedBox(width: 12.w),
       itemCount: offers.length,
     ),
   );
@@ -295,7 +290,7 @@ Widget _buildCustomPackageSection() {
     padding: const EdgeInsets.symmetric(horizontal: 16),
     child: Container(
       width: double.infinity,
-      height: 100, // Slightly increased to accommodate two lines of text
+      height: 100.h, // Slightly increased to accommodate two lines of text
       padding: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
         color: const Color(0xFFE47830),
@@ -308,42 +303,42 @@ Widget _buildCustomPackageSection() {
             children: [
               SvgPicture.asset(
                 'assets/icons/package.svg',
-                width: 58,
-                height: 62,
+                width: 58.w,
+                height: 62.h,
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12.w),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children:  [
                   SizedBox(
-                    width: 205.67,
-                    height: 26.46,
+                    width: 205.67.w,
+                    height: 26.46.h,
                     child: Text(
                       'Create a Customer Package',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: 16.sp,
                         fontFamily: 'Roboto',
                         fontWeight: FontWeight.w600,
-                        height: 1.50,
+                        height: 1.50.h,
                       ),
                     ),
                   ),
-                  SizedBox(height: 4),
+                  SizedBox(height: 4.h),
                   SizedBox(
-                    width: 156.31,
-                    height: 26.46,
+                    width: 156.31.w,
+                    height: 26.46.h,
                     child: Opacity(
                       opacity: 0.50,
                       child: Text(
                         'Specifically for your needs',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 13,
+                          fontSize: 13.sp,
                           fontFamily: 'Roboto',
                           fontWeight: FontWeight.w400,
-                          height: 1.85,
+                          height: 1.85.h,
                         ),
                       ),
                     ),
@@ -352,8 +347,7 @@ Widget _buildCustomPackageSection() {
               ),
             ],
           ),
-          const Icon(
-            Icons.arrow_forward_ios, // Native forward arrow
+          Icon(Icons.arrow_forward_ios, // Native forward arrow
             color: Colors.white,
             size: 16,
           ),
@@ -379,15 +373,14 @@ Widget _buildCategoryGrid() {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          "Categories",
+        Text("Categories",
           style: TextStyle(
-            fontSize: 16,
+            fontSize: 16.sp,
             fontWeight: FontWeight.w600,
             color: Colors.black,
           ),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12.h),
         GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -405,7 +398,7 @@ Widget _buildCategoryGrid() {
                 color: Colors.white,
                 border: Border.all(
                   color: const Color(0xFFFFD9BE),
-                  width: 1,
+                  width: 1.w,
                 ),
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: const [
@@ -423,8 +416,8 @@ Widget _buildCategoryGrid() {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Container(
-                      width: 48,
-                      height: 48,
+                      width: 48.w,
+                      height: 48.h,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
                         color: Colors.white,
@@ -437,14 +430,13 @@ Widget _buildCategoryGrid() {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8.h),
                     Text(
                       item['title']!,
-                      style: const TextStyle(
-                        fontSize: 11.5,
+                      style: TextStyle(fontSize: 11.5.sp,
                         fontWeight: FontWeight.w500,
                         color: Colors.black,
-                        height: 1.3,
+                        height: 1.3.h,
                       ),
                       textAlign: TextAlign.center,
                       maxLines: 2,
@@ -464,17 +456,16 @@ Widget _buildCategoryGrid() {
 
 Widget _buildBottomBar() {
   return Positioned(
-    bottom: 0,
-    left: 0,
-    right: 0,
+    bottom: 0.r,
+    left: 0.r,
+    right: 0.r,
     child: Builder(
       builder: (context) {
         final bottomPadding = MediaQuery.of(context).viewPadding.bottom;
 
         return Container(
           padding: EdgeInsets.fromLTRB(16, 12, 16, (bottomPadding > 0 ? bottomPadding : 16) + 8),
-          decoration: const BoxDecoration(
-            color: Colors.white,
+          decoration: BoxDecoration(color: Colors.white,
             boxShadow: [
               BoxShadow(
                 color: Colors.black12,
@@ -488,11 +479,11 @@ Widget _buildBottomBar() {
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text("2 items", style: TextStyle(fontSize: 12, color: Colors.grey)),
-                  SizedBox(height: 4),
+                children:  [
+                  Text("2 items", style: TextStyle(fontSize: 12.sp, color: Colors.grey)),
+                  SizedBox(height: 4.h),
                   Text("₹400",
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                      style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold)),
                 ],
               ),
               Container(
@@ -501,12 +492,11 @@ Widget _buildBottomBar() {
                   color: Color(0xFFE47830),
                   borderRadius: BorderRadius.circular(30),
                 ),
-                child: const Text(
-                  "Add to Cart",
+                child: Text("Add to Cart",
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
-                      fontSize: 14),
+                      fontSize: 14.sp),
                 ),
               )
             ],
@@ -583,14 +573,14 @@ Widget _buildBottomBar() {
           children: [
             Text(category,
                 style:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 12),
+                    TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold)),
+            SizedBox(height: 12.h),
             ...services.map((service) {
               if (!category.toLowerCase().contains('wet')) {
                 // Cleanup & Bleach & Detan with ADD button
                 return Container(
-                  margin: const EdgeInsets.only(bottom: 16),
-                  padding: const EdgeInsets.all(12),
+                  margin: EdgeInsets.only(bottom: 16.r),
+                  padding: EdgeInsets.all(12.r),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12),
@@ -608,52 +598,49 @@ Widget _buildBottomBar() {
                         borderRadius: BorderRadius.circular(8),
                         child: Image.asset(
                           service['image']!,
-                          width: 60,
-                          height: 60,
+                          width: 60.w,
+                          height: 60.h,
                           fit: BoxFit.cover,
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      SizedBox(width: 12.w),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(service['title']!,
-                                style: const TextStyle(
-                                    fontSize: 14,
+                                style: TextStyle(fontSize: 14.sp,
                                     fontWeight: FontWeight.bold)),
-                            const SizedBox(height: 4),
+                            SizedBox(height: 4.h),
                             Row(
                               children: [
                                  SvgPicture.asset('assets/icons/star.svg',
-                                    width: 18,  color: Colors.black,),
-                                const SizedBox(width: 4),
+                                    width: 18.w,  color: Colors.black,),
+                                SizedBox(width: 4.w),
                                 Text(
                                   "${service['rating']} | ${service['duration']}",
-                                  style: const TextStyle(
-                                      fontSize: 12, color: Colors.grey),
+                                  style: TextStyle(fontSize: 12.sp, color: Colors.grey),
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 4),
+                            SizedBox(height: 4.h),
                             Text(service['price']!,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14)),
+                                style: TextStyle(fontWeight: FontWeight.bold,
+                                    fontSize: 14.sp)),
                           ],
                         ),
                       ),
                       Container(
-                        width: 75,
-                        height: 29,
+                        width: 75.w,
+                        height: 29.h,
                         child: Stack(
                           children: [
                             Positioned(
-                              left: 0,
-                              top: 0,
+                              left: 0.r,
+                              top: 0.r,
                               child: Container(
-                                width: 75,
-                                height: 29,
+                                width: 75.w,
+                                height: 29.h,
                                 decoration: ShapeDecoration(
                                   color: Colors.white,
                                   shape: RoundedRectangleBorder(
@@ -668,24 +655,22 @@ Widget _buildBottomBar() {
                                 ),
                               ),
                             ),
-                            const Positioned(
-                              left: 32,
-                              top: 5.38,
+                            Positioned(left: 32.r,
+                              top: 5.38.r,
                               child: Text(
                                 'Add',
                                 style: TextStyle(
                                   color: Color(0xFFE47830),
-                                  fontSize: 14,
+                                  fontSize: 14.sp,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ),
-                            const Positioned(
-                              left: 16,
-                              top: 9,
+                            Positioned(left: 16.r,
+                              top: 9.r,
                               child: SizedBox(
-                                width: 12,
-                                height: 12,
+                                width: 12.w,
+                                height: 12.h,
                                 child: Icon(Icons.add,
                                     size: 12, color: Color(0xFFE47830)),
                               ),
@@ -699,7 +684,7 @@ Widget _buildBottomBar() {
               } else {
                 // Facial with title & add button in same row
                 return Container(
-                  margin: const EdgeInsets.only(bottom: 16),
+                  margin: EdgeInsets.only(bottom: 16.r),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12),
@@ -720,12 +705,12 @@ Widget _buildBottomBar() {
                         child: Image.asset(
                           service['image']!,
                           width: double.infinity,
-                          height: 180,
+                          height: 180.h,
                           fit: BoxFit.cover,
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(12),
+                        padding: EdgeInsets.all(12.r),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -734,20 +719,19 @@ Widget _buildBottomBar() {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(service['title']!,
-                                    style: const TextStyle(
-                                        fontSize: 15,
+                                    style: TextStyle(fontSize: 15.sp,
                                         fontWeight: FontWeight.bold)),
                                 Container(
-                                  width: 75,
-                                  height: 29,
+                                  width: 75.w,
+                                  height: 29.h,
                                   child: Stack(
                                     children: [
                                       Positioned(
-                                        left: 0,
-                                        top: 0,
+                                        left: 0.r,
+                                        top: 0.r,
                                         child: Container(
-                                          width: 75,
-                                          height: 29,
+                                          width: 75.w,
+                                          height: 29.h,
                                           decoration: ShapeDecoration(
                                             color: Colors.white,
                                             shape: RoundedRectangleBorder(
@@ -763,24 +747,22 @@ Widget _buildBottomBar() {
                                           ),
                                         ),
                                       ),
-                                      const Positioned(
-                                        left: 32,
-                                        top: 5.38,
+                                      Positioned(left: 32.r,
+                                        top: 5.38.r,
                                         child: Text(
                                           'Add',
                                           style: TextStyle(
                                             color: Color(0xFFE47830),
-                                            fontSize: 14,
+                                            fontSize: 14.sp,
                                             fontWeight: FontWeight.w500,
                                           ),
                                         ),
                                       ),
-                                      const Positioned(
-                                        left: 16,
-                                        top: 9,
+                                      Positioned(left: 16.r,
+                                        top: 9.r,
                                         child: SizedBox(
-                                          width: 12,
-                                          height: 12,
+                                          width: 12.w,
+                                          height: 12.h,
                                           child: Icon(Icons.add,
                                               size: 12,
                                               color: Color(0xFFE47830)),
@@ -791,42 +773,38 @@ Widget _buildBottomBar() {
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 4),
+                            SizedBox(height: 4.h),
                             Row(
                               children: [
                                  SvgPicture.asset('assets/icons/star.svg',
-                                    width: 18,  color: Colors.black,),
-                                const SizedBox(width: 4),
+                                    width: 18.w,  color: Colors.black,),
+                                SizedBox(width: 4.w),
                                 Text(
                                   "${service['rating']} | ${service['duration']}",
-                                  style: const TextStyle(
-                                      fontSize: 12, color: Colors.grey),
+                                  style: TextStyle(fontSize: 12.sp, color: Colors.grey),
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 6),
+                            SizedBox(height: 6.h),
                             Row(
                               children: [
                                 Text(service['price']!,
-                                    style: const TextStyle(
-                                        fontSize: 16,
+                                    style: TextStyle(fontSize: 16.sp,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black)),
-                                const SizedBox(width: 6),
+                                SizedBox(width: 6.w),
                                 Text(service['originalPrice']!,
-                                    style: const TextStyle(
-                                        fontSize: 14,
+                                    style: TextStyle(fontSize: 14.sp,
                                         decoration: TextDecoration.lineThrough,
                                         color: Colors.grey)),
                               ],
                             ),
                             if (service['desc'] != null &&
                                 service['desc']!.isNotEmpty) ...[
-                              const SizedBox(height: 8),
+                              SizedBox(height: 8.h),
                               Text(
                                 service['desc']!,
-                                style: const TextStyle(
-                                    fontSize: 12, color: Colors.black87),
+                                style: TextStyle(fontSize: 12.sp, color: Colors.black87),
                               ),
                             ],
                           ],

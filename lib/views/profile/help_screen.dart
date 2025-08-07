@@ -1,4 +1,5 @@
 import 'package:flutter/gestures.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:flutter/material.dart';
@@ -65,16 +66,16 @@ class _HelpScreenState extends State<HelpScreen> {
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               children: [
-                const Text(
+               Text(
                   'All Topics',
                   style: TextStyle(
-                    fontSize: 24,
+                    fontSize: 24.sp,
                     fontFamily: 'SF Pro',
                     fontWeight: FontWeight.w700,
                     letterSpacing: 0.24,
                   ),
                 ),
-                const SizedBox(height: 30),
+                SizedBox(height: 30.h),
                 ...topics.map((topic) => HelpExpansionTile(topic: topic, launchUrl: _launchUrl)),
               ],
             ),
@@ -111,14 +112,14 @@ class HelpExpansionTile extends StatelessWidget {
         colorFilter: const ColorFilter.mode(Colors.black, BlendMode.srcIn),
         child: SvgPicture.asset(
           topic.iconPath,
-          height: 26,
-          width: 26,
+          height: 26.h,
+          width: 26.w,
         ),
       ),
       title: Text(
         topic.title,
-        style: const TextStyle(
-          fontSize: 16,
+        style: TextStyle(
+          fontSize: 16.sp,
           fontFamily: 'SF Pro',
           fontWeight: FontWeight.w500,
           color: Colors.black,
@@ -126,13 +127,13 @@ class HelpExpansionTile extends StatelessWidget {
       ),
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 8.0, right: 4.0, bottom: 16.0),
+          padding: EdgeInsets.only(left: 8.0.r, right: 4.0.r, bottom: 16.0.r),
           child: RichText(
             text: TextSpan(
-              style: const TextStyle(
-                fontSize: 14,
+              style: TextStyle(
+                fontSize: 14.sp,
                 fontFamily: 'SF Pro',
-                height: 1.5,
+                height: 1.5.h,
                 color: Colors.black87,
               ),
               children: [

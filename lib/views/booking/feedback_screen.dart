@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../widgets/chayan_header.dart';
 import 'feedback_submitted_screen.dart';
 
@@ -24,16 +25,16 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                 title: 'Feedback',
                 onBackTap: () => Navigator.pop(context),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
 
               // Service Card
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Container(
-                  height: 132,
-                  padding: const EdgeInsets.all(12),
+                  height: 132.h,
+                  padding: EdgeInsets.all(12.r),
                   decoration: BoxDecoration(
-                    border: Border.all(color: Color(0xFFF3F3F3), width: 2),
+                    border: Border.all(color: Color(0xFFF3F3F3), width: 2.w),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Row(
@@ -42,28 +43,27 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                         borderRadius: BorderRadius.circular(14),
                         child: Image.asset(
                           'assets/cleanup.webp',
-                          width: 100,
-                          height: 100,
+                          width: 100.w,
+                          height: 100.h,
                           fit: BoxFit.cover,
                         ),
                       ),
-                      const SizedBox(width: 16),
+                      SizedBox(width: 16.w),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text(
-                            'Diamond Facial',
+                          Text('Diamond Facial',
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 14.sp,
                               fontWeight: FontWeight.w700,
                               fontFamily: 'Inter',
                               color: Color(0xFF161616),
                             ),
                           ),
-                          const SizedBox(height: 8),
+                          SizedBox(height: 8.h),
                           _dotWithText('2 hrs'),
-                          const SizedBox(height: 4),
+                          SizedBox(height: 4.h),
                           _dotWithText('Includes dummy info'),
                         ],
                       ),
@@ -72,16 +72,16 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                 ),
               ),
 
-              const SizedBox(height: 24),
+              SizedBox(height: 24.h),
 
               // Question
-              const Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 24),
                 child: Text(
                   'How would you rate the experience\n          and service ?',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 16.sp,
                     fontWeight: FontWeight.w500,
                     fontFamily: 'Inter',
                     color: Color(0xFF161616),
@@ -89,7 +89,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                 ),
               ),
 
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
 
               // Star Ratings
               Row(
@@ -115,15 +115,14 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
               if (selectedRating > 0)
                 Text(
                   '$selectedRating - ${_getRatingLabel(selectedRating)}',
-                  style: const TextStyle(
-                    fontSize: 16,
+                  style: TextStyle(fontSize: 16.sp,
                     fontWeight: FontWeight.w500,
                     color: Color(0xFF161616),
                     fontFamily: 'Inter',
                   ),
                 ),
 
-              const SizedBox(height: 24),
+              SizedBox(height: 24.h),
 
               // Comment Box
               Padding(
@@ -132,8 +131,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                   maxLines: 6,
                   decoration: InputDecoration(
                     hintText: 'Tell us on how we can improve',
-                    hintStyle: const TextStyle(
-                      fontSize: 14,
+                    hintStyle: TextStyle(fontSize: 14.sp,
                       color: Colors.grey,
                     ),
                     filled: true,
@@ -150,17 +148,16 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                 ),
               ),
 
-              const SizedBox(height: 24),
+              SizedBox(height: 24.h),
 
               // Add Photos Title
-              const Padding(
-                padding: EdgeInsets.only(left: 25, bottom: 8),
+              Padding(padding: EdgeInsets.only(left: 25.r, bottom: 8.r),
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
                     'Add Photos',
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 20.sp,
                       fontWeight: FontWeight.w600,
                       fontFamily: 'SF Pro',
                       color: Colors.black,
@@ -172,15 +169,15 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
               // Add Photo Blocks
              // Add Photo Blocks
 Padding(
-  padding: const EdgeInsets.only(left: 25),
+  padding: EdgeInsets.only(left: 25.r),
   child: Row(
     children: List.generate(3, (index) {
       return Container(
-        margin: const EdgeInsets.only(right: 10),
-        width: 80,
-        height: 80,
+        margin: EdgeInsets.only(right: 10.r),
+        width: 80.w,
+        height: 80.h,
         decoration: BoxDecoration(
-          color: index == 0 ? const Color(0xFFD9D9D9) : Colors.white,
+          color: index == 0 ? Color(0xFFD9D9D9) : Colors.white,
           border: Border.all(
             color: index == 0
                 ? Colors.transparent
@@ -192,7 +189,7 @@ Padding(
           child: Text(
             '+',
             style: TextStyle(
-              fontSize: 36,
+              fontSize: 36.sp,
               fontWeight: FontWeight.w500,
               color: Colors.black.withOpacity(0.7),
               shadows: index == 0
@@ -212,7 +209,7 @@ Padding(
   ),
 ),
 
-              const SizedBox(height: 32),
+              SizedBox(height: 32.h),
 
               // Submit Button
               Padding(
@@ -237,10 +234,9 @@ Padding(
                           );
                         }
                       : null,
-                  child: const Text(
-                    'Submit Feedback',
+                  child: Text('Submit Feedback',
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 16.sp,
                       color: Colors.white,
                       fontFamily: 'SF Pro Display',
                       fontWeight: FontWeight.w500,
@@ -250,7 +246,7 @@ Padding(
                 ),
               ),
 
-              const SizedBox(height: 24),
+              SizedBox(height: 24.h),
             ],
           ),
         ),
@@ -262,18 +258,17 @@ Padding(
     return Row(
       children: [
         Container(
-          width: 4,
-          height: 4,
+          width: 4.w,
+          height: 4.h,
           decoration: const BoxDecoration(
             color: Color(0xFF757575),
             shape: BoxShape.circle,
           ),
         ),
-        const SizedBox(width: 6),
+        SizedBox(width: 6.w),
         Text(
           text,
-          style: const TextStyle(
-            fontSize: 14,
+          style: TextStyle(fontSize: 14.sp,
             color: Color(0xFF757575),
             fontWeight: FontWeight.w400,
             fontFamily: 'Inter',

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'widgets/ReviewSubmittedPopup.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -59,28 +60,28 @@ void _launchURL(String url) async {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  const SizedBox(height: 40),
-                  const Text(
+                  SizedBox(height: 40.h),
+                 Text(
                     'How Did You Liked Chayan Karo?',
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 20.sp,
                       fontWeight: FontWeight.w600,
                       fontFamily: 'SF Pro',
                     ),
                   ),
-                  const SizedBox(height: 30),
-                  const Text(
+                  SizedBox(height: 30.h),
+                   Text(
                     'Ratings',
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 20.sp,
                       fontWeight: FontWeight.w600,
                       fontFamily: 'SF Pro',
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20.h),
                   Container(
-                    width: 343,
-                    height: 42,
+                    width: 343.w,
+                    height: 42.h,
                     padding: const EdgeInsets.symmetric(horizontal: 40),
                     decoration: BoxDecoration(
                       color: const Color(0xFFE47830),
@@ -106,20 +107,20 @@ void _launchURL(String url) async {
                       }),
                     ),
                   ),
-                  const SizedBox(height: 30),
-                  const Text(
+                  SizedBox(height: 30.h),
+                   Text(
                     'Review',
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 20.sp,
                       fontWeight: FontWeight.w600,
                       fontFamily: 'SF Pro',
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10.h),
                   Container(
-                    width: 343,
-                    height: 203,
-                    padding: const EdgeInsets.all(12),
+                    width: 343.w,
+                    height: 203.h,
+                    padding: EdgeInsets.all(12.r),
                     decoration: BoxDecoration(
                       color: const Color(0xFFD9D9D9),
                       border: Border.all(color: Colors.black.withOpacity(0.46)),
@@ -132,7 +133,7 @@ void _launchURL(String url) async {
                           InputDecoration.collapsed(hintText: 'Write your review here'),
                     ),
                   ),
-                  const SizedBox(height: 30),
+                  SizedBox(height: 30.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -145,10 +146,10 @@ void _launchURL(String url) async {
                           ),
                           fixedSize: const Size(166, 47),
                         ),
-                        child: const Text(
+                        child:  Text(
                           'Submit',
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 16.sp,
                             color: Colors.white,
                             fontFamily: 'SF Pro',
                           ),
@@ -168,10 +169,10 @@ void _launchURL(String url) async {
                           ),
                           fixedSize: const Size(166, 47),
                         ),
-                        child: const Text(
+                        child:  Text(
                           'No Thanks',
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 16.sp,
                             color: Colors.black,
                             fontFamily: 'SF Pro',
                           ),
@@ -179,7 +180,7 @@ void _launchURL(String url) async {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 40),
+                  SizedBox(height: 40.h),
                   Column(
                     children: [
                       Row(
@@ -192,12 +193,12 @@ children: [
       backgroundColor: Colors.white,
       child: SvgPicture.asset(
         'assets/icons/insta.svg',
-        width: 35,
-        height: 35,
+        width: 35.w,
+        height: 35.h,
       ),
     ),
   ),
-  const SizedBox(width: 8),
+  SizedBox(width: 8.w),
   GestureDetector(
     onTap: () => _launchURL(facebookUrl),
     child: CircleAvatar(
@@ -205,12 +206,12 @@ children: [
       backgroundColor: Colors.white,
       child: SvgPicture.asset(
         'assets/icons/fb.svg',
-        width: 35,
-        height: 35,
+        width: 35.w,
+        height: 35.h,
       ),
     ),
   ),
-  const SizedBox(width: 8),
+  SizedBox(width: 8.w),
   GestureDetector(
     onTap: () => _launchURL(youtubeUrl),
     child: CircleAvatar(
@@ -218,8 +219,8 @@ children: [
       backgroundColor: Colors.white,
       child: SvgPicture.asset(
         'assets/icons/youtube.svg',
-        width: 35,
-        height: 35,
+        width: 35.w,
+        height: 35.h,
       ),
     ),
   ),
@@ -227,18 +228,18 @@ children: [
 
 ),
 
-                      const SizedBox(height: 10),
-                      const Text(
+                      SizedBox(height: 10.h),
+                      Text(
                         'Our Social Links',
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 14.sp,
                           fontWeight: FontWeight.w400,
                           fontFamily: 'SF Pro',
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 30),
+                  SizedBox(height: 30.h),
                 ],
               ),
             ),

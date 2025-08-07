@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/services.dart';
@@ -75,12 +76,12 @@ Widget build(BuildContext context) {
           // Scrollable content
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.only(bottom: 90),
+              padding: EdgeInsets.only(bottom: 90.r),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
 
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20.h),
 
                   /// --- Refer & Earn Section ---
                   GestureDetector(
@@ -93,7 +94,7 @@ Widget build(BuildContext context) {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 24),
                       child: Container(
-                        padding: const EdgeInsets.all(16),
+                        padding: EdgeInsets.all(16.r),
                         decoration: BoxDecoration(
                           color: const Color(0xFFFFE0C7),
                           borderRadius: BorderRadius.circular(12),
@@ -103,35 +104,35 @@ Widget build(BuildContext context) {
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
+                                children:  [
                                   Text(
                                     'Refer & earn 100 coins',
                                     style: TextStyle(
-                                      fontSize: 15,
+                                      fontSize: 15.sp,
                                       fontWeight: FontWeight.w700,
                                     ),
                                   ),
-                                  SizedBox(height: 8),
+                                  SizedBox(height: 8.h),
                                   Text(
                                     'Get 100 coins when your friend completes their first booking',
-                                    style: TextStyle(fontSize: 12),
+                                    style: TextStyle(fontSize: 12.sp),
                                   ),
-                                  SizedBox(height: 8),
+                                  SizedBox(height: 8.h),
                                   Text(
                                     'Refer now',
                                     style: TextStyle(
-                                      fontSize: 14,
+                                      fontSize: 14.sp,
                                       color: Color(0xFF757575),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                            const SizedBox(width: 8),
+                            SizedBox(width: 8.w),
                             SvgPicture.asset(
                               'assets/icons/gifty.svg',
-                              height: 40,
-                              width: 40,
+                              height: 40.h,
+                              width: 40.w,
                             ),
                           ],
                         ),
@@ -139,7 +140,7 @@ Widget build(BuildContext context) {
                     ),
                   ),
 
-                  const SizedBox(height: 30),
+                  SizedBox(height: 30.h),
 
                   /// --- Coin Balance Section ---
                   Padding(
@@ -148,14 +149,14 @@ Widget build(BuildContext context) {
                       children: [
                         SvgPicture.asset(
                           'assets/icons/coins.svg',
-                          height: 30,
-                          width: 30,
+                          height: 30.h,
+                          width: 30.w,
                         ),
-                        const SizedBox(width: 10),
-                        const Text(
+                        SizedBox(width: 10.w),
+                         Text(
                           'Chayan Coins',
                           style: TextStyle(
-                            fontSize: 24,
+                            fontSize: 24.sp,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -167,11 +168,11 @@ Widget build(BuildContext context) {
                             borderRadius: BorderRadius.circular(6),
                             border: Border.all(color: Colors.black12),
                           ),
-                          child: const Text(
+                          child:  Text(
                             '100',
                             style: TextStyle(
                               color: Color(0xFFE47830),
-                              fontSize: 20,
+                              fontSize: 20.sp,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -180,33 +181,33 @@ Widget build(BuildContext context) {
                     ),
                   ),
 
-              const SizedBox(height: 10),
-              const Padding(
+              SizedBox(height: 10.h),
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 24),
                 child: Text(
                   'Formely Chayan Coins. Applicable on all services',
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(fontSize: 16.sp),
                 ),
               ),
 
-              const SizedBox(height: 40),
+              SizedBox(height: 40.h),
 
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: ExpansionTile(
                   tilePadding: EdgeInsets.zero,
-                  title: const Text(
+                  title:  Text(
                     'Have a Question?',
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 20.sp,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                   children: [
                     GestureDetector(
                       onTap: _launchChayanKaro,
-                      child: const Padding(
-                        padding: EdgeInsets.only(bottom: 12),
+                      child:  Padding(
+                        padding: EdgeInsets.only(bottom: 12.r),
                         child: Text.rich(
                           TextSpan(
                             text: 'At ',
@@ -221,7 +222,7 @@ Widget build(BuildContext context) {
                               ),
                             ],
                           ),
-                          style: TextStyle(fontSize: 14),
+                          style: TextStyle(fontSize: 14.sp),
                         ),
                       ),
                     ),
@@ -234,11 +235,11 @@ Widget build(BuildContext context) {
                 child: Divider(thickness: 1, color: Colors.grey),
               ),
 
-              const Padding(
+             Padding(
                 padding: EdgeInsets.symmetric(horizontal: 24),
                 child: Text(
                   'Wallet Activity',
-                  style: TextStyle(fontSize: 20),
+                  style: TextStyle(fontSize: 20.sp),
                 ),
               ),
 

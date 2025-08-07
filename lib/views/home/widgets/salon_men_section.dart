@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../services/SalonMenServiceScreen.dart';
 
 class SalonMenSection extends StatelessWidget {
@@ -13,10 +14,9 @@ class SalonMenSection extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              "Salon - Men",
+            Text("Salon - Men",
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -29,24 +29,23 @@ class SalonMenSection extends StatelessWidget {
                   ),
                 );
               },
-              child: const Padding(
-                padding: EdgeInsets.only(right: 16),
+              child: Padding(padding: EdgeInsets.only(right: 16.r),
                 child: Text(
                   "View All >",
                   style: TextStyle(
                     color: Colors.orange,
                     fontWeight: FontWeight.w600,
-                    fontSize: 12,
+                    fontSize: 12.sp,
                   ),
                 ),
               ),
             ),
           ],
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12.h),
 
         SizedBox(
-          height: 164,
+          height: 164.h,
           child: ListView(
             scrollDirection: Axis.horizontal,
             children: const [
@@ -82,12 +81,12 @@ class _SalonMenTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 144,
-      height: 164,
-      margin: const EdgeInsets.only(right: 12),
+      width: 144.w,
+      height: 164.h,
+      margin: EdgeInsets.only(right: 12.r),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: const Color(0xFFFFD9BE), width: 1),
+        border: Border.all(color: Color(0xFFFFD9BE), width: 1.w),
         image: DecorationImage(
           image: AssetImage(imagePath),
           fit: BoxFit.cover,
@@ -96,11 +95,11 @@ class _SalonMenTile extends StatelessWidget {
       child: Stack(
         children: [
           Positioned(
-            left: 0,
-            bottom: 0,
+            left: 0.r,
+            bottom: 0.r,
             child: Container(
-              width: 144,
-              height: 22,
+              width: 144.w,
+              height: 22.h,
               decoration: const BoxDecoration(
                 color: Color(0xFFFFD9BE),
                 borderRadius: BorderRadius.only(
@@ -111,8 +110,7 @@ class _SalonMenTile extends StatelessWidget {
               alignment: Alignment.center,
               child: Text(
                 label,
-                style: const TextStyle(
-                  fontSize: 10,
+                style: TextStyle(fontSize: 10.sp,
                   fontWeight: FontWeight.w600,
                 ),
                 maxLines: 1,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../services/HomeRepairsScreen.dart';
 
 class AppliancesRepairsSection extends StatelessWidget {
@@ -23,12 +24,11 @@ class AppliancesRepairsSection extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              'Appliances & Repairs',
+            Text('Appliances & Repairs',
               style: TextStyle(
                 fontFamily: 'SF Pro',
                 fontWeight: FontWeight.w600,
-                fontSize: 16,
+                fontSize: 16.sp,
               ),
             ),
             GestureDetector(
@@ -40,14 +40,13 @@ class AppliancesRepairsSection extends StatelessWidget {
                   ),
                 );
               },
-              child: const Padding(
-                padding: EdgeInsets.only(right: 16),
+              child: Padding(padding: EdgeInsets.only(right: 16.r),
                 child: Text(
                   'View All >',
                   style: TextStyle(
                     fontFamily: 'SF Pro',
                     fontWeight: FontWeight.w600,
-                    fontSize: 12,
+                    fontSize: 12.sp,
                     color: Color(0xFFE47830),
                   ),
                 ),
@@ -55,23 +54,23 @@ class AppliancesRepairsSection extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12.h),
 
         // Matching AC style (no extra horizontal padding, spacing via margin)
         SizedBox(
-          height: 260,
+          height: 260.h,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: appliances.length,
             itemBuilder: (context, index) {
               final appliance = appliances[index];
               return Container(
-                margin: const EdgeInsets.only(right: 12),
-                width: 191.11,
-                height: 260,
+                margin: EdgeInsets.only(right: 12.r),
+                width: 191.11.w,
+                height: 260.h,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: const Color(0xFFFFD9BE), width: 1),
+                  border: Border.all(color: Color(0xFFFFD9BE), width: 1.w),
                   image: DecorationImage(
                     image: AssetImage(appliance['image']!),
                     fit: BoxFit.cover,
@@ -81,7 +80,7 @@ class AppliancesRepairsSection extends StatelessWidget {
                   alignment: Alignment.bottomLeft,
                   child: Container(
                     width: double.infinity,
-                    height: 24,
+                    height: 24.h,
                     alignment: Alignment.center,
                     decoration: const BoxDecoration(
                       color: Color(0xFFFFD9BE),
@@ -92,8 +91,7 @@ class AppliancesRepairsSection extends StatelessWidget {
                     ),
                     child: Text(
                       appliance['title']!,
-                      style: const TextStyle(
-                        fontSize: 11,
+                      style: TextStyle(fontSize: 11.sp,
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w600,
                       ),

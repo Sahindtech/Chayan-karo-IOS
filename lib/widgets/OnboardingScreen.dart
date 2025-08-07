@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class OnboardingScreen extends StatefulWidget {
+  const OnboardingScreen({super.key});
+
   @override
   _OnboardingScreenState createState() => _OnboardingScreenState();
 }
@@ -15,46 +18,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     "assets/onboard3.webp",
   ];
 
-  final List<Widget> _titles = [
-    Text(
-      'We Provide Professional Home services at a very friendly price',
-      textAlign: TextAlign.center,
-      style: TextStyle(
-        color: Color(0xFF1A1D1F),
-        fontSize: 28,
-        fontFamily: 'SF Pro Display',
-        fontWeight: FontWeight.w700,
-        height: 1.43,
-      ),
-    ),
-    Text(
-      'Easy Service booking & Scheduling',
-      textAlign: TextAlign.center,
-      style: TextStyle(
-        color: Color(0xFF1A1D1F),
-        fontSize: 28,
-        fontFamily: 'SF Pro Display',
-        fontWeight: FontWeight.w700,
-        height: 1.43,
-      ),
-    ),
-    Text(
-      'Get Beauty parlor at your home & other Personal Grooming needs',
-      textAlign: TextAlign.center,
-      style: TextStyle(
-        color: Color(0xFF1A1D1F),
-        fontSize: 28,
-        fontFamily: 'SF Pro Display',
-        fontWeight: FontWeight.w700,
-        height: 1.43,
-      ),
-    ),
+  final List<String> _titles = [
+    'We Provide Professional Home services at a very friendly price',
+    'Easy Service booking & Scheduling',
+    'Get Beauty parlor at your home & other Personal Grooming needs',
   ];
 
   void _nextPage() {
     if (_currentPage < _images.length - 1) {
       _pageController.nextPage(
-        duration: Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 300),
         curve: Curves.ease,
       );
     } else {
@@ -68,6 +41,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Responsive sizes based on screen width
+    double outerCircleSize = 0.8.sw; // 80% of screen width
+    double innerCircleSize = 0.7.sw; // 70% of screen width
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
@@ -82,33 +59,34 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             },
             itemBuilder: (context, index) {
               return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                padding: EdgeInsets.symmetric(horizontal: 24.w),
                 child: Column(
                   children: [
-                    const SizedBox(height: 100),
-                    // Circular background with image
+                    SizedBox(height: 100.h),
                     Center(
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
                           Container(
-                            height: 328,
-                            width: 328,
+                            height: outerCircleSize,
+                            width: outerCircleSize,
                             decoration: BoxDecoration(
-                              color: Color(0xFFF2F4FF),
+                              color: const Color(0xFFF2F4FF),
                               shape: BoxShape.circle,
                             ),
                           ),
                           Container(
-                            height: 287,
-                            width: 287,
+                            height: innerCircleSize,
+                            width: innerCircleSize,
                             decoration: BoxDecoration(
-                              color: Color(0xFFE5EAFF),
+                              color: const Color(0xFFE5EAFF),
                               shape: BoxShape.circle,
                             ),
                             child: ClipOval(
                               child: Image.asset(
                                 _images[index],
+                                width: innerCircleSize,
+                                height: innerCircleSize,
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -116,8 +94,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 40),
-                    _titles[index], // Injected custom title
+                    SizedBox(height: 40.h),
+                    Text(
+                      _titles[index],
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: const Color(0xFF1A1D1F),
+                        fontSize: 28.sp,
+                        fontFamily: 'SF Pro Display',
+                        fontWeight: FontWeight.w700,
+                        height: 1.43,
+                      ),
+                    ),
                   ],
                 ),
               );
@@ -126,64 +114,65 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
           // Skip Button
           Positioned(
-            top: 50,
-            right: 24,
+            top: 50.h,
+            right: 24.w,
             child: GestureDetector(
               onTap: _skip,
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
                 decoration: BoxDecoration(
-                  color: Color(0xFFE6EAFF),
-                  borderRadius: BorderRadius.circular(20),
+                  color: const Color(0xFFE6EAFF),
+                  borderRadius: BorderRadius.circular(20.r),
                 ),
                 child: Text(
                   "Skip",
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 14.sp,
                     fontFamily: 'SFProSemibold',
-                    color: Color(0xFFFF6F00),
+                    color: const Color(0xFFFF6F00),
                   ),
                 ),
               ),
             ),
           ),
 
-          // Bottom Controls wrapped with SafeArea
-Positioned(
-  bottom: 0,
-  left: 0,
-  right: 0,
-  child: SafeArea(
-    minimum: const EdgeInsets.only(bottom: 28), // adds spacing inside SafeArea
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        // Arrow Button
-        GestureDetector(
-          onTap: _nextPage,
-          child: Container(
-            padding: EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Color(0xFFFF6F00),
+          // Bottom Controls
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: SafeArea(
+              minimum: EdgeInsets.only(bottom: 28.h),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  GestureDetector(
+                    onTap: _nextPage,
+                    child: Container(
+                      padding: EdgeInsets.all(16.r),
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Color(0xFFFF6F00),
+                      ),
+                      child: Icon(
+                        Icons.arrow_forward,
+                        color: Colors.white,
+                        size: 28.sp,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 12.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(
+                      _images.length,
+                      (index) => buildDot(index),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            child: Icon(Icons.arrow_forward, color: Colors.white, size: 28),
           ),
-        ),
-        SizedBox(height: 12),
-        // Page Dots
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(
-            _images.length,
-            (index) => buildDot(index),
-          ),
-        ),
-      ],
-    ),
-  ),
-),
-
         ],
       ),
     );
@@ -191,12 +180,14 @@ Positioned(
 
   Widget buildDot(int index) {
     return Container(
-      height: 8,
-      width: _currentPage == index ? 24 : 8,
-      margin: EdgeInsets.symmetric(horizontal: 4),
+      height: 8.h,
+      width: _currentPage == index ? 24.w : 8.w,
+      margin: EdgeInsets.symmetric(horizontal: 4.w),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(4),
-        color: _currentPage == index ? Color(0xFFFF6F00) : Colors.grey.shade300,
+        borderRadius: BorderRadius.circular(4.r),
+        color: _currentPage == index
+            ? const Color(0xFFFF6F00)
+            : Colors.grey.shade300,
       ),
     );
   }

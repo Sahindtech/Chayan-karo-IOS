@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../widgets/chayan_header.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -55,28 +56,28 @@ class _HelpScreenState extends State<HelpScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20.h),
                   
                   // Need Assistance title
                   Padding(
-                    padding: const EdgeInsets.only(left: 16),
+                    padding: EdgeInsets.only(left: 16.r),
                     child: Text(
                       'Need assistance?',
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 20.sp,
                         fontWeight: FontWeight.w700,
                         fontFamily: 'SF Pro',
                         color: Color(0xFF161616),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12.h),
                   
                   // Call for Support button
                   Container(
-                    height: 33,
-                    width: 160,
-                    margin: const EdgeInsets.only(left: 16),
+                    height: 33.h,
+                    width: 160.w,
+                    margin: EdgeInsets.only(left: 16.r),
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.black.withOpacity(0.3)),
                       borderRadius: BorderRadius.circular(5),
@@ -85,12 +86,11 @@ class _HelpScreenState extends State<HelpScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SvgPicture.asset('assets/icons/help.svg', height: 20, width: 20,color: Colors.black),
-                        const SizedBox(width: 8),
-                        const Text(
-                          'Call For Support',
+                        SvgPicture.asset('assets/icons/help.svg', height: 20.h, width: 20.w,color: Colors.black),
+                        SizedBox(width: 8.w),
+                        Text('Call For Support',
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.w500,
                             fontFamily: 'SF Pro',
                           ),
@@ -99,15 +99,14 @@ class _HelpScreenState extends State<HelpScreen> {
                     ),
                   ),
 
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24.h),
 
                   // FAQ Title (left-aligned, no padding)
-                  const Padding(
-  padding: EdgeInsets.only(left: 16),
+                  Padding(padding: EdgeInsets.only(left: 16.r),
   child: Text(
     'Frequently Asked Question(FAQ’s)',
     style: TextStyle(
-      fontSize: 18,
+      fontSize: 18.sp,
       fontWeight: FontWeight.w600,
       fontFamily: 'SF Pro',
       color: Color(0xFF161616),
@@ -115,7 +114,7 @@ class _HelpScreenState extends State<HelpScreen> {
   ),
 ),
 
-const SizedBox(height: 8),
+SizedBox(height: 8.h),
 Divider(thickness: 6, color: Color(0x7FD9D9D9)),
 
                   // FAQ list
@@ -141,14 +140,14 @@ Divider(thickness: 6, color: Color(0x7FD9D9D9)),
         trailing: Text(
           _isExpanded[index] ? '✕' : '+',
           style: TextStyle(
-            fontSize: 16,
+            fontSize: 16.sp,
             fontWeight: FontWeight.w600,
           ),
         ),
         title: Text(
           faqs[index]['question']!,
           style: TextStyle(
-            fontSize: 16,
+            fontSize: 16.sp,
             fontWeight: FontWeight.w500,
             fontFamily: 'SF Pro',
             color: Colors.black,
@@ -156,11 +155,11 @@ Divider(thickness: 6, color: Color(0x7FD9D9D9)),
         ),
         children: [
           Padding(
-            padding: const EdgeInsets.only(bottom: 10),
+            padding: EdgeInsets.only(bottom: 10.r),
             child: Text(
               faqs[index]['answer']!,
               style: TextStyle(
-                fontSize: 14,
+                fontSize: 14.sp,
                 fontWeight: FontWeight.w400,
                 color: Colors.black87,
               ),
@@ -171,7 +170,7 @@ Divider(thickness: 6, color: Color(0x7FD9D9D9)),
     },
   ),
 ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20.h),
                 ],
               ),
             ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -54,14 +55,14 @@ class _ReferAndEarnScreenState extends State<ReferAndEarnScreen> {
         body: Stack(
           children: [
             Container(
-              height: 140,
+              height: 140.h,
               width: double.infinity,
               color: const Color(0xFFFFEEE0),
             ),
             SafeArea(
   child: Column( // ✅ this is required for Expanded to work
     children: [
-      const SizedBox(height: 10),
+      SizedBox(height: 10.h),
       ChayanHeader(
         title: 'Refer & Earn',
         onBackTap: () => Navigator.pop(context),
@@ -70,7 +71,7 @@ class _ReferAndEarnScreenState extends State<ReferAndEarnScreen> {
         child: SingleChildScrollView(
           child: Container(
             color: Colors.white,
-            padding: const EdgeInsets.only(top: 16),
+            padding: EdgeInsets.only(top: 16.r),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -93,47 +94,47 @@ class _ReferAndEarnScreenState extends State<ReferAndEarnScreen> {
                                     Expanded(
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: const [
+                                        children:  [
                                           Text(
                                             'Refer and get FREE\nServices',
                                             style: TextStyle(
-                                              fontSize: 18,
+                                              fontSize: 18.sp,
                                               fontWeight: FontWeight.w600,
                                               color: Colors.white,
                                             ),
                                           ),
-                                          SizedBox(height: 6),
+                                          SizedBox(height: 6.h),
                                           Text(
                                             'Invite your friends to try Chayan Karo services. They get instant 100 coins off. You win 100 coins once they take a service.',
                                             style: TextStyle(
-                                              fontSize: 13,
+                                              fontSize: 13.sp,
                                               color: Colors.white70,
                                             ),
                                           ),
                                         ],
                                       ),
                                     ),
-                                    const SizedBox(width: 10),
+                                    SizedBox(width: 10.w),
                                     SvgPicture.asset(
                                       'assets/icons/Gift.svg',
-                                      width: 80,
-                                      height: 80,
+                                      width: 80.w,
+                                      height: 80.h,
                                       fit: BoxFit.contain,
                                     ),
                                   ],
                                 ),
-                                const SizedBox(height: 16),
-                                const Center(
+                                SizedBox(height: 16.h),
+                                Center(
                                   child: Text(
                                     'Refer via',
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 12,
+                                      fontSize: 12.sp,
                                       letterSpacing: 0.8,
                                     ),
                                   ),
                                 ),
-                                const SizedBox(height: 12),
+                                SizedBox(height: 12.h),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                                   children: [
@@ -145,77 +146,77 @@ class _ReferAndEarnScreenState extends State<ReferAndEarnScreen> {
                               ],
                             ),
                           ),
-                          const SizedBox(height: 24),
+                          SizedBox(height: 24.h),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: Container(
                               width: double.infinity,
-                              padding: const EdgeInsets.all(16),
+                              padding: EdgeInsets.all(16.r),
                               decoration: BoxDecoration(
                                 color: const Color(0x66FF9437),
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              child: const Column(
+                              child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     'How it works?',
                                     style: TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 18.sp,
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
-                                  SizedBox(height: 16),
-                                  Text('1. Invite your friends & get rewarded', style: TextStyle(fontSize: 14)),
-                                  SizedBox(height: 8),
-                                  Text('2. They get 100 coins on their first service', style: TextStyle(fontSize: 14)),
-                                  SizedBox(height: 8),
-                                  Text('3. You get 100 coins once their service is completed', style: TextStyle(fontSize: 14)),
+                                  SizedBox(height: 16.h),
+                                  Text('1. Invite your friends & get rewarded', style: TextStyle(fontSize: 14.sp)),
+                                  SizedBox(height: 8.h),
+                                  Text('2. They get 100 coins on their first service', style: TextStyle(fontSize: 14.sp)),
+                                  SizedBox(height: 8.h),
+                                  Text('3. You get 100 coins once their service is completed', style: TextStyle(fontSize: 14.sp)),
                                 ],
                               ),
                             ),
                           ),
-                          const SizedBox(height: 24),
+                          SizedBox(height: 24.h),
                           Center(
   child: Column(
     children: [
-      const Text(
+       Text(
         'You are yet to earn any scratch cards',
         style: TextStyle(
-          fontSize: 17,
+          fontSize: 17.sp,
           fontWeight: FontWeight.w600,
           letterSpacing: 0.5,
         ),
       ),
-      const SizedBox(height: 4),
-      const Opacity(
+      SizedBox(height: 4.h),
+      Opacity(
         opacity: 0.75,
         child: Text(
           'Start referring to get surprises',
-          style: TextStyle(fontSize: 13),
+          style: TextStyle(fontSize: 13.sp),
         ),
       ),
-      const SizedBox(height: 8),
-      const Text(
+      SizedBox(height: 8.h),
+       Text(
         '......................................................................................',
         style: TextStyle(
-          fontSize: 12,
+          fontSize: 12.sp,
           fontWeight: FontWeight.w600,
         ),
       ),
-      const SizedBox(height: 8),
+      SizedBox(height: 8.h),
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SvgPicture.asset(
             'assets/icons/gifty.svg',
-            width: 37,
-            height: 37,
+            width: 37.w,
+            height: 37.h,
           ),
-          const SizedBox(width: 6),
-          const Text(
+          SizedBox(width: 6.w),
+         Text(
             'Earn 100 coins on every successful referral',
-            style: TextStyle(fontSize: 12),
+            style: TextStyle(fontSize: 12.sp),
           ),
         ],
       ),
@@ -223,7 +224,7 @@ class _ReferAndEarnScreenState extends State<ReferAndEarnScreen> {
   ),
 ),
 
-                          const SizedBox(height: 60),
+                          SizedBox(height: 60.h),
                         ],
                       ),
                     ),
@@ -242,8 +243,8 @@ class _ReferAndEarnScreenState extends State<ReferAndEarnScreen> {
     return Column(
       children: [
         Container(
-          width: 54,
-          height: 54,
+          width: 54.w,
+          height: 54.h,
           decoration: BoxDecoration(
             color: color,
             shape: BoxShape.circle,
@@ -252,10 +253,10 @@ class _ReferAndEarnScreenState extends State<ReferAndEarnScreen> {
             child: Icon(icon, color: Colors.white, size: 24),
           ),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8.h),
         Text(
           label,
-          style: const TextStyle(fontSize: 12, color: Colors.black),
+          style: TextStyle(fontSize: 12.sp, color: Colors.black),
         ),
       ],
     );

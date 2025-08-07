@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
 import '../../widgets/chayan_header.dart';
 import 'cancel_booking_screen.dart';
@@ -34,17 +35,16 @@ Widget build(BuildContext context) {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
 
                     // Date + Actions
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        Column(crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('22nd', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18)),
-                            Text('Nov, Tuesday', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18)),
+                            Text('22nd', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18.sp)),
+                            Text('Nov, Tuesday', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18.sp)),
                           ],
                         ),
                         Row(
@@ -55,7 +55,7 @@ Widget build(BuildContext context) {
                               },
                               child: _actionButton('Help', 'assets/icons/help.svg', const Color(0xFFE47830)),
                             ),
-                            const SizedBox(width: 8),
+                            SizedBox(width: 8.w),
                             GestureDetector(
                               onTap: () {
                                 Navigator.push(context, MaterialPageRoute(builder: (_) => EmergencyScreen()));
@@ -67,33 +67,33 @@ Widget build(BuildContext context) {
                       ],
                     ),
 
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20.h),
 
                     // Service Cards
                     _bookingCard('assets/facial.webp', 'Diamond Facial', '2 hrs', 'Includes lorem ipsum'),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
                     _bookingCard('assets/cleanup.webp', 'Cleanup', '30 mins', 'Includes lorem'),
 
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20.h),
 
                     // Billing
                     Container(
-                      padding: const EdgeInsets.all(16),
+                      padding: EdgeInsets.all(16.r),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: const Color(0xFFF3F3F3), width: 2),
+                        border: Border.all(color: Color(0xFFF3F3F3), width: 2.w),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text('Billing Details', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
-                          const SizedBox(height: 16),
+                          Text('Billing Details', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16.sp)),
+                          SizedBox(height: 16.h),
                           _billingRow('Item Total', '₹699'),
                           _billingRow('Item Discount', '-₹50', valueColor: const Color(0xFF52B46B)),
                           _billingRow('Service Fee', '₹50'),
-                          const Divider(height: 30),
+                          Divider(height: 30.h),
                           _billingRow('Grand Total', '₹749', isBold: true),
-                          const SizedBox(height: 16),
+                          SizedBox(height: 16.h),
                           Container(
                             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                             decoration: BoxDecoration(
@@ -102,9 +102,9 @@ Widget build(BuildContext context) {
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: const [
-                                Text('Payment mode', style: TextStyle(fontSize: 14)),
-                                Text('Paytm UPI', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                              children:  [
+                                Text('Payment mode', style: TextStyle(fontSize: 14.sp)),
+                                Text('Paytm UPI', style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500)),
                               ],
                             ),
                           ),
@@ -112,36 +112,35 @@ Widget build(BuildContext context) {
                       ),
                     ),
 
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20.h),
 
                     // Address Section
                     Container(
-                      padding: const EdgeInsets.all(16),
+                      padding: EdgeInsets.all(16.r),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: const Color(0xFFF3F3F3), width: 2),
+                        border: Border.all(color: Color(0xFFF3F3F3), width: 2.w),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           _infoRow('assets/icons/home.svg', 'Home'),
-                          const SizedBox(height: 4),
-                          const Padding(
-                            padding: EdgeInsets.only(left: 32),
+                          SizedBox(height: 4.h),
+                          Padding(padding: EdgeInsets.only(left: 32.r),
                             child: Text(
                               'Plot no.209, Kavuri Hills, Madhapur, Telangana 500033, Ph: +91234567890',
-                              style: TextStyle(fontSize: 12, color: Color(0xFF757575), height: 1.5),
+                              style: TextStyle(fontSize: 12.sp, color: Color(0xFF757575), height: 1.5.h),
                             ),
                           ),
-                          const SizedBox(height: 12),
+                          SizedBox(height: 12.h),
                           _infoRow('assets/icons/calendar.svg', 'Sat, Apr 09 - 07:30 PM'),
-                          const SizedBox(height: 12),
+                          SizedBox(height: 12.h),
                           _infoRow('assets/icons/user.svg', 'Sumit Gupta, (180+ work), 4.5 rating'),
                         ],
                       ),
                     ),
 
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20.h),
                   ],
                 ),
               ),
@@ -170,10 +169,10 @@ Widget build(BuildContext context) {
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        child: const Text('Cancel', style: TextStyle(color: Colors.white)),
+                        child: Text('Cancel', style: TextStyle(color: Colors.white)),
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12.w),
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () => showReschedulePopup(context),
@@ -184,7 +183,7 @@ Widget build(BuildContext context) {
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        child: const Text('Reschedule', style: TextStyle(color: Colors.white)),
+                        child: Text('Reschedule', style: TextStyle(color: Colors.white)),
                       ),
                     ),
                   ],
@@ -202,7 +201,7 @@ Widget build(BuildContext context) {
   Widget _actionButton(String label, String iconPath, Color color) {
   return Container(
     padding: const EdgeInsets.symmetric(horizontal: 8),
-    height: 28,
+    height: 28.h,
     decoration: BoxDecoration(
       color: color,
       borderRadius: BorderRadius.circular(5),
@@ -210,11 +209,11 @@ Widget build(BuildContext context) {
     child: Row(
       children: [
         ColorFiltered(
-          colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-          child: SvgPicture.asset(iconPath, width: 16, height: 16),
+          colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
+          child: SvgPicture.asset(iconPath, width: 16.w, height: 16.h),
         ),
-        const SizedBox(width: 4),
-        Text(label, style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w700)),
+        SizedBox(width: 4.w),
+        Text(label, style: TextStyle(color: Colors.white, fontSize: 11.sp, fontWeight: FontWeight.w700)),
       ],
     ),
   );
@@ -224,16 +223,16 @@ Widget build(BuildContext context) {
  Widget _bookingCard(String imagePath, String title, String duration, String subtitle) {
   return Container(
     decoration: BoxDecoration(
-      border: Border.all(color: const Color(0xFFF3F3F3), width: 2),
+      border: Border.all(color: Color(0xFFF3F3F3), width: 2.w),
       borderRadius: BorderRadius.circular(20),
     ),
     child: Row(
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(14),
-          child: Image.asset(imagePath, width: 100, height: 100, fit: BoxFit.cover),
+          child: Image.asset(imagePath, width: 100.w, height: 100.h, fit: BoxFit.cover),
         ),
-        const SizedBox(width: 12),
+        SizedBox(width: 12.w),
         Expanded(
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 16),
@@ -242,11 +241,11 @@ Widget build(BuildContext context) {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14.sp),
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8.h),
                 _detailRow(duration),
-                const SizedBox(height: 4),
+                SizedBox(height: 4.h),
                 if (subtitle.isNotEmpty) _detailRow(subtitle),
               ],
             ),
@@ -263,8 +262,8 @@ Widget build(BuildContext context) {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: TextStyle(fontSize: 14, fontWeight: isBold ? FontWeight.w700 : FontWeight.w400)),
-          Text(value, style: TextStyle(fontSize: 14, fontWeight: isBold ? FontWeight.w700 : FontWeight.w400, color: valueColor)),
+          Text(label, style: TextStyle(fontSize: 14.sp, fontWeight: isBold ? FontWeight.w700 : FontWeight.w400)),
+          Text(value, style: TextStyle(fontSize: 14.sp, fontWeight: isBold ? FontWeight.w700 : FontWeight.w400, color: valueColor)),
         ],
       ),
     );
@@ -276,10 +275,10 @@ Widget build(BuildContext context) {
     children: [
       ColorFiltered(
         colorFilter: const ColorFilter.mode(Colors.black, BlendMode.srcIn),
-        child: SvgPicture.asset(iconPath, width: 20, height: 20),
+        child: SvgPicture.asset(iconPath, width: 20.w, height: 20.h),
       ),
-      const SizedBox(width: 8),
-      Expanded(child: Text(text, style: const TextStyle(fontSize: 12, color: Color(0xFF757575)))),
+      SizedBox(width: 8.w),
+      Expanded(child: Text(text, style: TextStyle(fontSize: 12.sp, color: Color(0xFF757575)))),
     ],
   );
 }
@@ -289,11 +288,11 @@ Widget _detailRow(String text) {
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
       _dot(),
-      const SizedBox(width: 6),
+      SizedBox(width: 6.w),
       Expanded(
         child: Text(
           text,
-          style: const TextStyle(fontSize: 14, color: Color(0xFF757575)),
+          style: TextStyle(fontSize: 14.sp, color: Color(0xFF757575)),
         ),
       ),
     ],
@@ -302,8 +301,8 @@ Widget _detailRow(String text) {
 
 Widget _dot() {
   return Container(
-    width: 4,
-    height: 4,
+    width: 4.w,
+    height: 4.h,
     decoration: const BoxDecoration(
       color: Color(0xFF757575),
       shape: BoxShape.circle,

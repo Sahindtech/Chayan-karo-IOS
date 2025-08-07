@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ReferSection extends StatelessWidget {
@@ -10,39 +11,36 @@ class ReferSection extends StatelessWidget {
       children: [
         Image.asset(
           'assets/reward_giftbox.png',
-          width: 170,
-          height: 170,
+          width: 170.w,
+          height: 170.h,
           fit: BoxFit.contain,
         ),
-        const SizedBox(height: 20),
-        const Text(
-          'Refer and Earn',
+        SizedBox(height: 20.h),
+        Text('Refer and Earn',
           style: TextStyle(
-            fontSize: 20,
+            fontSize: 20.sp,
             fontWeight: FontWeight.w600,
             fontFamily: 'SF Pro',
             color: Colors.black,
           ),
         ),
-        const SizedBox(height: 8),
-        const Opacity(
-          opacity: 0.8,
+        SizedBox(height: 8.h),
+        Opacity(opacity: 0.8,
           child: Text(
             'Share the app with friends',
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 16.sp,
               fontWeight: FontWeight.w400,
               fontFamily: 'SF Pro',
               color: Colors.black,
             ),
           ),
         ),
-        const SizedBox(height: 20),
-        const Text(
-          '...............................................        Refer via        ................................................',
-          style: TextStyle(color: Colors.white, fontSize: 12),
+        SizedBox(height: 20.h),
+        Text('...............................................        Refer via        ................................................',
+          style: TextStyle(color: Colors.white, fontSize: 12.sp),
         ),
-        const SizedBox(height: 20),
+        SizedBox(height: 20.h),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: const [
@@ -84,8 +82,8 @@ class _SocialIcon extends StatelessWidget {
     return Column(
       children: [
         Container(
-          width: 52,
-          height: 52,
+          width: 52.w,
+          height: 52.h,
           decoration: BoxDecoration(
             color: color,
             shape: BoxShape.circle,
@@ -94,12 +92,11 @@ class _SocialIcon extends StatelessWidget {
             child: Icon(icon, color: Colors.white, size: 24),
           ),
         ),
-        const SizedBox(height: 8),
-        const DefaultTextStyle(
-          style: TextStyle(fontSize: 12, color: Colors.white),
+        SizedBox(height: 8.h),
+        DefaultTextStyle(style: TextStyle(fontSize: 12.sp, color: Colors.white),
           child: Text(""),
         ),
-        Text(label, style: const TextStyle(fontSize: 12, color: Colors.white)),
+        Text(label, style: TextStyle(fontSize: 12.sp, color: Colors.white)),
       ],
     );
   }

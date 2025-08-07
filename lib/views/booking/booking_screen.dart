@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../home/home_screen.dart';
 import '../profile/profile_screen.dart';
 import '../chayan_sathi/chayan_sathi_screen.dart';
@@ -56,16 +57,16 @@ class _BookingScreenState extends State<BookingScreen> {
                 Text(
                   'Upcoming',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 16.sp,
                     fontWeight: FontWeight.w500,
                     color: showUpcoming ? const Color(0xFFE47830) : const Color(0xFFA2A2A2),
                   ),
                 ),
                 if (showUpcoming)
                   Container(
-                    margin: const EdgeInsets.only(top: 4),
-                    width: 76, // slightly wider than text
-                    height: 4,
+                    margin: EdgeInsets.only(top: 4.r),
+                    width: 76.w, // slightly wider than text
+                    height: 4.h,
                     decoration: BoxDecoration(
                       color: const Color(0xFFE47830),
                       borderRadius: BorderRadius.circular(10),
@@ -84,16 +85,16 @@ class _BookingScreenState extends State<BookingScreen> {
                 Text(
                   'Previous',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 16.sp,
                     fontWeight: FontWeight.w400,
                     color: !showUpcoming ? const Color(0xFFE47830) : const Color(0xFFA2A2A2),
                   ),
                 ),
                 if (!showUpcoming)
                   Container(
-                    margin: const EdgeInsets.only(top: 4),
-                    width: 72, // similar width for visual balance
-                    height: 4,
+                    margin: EdgeInsets.only(top: 4.r),
+                    width: 72.w, // similar width for visual balance
+                    height: 4.h,
                     decoration: BoxDecoration(
                       color: const Color(0xFFE47830),
                       borderRadius: BorderRadius.circular(10),
@@ -124,7 +125,7 @@ class _BookingScreenState extends State<BookingScreen> {
             child: Text(
               label,
               style: TextStyle(
-                fontSize: 10,
+                fontSize: 10.sp,
                 fontWeight: FontWeight.w600,
                 color: Colors.black.withOpacity(0.8),
               ),
@@ -139,9 +140,9 @@ class _BookingScreenState extends State<BookingScreen> {
     return Row(
       children: pin.split('').map((digit) {
         return Container(
-          margin: EdgeInsets.only(left: 4),
-          width: 20,
-          height: 22,
+          margin: EdgeInsets.only(left: 4.r),
+          width: 20.w,
+          height: 22.h,
           alignment: Alignment.center,
           decoration: BoxDecoration(
             color: Color(0xFF161616),
@@ -151,7 +152,7 @@ class _BookingScreenState extends State<BookingScreen> {
             digit,
             style: TextStyle(
               color: Colors.white,
-              fontSize: 13,
+              fontSize: 13.sp,
               fontWeight: FontWeight.w500,
               fontFamily: 'SF Pro',
             ),
@@ -168,7 +169,7 @@ class _BookingScreenState extends State<BookingScreen> {
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16.r),
         decoration: BoxDecoration(
           color: Color(0xFFECEEFF),
           borderRadius: BorderRadius.circular(16),
@@ -184,7 +185,7 @@ class _BookingScreenState extends State<BookingScreen> {
                 Text(
                   'Salon for Woman',
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 20.sp,
                     fontWeight: FontWeight.w700,
                     fontFamily: 'Inter',
                     color: Color(0xFF161616),
@@ -197,53 +198,53 @@ class _BookingScreenState extends State<BookingScreen> {
                     Text(
                       'Your PIN',
                       style: TextStyle(
-                        fontSize: 10,
+                        fontSize: 10.sp,
                         color: Color(0xFF161616),
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    SizedBox(height: 4),
+                    SizedBox(height: 4.h),
                     buildPinBoxes("3333"),
                   ],
                 ),
               ],
             ),
-            SizedBox(height: 12),
+            SizedBox(height: 12.h),
             // Services
             Text(
               '• Diamond Facial',
-              style: TextStyle(fontSize: 12, color: Color(0xFF555555), fontWeight: FontWeight.w400),
+              style: TextStyle(fontSize: 12.sp, color: Color(0xFF555555), fontWeight: FontWeight.w400),
             ),
-            SizedBox(height: 2),
+            SizedBox(height: 2.h),
             Text(
               '• Cleanup',
-              style: TextStyle(fontSize: 12, color: Color(0xFF555555), fontWeight: FontWeight.w400),
+              style: TextStyle(fontSize: 12.sp, color: Color(0xFF555555), fontWeight: FontWeight.w400),
             ),
-            SizedBox(height: 12),
+            SizedBox(height: 12.h),
             // Booking status
             Text(
               'Booking scheduled',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
             ),
-            SizedBox(height: 4),
+            SizedBox(height: 4.h),
             Text.rich(
               TextSpan(
                 children: [
                   TextSpan(
                     text: '22nd Nov, Tuesday / ',
-                    style: TextStyle(fontSize: 13),
+                    style: TextStyle(fontSize: 13.sp),
                   ),
                   TextSpan(
                     text: '07:30 PM',
-                    style: TextStyle(fontSize: 10),
+                    style: TextStyle(fontSize: 10.sp),
                   ),
                 ],
               ),
             ),
-            SizedBox(height: 4),
+            SizedBox(height: 4.h),
             Text(
               'When Your Chayan sathi arrives share your PIN',
-              style: TextStyle(fontSize: 8, color: Colors.black.withOpacity(0.6)),
+              style: TextStyle(fontSize: 8.sp, color: Colors.black.withOpacity(0.6)),
             ),
           ],
         ),
@@ -255,7 +256,7 @@ class _BookingScreenState extends State<BookingScreen> {
   Widget buildPreviousCard() {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
         color: Color(0xFFFDFDFD),
         borderRadius: BorderRadius.circular(16),
@@ -271,14 +272,14 @@ class _BookingScreenState extends State<BookingScreen> {
               Text('AC service', style: TextStyle(color: Colors.black54)),
             ],
           ),
-          SizedBox(height: 8),
+          SizedBox(height: 8.h),
           Row(
             children: [
               Text('• General service', style: TextStyle(color: Colors.black54)),
               Icon(Icons.arrow_drop_down, size: 16, color: Colors.black54),
             ],
           ),
-          SizedBox(height: 12),
+          SizedBox(height: 12.h),
          Row(
   mainAxisAlignment: MainAxisAlignment.spaceBetween,
   children: [
@@ -296,7 +297,7 @@ class _BookingScreenState extends State<BookingScreen> {
 },
       child: Text(
         'Share Feedback',
-        style: TextStyle(fontSize: 12, color: Colors.white),
+        style: TextStyle(fontSize: 12.sp, color: Colors.white),
       ),
     ),
     GestureDetector(
@@ -308,7 +309,7 @@ class _BookingScreenState extends State<BookingScreen> {
       },
       child: Text(
         'View details',
-        style: TextStyle(fontSize: 12, color: Color(0xFFE47830)),
+        style: TextStyle(fontSize: 12.sp, color: Color(0xFFE47830)),
       ),
     ),
   ],
@@ -326,7 +327,7 @@ class _BookingScreenState extends State<BookingScreen> {
       body: Column(
         children: [
           buildTabBar(),
-          Divider(height: 1, color: Color(0xFFEBEBEB)),
+          Divider(height: 1.h, color: Color(0xFFEBEBEB)),
           if (showUpcoming) buildFilterChips(),
           Expanded(
             child: ListView(

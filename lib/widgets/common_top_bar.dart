@@ -1,5 +1,6 @@
 // widgets/common_top_bar.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:share_plus/share_plus.dart';
 
 class CommonTopBar extends StatelessWidget {
@@ -19,7 +20,7 @@ class CommonTopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 56,
+      height: 56.h,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       color: const Color(0xFFFFEEE0),
       child: Row(
@@ -31,8 +32,8 @@ class CommonTopBar extends StatelessWidget {
           const Spacer(),
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 16,
+            style:  TextStyle(
+              fontSize: 16.sp,
               fontFamily: 'SFProSemibold',
             ),
           ),
@@ -45,7 +46,7 @@ class CommonTopBar extends StatelessWidget {
               child: const Icon(Icons.share, size: 20),
             )
           else
-            const SizedBox(width: 20),
+            SizedBox(width: 20.w),
         ],
       ),
     );

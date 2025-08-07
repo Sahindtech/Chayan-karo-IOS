@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 
@@ -18,7 +19,7 @@ class ReviewSubmittedPopup extends StatelessWidget {
           // Bottom Card
           Container(
             width: double.infinity,
-            margin: const EdgeInsets.only(top: 50),
+            margin: EdgeInsets.only(top: 50.r),
             padding: const EdgeInsets.fromLTRB(20, 70, 20, 20),
             decoration: BoxDecoration(
               color: Colors.white,
@@ -34,26 +35,25 @@ class ReviewSubmittedPopup extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
-                  'Review Submitted',
+                Text('Review Submitted',
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 20.sp,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: 12.h),
                 Text(
                   'Thank You For your Feedback. Your Review has been Sent To the App Successfully.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 15.sp,
                     color: Colors.black.withOpacity(0.6),
                   ),
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: 24.h),
                 SizedBox(
-                  width: 166,
-                  height: 47,
+                  width: 166.w,
+                  height: 47.h,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFE47830),
@@ -62,11 +62,10 @@ class ReviewSubmittedPopup extends StatelessWidget {
                       ),
                     ),
                     onPressed: onOkay,
-                    child: const Text(
-                      'Okay',
+                    child: Text('Okay',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -77,24 +76,23 @@ class ReviewSubmittedPopup extends StatelessWidget {
           ),
           // Top Circle
           Positioned(
-            left: 0,
-            right: 0,
-            top: 0,
+            left: 0.r,
+            right: 0.r,
+            top: 0.r,
             child: Center(
               child: Stack(
                 alignment: Alignment.center,
                 children: [
                   Container(
-                    width: 100,
-                    height: 100,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
+                    width: 100.w,
+                    height: 100.h,
+                    decoration: BoxDecoration(shape: BoxShape.circle,
                       color: Colors.white,
                     ),
                   ),
                   Container(
-                    width: 80,
-                    height: 80,
+                    width: 80.w,
+                    height: 80.h,
                     decoration: const BoxDecoration(
                       shape: BoxShape.circle,
                       color: Color(0xFFC3FFD2),
@@ -102,8 +100,8 @@ class ReviewSubmittedPopup extends StatelessWidget {
                   ),
 SvgPicture.asset(
   'assets/icons/gtick.svg',
-  width: 90,
-  height: 100,
+  width: 90.w,
+  height: 100.h,
 ),
                 ],
               ),

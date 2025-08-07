@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../home/home_screen.dart';
 import '../profile/profile_screen.dart';
 import '../booking/booking_screen.dart';
@@ -107,24 +108,23 @@ class ChayanSathiScreen extends StatelessWidget {
       borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
       child: Image.asset(
         saathi["image"],
-        height: 140,
+        height: 140.h,
         width: double.infinity,
         fit: BoxFit.contain,
       ),
     ),
-    const SizedBox(height: 8),
+    SizedBox(height: 8.h),
     Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Text(
         saathi["name"],
-        style: const TextStyle(
-          fontFamily: 'SFProSemibold',
-          fontSize: 14,
+        style: TextStyle(fontFamily: 'SFProSemibold',
+          fontSize: 14.sp,
           color: Colors.black,
         ),
       ),
     ),
-    const SizedBox(height: 6),
+    SizedBox(height: 6.h),
 
     // Jobs row
     Padding(
@@ -133,22 +133,21 @@ class ChayanSathiScreen extends StatelessWidget {
         children: [
            SvgPicture.asset(
             'assets/icons/tick.svg',
-            width: 14,
-            height: 14,
+            width: 14.w,
+            height: 14.h,
           ),
-          const SizedBox(width: 4),
+          SizedBox(width: 4.w),
           Text(
             "${saathi["jobs"]} jobs completed",
-            style: const TextStyle(
-              fontFamily: 'SFPro',
-              fontSize: 12,
+            style: TextStyle(fontFamily: 'SFPro',
+              fontSize: 12.sp,
               color: Colors.black,
             ),
           ),
         ],
       ),
     ),
-    const SizedBox(height: 4),
+    SizedBox(height: 4.h),
 
     // Rating row
     Padding(
@@ -157,24 +156,23 @@ class ChayanSathiScreen extends StatelessWidget {
         children: [
            SvgPicture.asset(
             'assets/icons/star.svg',
-            width: 14,
-            height: 14,
+            width: 14.w,
+            height: 14.h,
             color: Colors.black,
           ),
-          const SizedBox(width: 4),
+          SizedBox(width: 4.w),
           Text(
             "${saathi["rating"]}",
-            style: const TextStyle(
-              fontFamily: 'SFPro',
-              fontSize: 12,
+            style: TextStyle(fontFamily: 'SFPro',
+              fontSize: 12.sp,
               color: Colors.black,
             ),
           ),
-          const Text(
+         Text(
             " (23k)",
             style: TextStyle(
               fontFamily: 'SFPro',
-              fontSize: 12,
+              fontSize: 12.sp,
               color: Colors.black,
             ),
           ),

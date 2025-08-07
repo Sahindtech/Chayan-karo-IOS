@@ -1,4 +1,5 @@
 import 'package:chayankaro/services/SearchScreen.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -68,8 +69,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   return Text(
     '$locationLabel\n$cityOnly',
-    style: const TextStyle(
-      fontSize: 12,
+    style:  TextStyle(
+      fontSize: 12.sp,
       fontWeight: FontWeight.w500,
       color: Colors.black,
     ),
@@ -154,7 +155,7 @@ Widget build(BuildContext context) {
             // 🍑 Peach background only for header
             Container(
               color: const Color(0xFFFFEEE0),
-              padding: const EdgeInsets.only(bottom: 16),
+              padding: EdgeInsets.only(bottom: 16.r),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -168,11 +169,11 @@ Widget build(BuildContext context) {
                           children: [
                            SvgPicture.asset(
                               'assets/icons/homy.svg',
-                              width: 40,
-                              height: 40,
+                              width: 40.w,
+                              height: 40.h,
                               color: Colors.black,
                             ),
-                            const SizedBox(width: 8),
+                            SizedBox(width: 8.w),
                             _buildLocationInfo()
 
                           ],
@@ -184,8 +185,8 @@ Widget build(BuildContext context) {
                           ),
                           child: SvgPicture.asset(
                             'assets/icons/cart.svg',
-                            width: 40,
-                            height: 40,
+                            width: 40.w,
+                            height: 40.h,
                             color: Colors.black,
                           ),
                         ),
@@ -224,7 +225,7 @@ Widget build(BuildContext context) {
               ),
             ),
 
-            const SizedBox(height: 16),
+            SizedBox(height: 16.h),
 
             // 🔲 Categories Grid + everything else
             Container(
@@ -268,12 +269,12 @@ Widget build(BuildContext context) {
       }
     },
                           child: Container(
-                            width: 70,
-                            height: 85,
+                            width: 70.w,
+                            height: 85.h,
                             decoration: ShapeDecoration(
                               color: Colors.white,
                               shape: RoundedRectangleBorder(
-                                side: BorderSide(width: 1, color: Color(0xFFFFD9BE)),
+                                side: BorderSide(width: 1.w, color: Color(0xFFFFD9BE)),
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               shadows: const [
@@ -289,19 +290,19 @@ Widget build(BuildContext context) {
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  SvgPicture.asset(cat['icon']!, width: 45, height: 45),
-                                  const SizedBox(height: 6),
+                                  SvgPicture.asset(cat['icon']!, width: 45.w, height: 45.h),
+                                  SizedBox(height: 6.h),
                                   SizedBox(
-                                    width: 56,
+                                    width: 56.w,
                                     child: Text(
                                       cat['title']!,
                                       textAlign: TextAlign.center,
-                                      style: const TextStyle(
+                                      style:  TextStyle(
                                         color: Colors.black,
-                                        fontSize: 8,
+                                        fontSize: 8.sp,
                                         fontFamily: 'Inter',
                                         fontWeight: FontWeight.w500,
-                                        height: 2.5,
+                                        height: 2.5.h,
                                       ),
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
@@ -316,13 +317,13 @@ Widget build(BuildContext context) {
                     ),
                   ),
 
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20.h),
 
                   // 🎯 Banner
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Container(
-                      height: 120,
+                      height: 120.h,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
                         gradient: const LinearGradient(
@@ -339,26 +340,26 @@ Widget build(BuildContext context) {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
+                                children:  [
                                   Text(
                                     "Let’s make a package just\nfor you, Manvi!",
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 16,
+                                      fontSize: 16.sp,
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
-                                  SizedBox(height: 8),
+                                  SizedBox(height: 8.h),
                                   Row(
                                     children: [
                                       Text(
                                         "Salon for women",
                                         style: TextStyle(
                                           color: Colors.white,
-                                          fontSize: 12,
+                                          fontSize: 12.sp,
                                         ),
                                       ),
-                                      SizedBox(width: 6),
+                                      SizedBox(width: 6.w),
                                       Icon(Icons.arrow_forward,
                                           size: 16, color: Colors.white),
                                     ],
@@ -374,8 +375,8 @@ Widget build(BuildContext context) {
                             ),
                             child: Image.asset(
                               'assets/banner_woman.webp',
-                              height: 120,
-                              width: 100,
+                              height: 120.h,
+                              width: 100.w,
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -384,10 +385,10 @@ Widget build(BuildContext context) {
                     ),
                   ),
 
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24.h),
 
                   _buildServiceSection('Your go-to services', goToServices),
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24.h),
                   _buildMostUsedServices(mostUsedServices),
                 ],
               ),
@@ -414,24 +415,24 @@ Widget build(BuildContext context) {
         padding: const EdgeInsets.symmetric(horizontal: 16),
        child: Text(
   title,
-  style: const TextStyle(
+  style: TextStyle(
     color: Colors.black,
-    fontSize: 15,
+    fontSize: 15.sp,
     fontFamily: 'Inter',
     fontWeight: FontWeight.w700,
-    height: 1.33,
+    height: 1.33.h,
   ),
 ),
 
       ),
-      const SizedBox(height: 12),
+      SizedBox(height: 12.h),
       SizedBox(
-        height: 220,
+        height: 220.h,
         child: ListView.separated(
           scrollDirection: Axis.horizontal,
-          padding: const EdgeInsets.only(left: 12),
+          padding: EdgeInsets.only(left: 12.r),
           itemCount: data.length,
-          separatorBuilder: (_, __) => const SizedBox(width: 8),
+          separatorBuilder: (_, __) => SizedBox(width: 8.w),
           itemBuilder: (context, index) {
             final item = data[index];
             return GestureDetector(
@@ -446,8 +447,8 @@ Widget build(BuildContext context) {
                 ),
               ),
               child: Container(
-                width: 170,
-                padding: const EdgeInsets.all(8),
+                width: 170.w,
+                padding: EdgeInsets.all(8.r),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
@@ -484,21 +485,21 @@ Widget build(BuildContext context) {
                         },
                       ),
                     ),
-                    const SizedBox(height: 6),
+                    SizedBox(height: 6.h),
                     Text(
                       item['title'],
-                      style: const TextStyle(
-                        fontSize: 12,
+                      style:  TextStyle(
+                        fontSize: 12.sp,
                         fontWeight: FontWeight.w700,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4.h),
                     Text(
                       item['subtitle'],
-                      style: const TextStyle(
-                        fontSize: 10,
+                      style:  TextStyle(
+                        fontSize: 10.sp,
                         color: Colors.grey,
                         fontWeight: FontWeight.w500,
                       ),
@@ -517,7 +518,7 @@ Widget build(BuildContext context) {
 
 Widget _buildMostUsedServices(List<Map<String, String>> services) {
   return Padding(
-    padding: const EdgeInsets.only(left: 16.0),
+    padding: EdgeInsets.only(left: 16.0.r),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -525,14 +526,14 @@ Widget _buildMostUsedServices(List<Map<String, String>> services) {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
+             Text(
               'Most used services',
               style: TextStyle(
                 color: Colors.black,
-                fontSize: 15,
+                fontSize: 15.sp,
                 fontFamily: 'Inter',
                 fontWeight: FontWeight.w700,
-                height: 1.33,
+                height: 1.33.h,
               ),
             ),
             GestureDetector(
@@ -546,8 +547,8 @@ Widget _buildMostUsedServices(List<Map<String, String>> services) {
                   ),
                 );
               },
-              child: const Padding(
-                padding: EdgeInsets.only(right: 16),
+              child:  Padding(
+                padding: EdgeInsets.only(right: 16.r),
                 child: Text(
                   'View all >',
                   style: TextStyle(color: Colors.orange),
@@ -556,21 +557,21 @@ Widget _buildMostUsedServices(List<Map<String, String>> services) {
             ),
           ],
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12.h),
         HorizontalServiceScroll(services: services),
-        const SizedBox(height: 24),
+        SizedBox(height: 24.h),
         const SaloonWomenSection(),
-        const SizedBox(height: 24),
+        SizedBox(height: 24.h),
         const SpaWomenSection(),
-        const SizedBox(height: 24),
+        SizedBox(height: 24.h),
         const MaleSpaSection(),
-        const SizedBox(height: 24),
+        SizedBox(height: 24.h),
         const SalonMenSection(),
-        const SizedBox(height: 24),
+        SizedBox(height: 24.h),
         const ACRepairSection(),
-        const SizedBox(height: 24),
+        SizedBox(height: 24.h),
         const AppliancesRepairsSection(),
-        const SizedBox(height: 24),
+        SizedBox(height: 24.h),
       ],
     ),
   );

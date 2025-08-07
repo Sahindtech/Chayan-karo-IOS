@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../widgets/chayan_header.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -12,7 +13,7 @@ class PreviousBookingScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.only(bottom: 24),
+          padding: EdgeInsets.only(bottom: 24.r),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -20,36 +21,36 @@ class PreviousBookingScreen extends StatelessWidget {
                 title: 'Previous Booking',
                 onBackTap: () => Navigator.pop(context),
               ),
-              const SizedBox(height: 16),
-              const Padding(
+              SizedBox(height: 16.h),
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
                   '19th Nov, Saturday',
                   style: TextStyle(
                     color: Color(0xFF161616),
-                    fontSize: 18,
+                    fontSize: 18.sp,
                     fontWeight: FontWeight.w700,
                     fontFamily: 'Inter',
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
               _bookingCard(
                 imageAsset: 'assets/ac_services.webp',
                 title: 'AC Service',
                 duration: '1 hrs',
                 details: 'Includes general cleaning',
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
               _bookingCard(
                 imageAsset: 'assets/ac_installation.webp',
                 title: 'AC Installation',
                 duration: '30 mins',
                 details: 'Includes lorem',
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24.h),
               _billingSection(),
-              const SizedBox(height: 24),
+              SizedBox(height: 24.h),
               _addressSection(),
             ],
           ),
@@ -67,19 +68,19 @@ class PreviousBookingScreen extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Container(
-        height: 132,
+        height: 132.h,
         decoration: ShapeDecoration(
           shape: RoundedRectangleBorder(
-            side: const BorderSide(width: 2, color: Color(0xFFF3F3F3)),
+            side: BorderSide(width: 2.w, color: Color(0xFFF3F3F3)),
             borderRadius: BorderRadius.circular(20),
           ),
         ),
         child: Row(
           children: [
             Container(
-              width: 100,
-              height: 100,
-              margin: const EdgeInsets.all(16),
+              width: 100.w,
+              height: 100.h,
+              margin: EdgeInsets.all(16.r),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(14),
                 image: DecorationImage(
@@ -90,44 +91,41 @@ class PreviousBookingScreen extends StatelessWidget {
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(top: 20, bottom: 20, right: 12),
+                padding: EdgeInsets.only(top: 20.r, bottom: 20.r, right: 12.r),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       title,
-                      style: const TextStyle(
-                        fontFamily: 'Inter',
+                      style: TextStyle(fontFamily: 'Inter',
                         fontWeight: FontWeight.w700,
-                        fontSize: 14,
+                        fontSize: 14.sp,
                         color: Color(0xFF161616),
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8.h),
                     Row(
                       children: [
                         _bulletDot(),
-                        const SizedBox(width: 6),
+                        SizedBox(width: 6.w),
                         Text(
                           duration,
-                          style: const TextStyle(
-                            fontFamily: 'Inter',
-                            fontSize: 14,
+                          style: TextStyle(fontFamily: 'Inter',
+                            fontSize: 14.sp,
                             color: Color(0xFF757575),
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4.h),
                     Row(
                       children: [
                         _bulletDot(),
-                        const SizedBox(width: 6),
+                        SizedBox(width: 6.w),
                         Text(
                           details,
-                          style: const TextStyle(
-                            fontFamily: 'Inter',
-                            fontSize: 14,
+                          style: TextStyle(fontFamily: 'Inter',
+                            fontSize: 14.sp,
                             color: Color(0xFF757575),
                           ),
                         ),
@@ -145,8 +143,8 @@ class PreviousBookingScreen extends StatelessWidget {
 
   Widget _bulletDot() {
     return Container(
-      width: 4,
-      height: 4,
+      width: 4.w,
+      height: 4.h,
       decoration: const ShapeDecoration(
         color: Color(0xFF757575),
         shape: OvalBorder(),
@@ -160,13 +158,13 @@ class PreviousBookingScreen extends StatelessWidget {
       child: Container(
         decoration: ShapeDecoration(
           shape: RoundedRectangleBorder(
-            side: const BorderSide(width: 2, color: Color(0xFFF3F3F3)),
+            side: BorderSide(width: 2.w, color: Color(0xFFF3F3F3)),
             borderRadius: BorderRadius.circular(10),
           ),
         ),
         child: Column(
           children: [
-            const Padding(
+            Padding(
               padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
               child: Row(
                 children: [
@@ -174,7 +172,7 @@ class PreviousBookingScreen extends StatelessWidget {
                     'Billing Details',
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
-                      fontSize: 16,
+                      fontSize: 16.sp,
                       fontFamily: 'SF Pro Display',
                     ),
                   ),
@@ -186,7 +184,7 @@ class PreviousBookingScreen extends StatelessWidget {
             _billingRow('Service Fee', '₹50'),
             _billingRow('Grand Total', '₹749', isBold: true),
             Container(
-              height: 47,
+              height: 47.h,
               width: double.infinity,
               decoration: const BoxDecoration(
                 color: Color(0xFFF3F3F3),
@@ -197,16 +195,15 @@ class PreviousBookingScreen extends StatelessWidget {
               ),
               padding: const EdgeInsets.symmetric(horizontal: 16),
               alignment: Alignment.centerLeft,
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('Payment mode',
-                      style: TextStyle(fontFamily: 'Inter', fontSize: 14)),
+                      style: TextStyle(fontFamily: 'Inter', fontSize: 14.sp)),
                   Text('Paytm UPI',
                       style: TextStyle(
                           fontWeight: FontWeight.w500,
                           fontFamily: 'Inter',
-                          fontSize: 14)),
+                          fontSize: 14.sp)),
                 ],
               ),
             ),
@@ -225,13 +222,13 @@ class PreviousBookingScreen extends StatelessWidget {
         children: [
           Text(label,
               style: TextStyle(
-                fontSize: 14,
+                fontSize: 14.sp,
                 fontFamily: 'Inter',
                 fontWeight: isBold ? FontWeight.w700 : FontWeight.w400,
               )),
           Text(value,
               style: TextStyle(
-                fontSize: 14,
+                fontSize: 14.sp,
                 fontFamily: 'Inter',
                 fontWeight: isBold ? FontWeight.w700 : FontWeight.w400,
                 color: color ?? const Color(0xFF161616),
@@ -245,10 +242,10 @@ class PreviousBookingScreen extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16.r),
         decoration: ShapeDecoration(
           shape: RoundedRectangleBorder(
-            side: const BorderSide(width: 2, color: Color(0xFFF3F3F3)),
+            side: BorderSide(width: 2.w, color: Color(0xFFF3F3F3)),
             borderRadius: BorderRadius.circular(20),
           ),
         ),
@@ -257,48 +254,46 @@ class PreviousBookingScreen extends StatelessWidget {
           children: [
             Row(
               children: [
-                SvgPicture.asset('assets/icons/home.svg', width: 20, height: 20,  color: Colors.black,),
-                const SizedBox(width: 8),
-                const Text(
-                  'Home',
+                SvgPicture.asset('assets/icons/home.svg', width: 20.w, height: 20.h,  color: Colors.black,),
+                SizedBox(width: 8.w),
+                Text('Home',
                   style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 14.sp,
                       fontFamily: 'Inter',
                       fontWeight: FontWeight.w500),
                 )
               ],
             ),
-            const SizedBox(height: 8),
-            const Text(
-              'Plot no.209, Kavuri Hills, Madhapur, Telangana 500033, Ph: +91234567890',
+            SizedBox(height: 8.h),
+            Text('Plot no.209, Kavuri Hills, Madhapur, Telangana 500033, Ph: +91234567890',
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 12.sp,
                 fontFamily: 'SF Pro Display',
                 color: Color(0xFF757575),
-                height: 1.5,
+                height: 1.5.h,
               ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8.h),
             Row(
               children: [
-                SvgPicture.asset('assets/icons/calendar.svg', width: 18, height: 18,  color: Colors.black,),
-                const SizedBox(width: 6),
-                const Text('Sat, Apr 09 - 07:30 PM',
+                SvgPicture.asset('assets/icons/calendar.svg', width: 18.w, height: 18.h,  color: Colors.black,),
+                SizedBox(width: 6.w),
+                Text('Sat, Apr 09 - 07:30 PM',
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 12.sp,
                       color: Color(0xFF757575),
                       fontFamily: 'SF Pro Display',
                     )),
               ],
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8.h),
             Row(
               children: [
-                SvgPicture.asset('assets/icons/user.svg', width: 20, height: 20,  color: Colors.black,),
-                const SizedBox(width: 6),
-                const Text('Sumit Gupta, (180+ work), 4.5 rating',
+                SvgPicture.asset('assets/icons/user.svg', width: 20.w, height: 20.h,  color: Colors.black,),
+                SizedBox(width: 6.w),
+                 Text('Sumit Gupta, (180+ work), 4.5 rating',
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 12.sp,
                       color: Color(0xFF757575),
                       fontFamily: 'SF Pro Display',
                     )),

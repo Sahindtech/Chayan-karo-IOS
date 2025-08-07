@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 
@@ -20,10 +21,10 @@ Widget build(BuildContext context) {
     padding: EdgeInsets.only(bottom: bottomPadding > 0 ? bottomPadding : 8),
     decoration: BoxDecoration(
       color: const Color(0xFFFFFEFD),
-      border: const Border(
+      border:  Border(
         top: BorderSide(
           color: Color(0xFFFA9441),
-          width: 0.5,
+          width: 0.5.w,
         ),
       ),
       boxShadow: const [
@@ -35,7 +36,7 @@ Widget build(BuildContext context) {
       ],
     ),
     child: SizedBox(
-      height: 70,
+      height: 70.h,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
        children: [
@@ -67,23 +68,23 @@ Widget build(BuildContext context) {
           child: iconPath.endsWith('.svg')
               ? SvgPicture.asset(
                   iconPath,
-                  width: 40,
-                  height: 40,
+                  width: 40.w,
+                  height: 40.h,
                   color: isActive ? null : Colors.black,
                 )
               : Image.asset(
                   iconPath,
-                  width: 40,
-                  height: 40,
+                  width: 40.w,
+                  height: 40.h,
                   fit: BoxFit.cover,
                 ),
         ),
-        const SizedBox(height: 2),
+        SizedBox(height: 2.h),
         Text(
           label,
           style: TextStyle(
-            fontSize: 8,
-            height: 2,
+            fontSize: 8.sp,
+            height: 2.h,
             fontFamily: 'SF Pro',
             fontWeight: FontWeight.w500,
             color: Colors.black,
@@ -105,11 +106,11 @@ Widget build(BuildContext context) {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SizedBox(
-          height: 40,
+          height: 40.h,
           child: Center(
             child: Container(
-              width: 24.45,
-              height: 23.8,
+              width: 24.45.w,
+              height: 23.8.h,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(2),
                 image: DecorationImage(
@@ -120,12 +121,12 @@ Widget build(BuildContext context) {
             ),
           ),
         ),
-        const SizedBox(height: 2),
+        SizedBox(height: 2.h),
         Text(
           label,
-          style: const TextStyle(
-            fontSize: 8,
-            height: 2,
+          style:  TextStyle(
+            fontSize: 8.sp,
+            height: 2.h,
             fontFamily: 'SF Pro',
             fontWeight: FontWeight.w500,
             color: Colors.black,

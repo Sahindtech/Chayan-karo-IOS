@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
@@ -108,22 +109,22 @@ Widget build(BuildContext context) {
         ? Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children:  [
                 Icon(
                   Icons.location_on,
                   color: Color(0xFFE47830),
                   size: 64,
                 ),
-                SizedBox(height: 16),
+                SizedBox(height: 16.h),
                 Text(
                   'Getting your location...',
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 18.sp,
                     fontWeight: FontWeight.w500,
                     color: Color(0xFF444444),
                   ),
                 ),
-                SizedBox(height: 24),
+                SizedBox(height: 24.h),
                 CircularProgressIndicator(
                   color: Color(0xFFE47830),
                 ),
@@ -140,28 +141,28 @@ Widget build(BuildContext context) {
                       color: Color(0xFFE47830),
                       size: 64,
                     ),
-                    const SizedBox(height: 16),
-                    const Text(
+                    SizedBox(height: 16.h),
+                    Text(
                       'Location unavailable',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 18.sp,
                         fontWeight: FontWeight.w600,
                         color: Color(0xFF444444),
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8.h),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 32),
                       child: Text(
                         error!,
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontSize: 14,
+                        style:  TextStyle(
+                          fontSize: 14.sp,
                           color: Color(0xFF757575),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24.h),
                     ElevatedButton(
                       onPressed: _fetchLocation,
                       style: ElevatedButton.styleFrom(
@@ -171,11 +172,11 @@ Widget build(BuildContext context) {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      child: const Text(
+                      child:  Text(
                         'Retry',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 14,
+                          fontSize: 14.sp,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -207,8 +208,8 @@ Widget build(BuildContext context) {
                   MarkerLayer(
                     markers: [
                       Marker(
-                        width: 40.0,
-                        height: 40.0,
+                        width: 40.0.w,
+                        height: 40.0.h,
                         point: currentLatLng!,
                         child: const Icon(
                           Icons.location_pin,
@@ -225,8 +226,7 @@ Widget build(BuildContext context) {
               top: false,
               child: Container(
                 height: MediaQuery.of(context).size.height * 0.55,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
+                decoration: BoxDecoration(color: Colors.white,
                   borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                 ),
                 child: SingleChildScrollView(
@@ -236,34 +236,34 @@ Widget build(BuildContext context) {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(locationTitle,
-                          style: const TextStyle(
+                          style:  TextStyle(
                             fontWeight: FontWeight.w600,
-                            fontSize: 16,
+                            fontSize: 16.sp,
                             fontFamily: 'Inter',
                           )),
-                      const SizedBox(height: 4),
+                      SizedBox(height: 4.h),
                       Text(locationDetails,
-                          style: const TextStyle(
-                            fontSize: 12,
+                          style:  TextStyle(
+                            fontSize: 12.sp,
                             color: Color(0xFF757575),
                             fontFamily: 'SF Pro Display',
                           )),
-                      const Divider(height: 24),
+                      Divider(height: 24.h),
                       _buildInputField('House/Flat Number *', houseController),
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12.h),
                       _buildInputField('Landmark (Optional)', landmarkController),
-                      const SizedBox(height: 24),
-                      const Text('Save as',
+                      SizedBox(height: 24.h),
+                      Text('Save as',
                           style: TextStyle(
                             color: Color(0xFF757575),
-                            fontSize: 14,
+                            fontSize: 14.sp,
                             fontFamily: 'SF Pro Display',
                           )),
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8.h),
                       Row(
                         children: [
                           _buildOptionChip('Home'),
-                          const SizedBox(width: 12),
+                          SizedBox(width: 12.w),
                           _buildOptionChip('Other'),
                           const Spacer(),
                           OutlinedButton(
@@ -274,10 +274,10 @@ Widget build(BuildContext context) {
                               ),
                             ),
                             onPressed: _handleSubmit,
-                            child: const Text(
+                            child:  Text(
                               'Set as Default',
                               style: TextStyle(
-                                fontSize: 10,
+                                fontSize: 10.sp,
                                 fontWeight: FontWeight.w500,
                                 color: Color(0xFFE47830),
                               ),
@@ -285,10 +285,10 @@ Widget build(BuildContext context) {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16.h),
                       SizedBox(
                         width: double.infinity,
-                        height: 47,
+                        height: 47.h,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: houseController.text.isNotEmpty
@@ -301,11 +301,11 @@ Widget build(BuildContext context) {
                           onPressed: houseController.text.isNotEmpty
                               ? _handleSubmit
                               : null,
-                          child: const Text(
+                          child:  Text(
                             'Save and Proceed to slots',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 16,
+                              fontSize: 16.sp,
                               letterSpacing: 0.32,
                             ),
                           ),
@@ -319,8 +319,8 @@ Widget build(BuildContext context) {
           ],
         ),
         Positioned(
-          top: 40,
-          right: 16,
+          top: 40.r,
+          right: 16.r,
           child: GestureDetector(
             onTap: () => Navigator.pop(context),
             child: const Icon(Icons.close, color: Colors.black54),
@@ -365,7 +365,7 @@ Widget build(BuildContext context) {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFFE6EAFF) : Colors.white,
+          color: isSelected ? Color(0xFFE6EAFF) : Colors.white,
           border: Border.all(
             color: isSelected ? const Color(0xFFE47830) : const Color(0xFFE3E3E3),
           ),
@@ -376,7 +376,7 @@ Widget build(BuildContext context) {
           style: TextStyle(
             color: isSelected ? const Color(0xFFE47830) : const Color(0xFFABABAB),
             fontWeight: isSelected ? FontWeight.w500 : FontWeight.w400,
-            fontSize: 14,
+            fontSize: 14.sp,
           ),
         ),
       ),

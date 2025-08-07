@@ -1,8 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class SearchScreen extends StatelessWidget {
+class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
+
+  @override
+  State<SearchScreen> createState() => _SearchScreenState();
+}
+
+class _SearchScreenState extends State<SearchScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    _focusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -10,67 +26,77 @@ class SearchScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
 
-              // Full-width Search Bar with back icon
+              // Full-width Search Bar with TextField
               Container(
-                height: 42,
+                height: 42.h,
                 decoration: ShapeDecoration(
                   color: Colors.white,
                   shape: RoundedRectangleBorder(
-                    side: const BorderSide(
-                      width: 1,
-                      color: Color(0x9BE47830),
-                    ),
-                    borderRadius: BorderRadius.circular(5),
+                    side: BorderSide(width: 1.w, color: const Color(0x9BE47830)),
+                    borderRadius: BorderRadius.circular(5.r),
                   ),
                 ),
                 child: Row(
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 20),
+                      icon: Icon(Icons.arrow_back_ios, color: Colors.black, size: 20.sp),
                       onPressed: () => Navigator.pop(context),
                     ),
-                    const SizedBox(width: 4),
-                    Text(
-                      'Look For Services',
-                      style: TextStyle(
-                        color: Colors.black.withOpacity(0.72),
-                        fontSize: 13,
-                        fontFamily: 'SF Pro',
-                        fontWeight: FontWeight.w400,
+                    SizedBox(width: 4.w),
+                    Expanded(
+                      child: TextField(
+                        controller: _searchController,
+                        focusNode: _focusNode,
+                        style: TextStyle(
+                          color: Colors.black.withOpacity(0.72),
+                          fontSize: 13.sp,
+                          fontFamily: 'SF Pro',
+                          fontWeight: FontWeight.w400,
+                        ),
+                        cursorColor: Colors.black,
+                        autofocus: true, // keyboard opens on screen open
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Look For Services',
+                          hintStyle: TextStyle(
+                            color: Colors.black.withOpacity(0.72),
+                            fontSize: 13.sp,
+                            fontFamily: 'SF Pro',
+                            fontWeight: FontWeight.w400,
+                          ),
+                          isDense: true,
+                          contentPadding: EdgeInsets.zero,
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
 
-              const SizedBox(height: 36),
+              SizedBox(height: 36.h),
 
-              // Trending Searches Title
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Trending searches',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontFamily: 'SF Pro',
-                    fontWeight: FontWeight.w600,
-                  ),
+              Text(
+                'Trending searches',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20.sp,
+                  fontFamily: 'SF Pro',
+                  fontWeight: FontWeight.w600,
                 ),
               ),
 
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
 
-              // Trending Tags
               Wrap(
-                alignment: WrapAlignment.start, // 👈 ensures tags align from left
-                spacing: 12,
-                runSpacing: 12,
+                alignment: WrapAlignment.start,
+                spacing: 12.w,
+                runSpacing: 12.h,
                 children: _buildSearchTags(),
               ),
             ],
@@ -91,26 +117,26 @@ class SearchScreen extends StatelessWidget {
 
     return tags.map((text) {
       return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
         decoration: BoxDecoration(
           color: Colors.white,
           border: Border.all(color: Colors.black.withOpacity(0.5)),
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(5.r),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             SvgPicture.asset(
               'assets/icons/trend.svg',
-              width: 20,
-              height: 20,
+              width: 20.w,
+              height: 20.h,
             ),
-            const SizedBox(width: 6),
+            SizedBox(width: 6.w),
             Text(
               text,
               style: TextStyle(
                 color: Colors.black.withOpacity(0.72),
-                fontSize: 13,
+                fontSize: 13.sp,
                 fontFamily: 'SF Pro',
                 fontWeight: FontWeight.w400,
               ),

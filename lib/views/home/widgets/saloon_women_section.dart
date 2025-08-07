@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../services/saloonservicescreen.dart';
 
 class SaloonWomenSection extends StatelessWidget {
@@ -34,10 +35,9 @@ class SaloonWomenSection extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              'Saloon - Women',
+            Text('Saloon - Women',
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.w600,
                 fontFamily: 'SF Pro',
               ),
@@ -51,12 +51,11 @@ class SaloonWomenSection extends StatelessWidget {
                   ),
                 );
               },
-              child: const Padding(
-                padding: EdgeInsets.only(right: 16),
+              child: Padding(padding: EdgeInsets.only(right: 16.r),
                 child: Text(
                   'View all >',
                   style: TextStyle(
-                    fontSize: 13,
+                    fontSize: 13.sp,
                     color: Color(0xFFFF6F00),
                   ),
                 ),
@@ -65,11 +64,11 @@ class SaloonWomenSection extends StatelessWidget {
           ],
         ),
 
-        const SizedBox(height: 8),
+        SizedBox(height: 8.h),
 
         // Scrollable card layout (starts from left edge)
         SizedBox(
-          height: 384,
+          height: 384.h,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             padding: EdgeInsets.zero,
@@ -87,7 +86,7 @@ class SaloonWomenSection extends StatelessWidget {
                       title: item['title1']!,
                       imageAsset: item['image1']!,
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8.h),
                     _ServiceCard(
                       title: item['title2']!,
                       imageAsset: item['image2']!,
@@ -112,11 +111,11 @@ class _ServiceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 144,
-      height: 164,
+      width: 144.w,
+      height: 164.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: const Color(0xFFFFD9BE), width: 1),
+        border: Border.all(color: Color(0xFFFFD9BE), width: 1.w),
         image: DecorationImage(
           image: AssetImage(imageAsset),
           fit: BoxFit.cover,
@@ -126,7 +125,7 @@ class _ServiceCard extends StatelessWidget {
         alignment: Alignment.bottomCenter,
         child: Container(
           width: double.infinity,
-          height: 22,
+          height: 22.h,
           decoration: const BoxDecoration(
             color: Color(0xFFFFD9BE),
             borderRadius: BorderRadius.only(
@@ -137,8 +136,7 @@ class _ServiceCard extends StatelessWidget {
           alignment: Alignment.center,
           child: Text(
             title,
-            style: const TextStyle(
-              fontSize: 10,
+            style: TextStyle(fontSize: 10.sp,
               fontWeight: FontWeight.w600,
               fontFamily: 'Inter',
             ),

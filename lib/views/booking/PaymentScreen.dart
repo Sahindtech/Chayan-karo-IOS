@@ -1,4 +1,5 @@
 import 'package:chayankaro/views/booking/PaymentSuccess.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import '../../widgets/chayan_header.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -50,20 +51,20 @@ Widget build(BuildContext context) {
                   color: Colors.white,
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: ListView(
-                    padding: const EdgeInsets.only(bottom: 100),
+                    padding: EdgeInsets.only(bottom: 100.r),
                     children: [
-                      const SizedBox(height: 16),
-                      const Text('UPI', style: _sectionTitleStyle),
+                      SizedBox(height: 16.h),
+                       Text('UPI', style: _sectionTitleStyle),
                       _paymentTile('Paytm UPI', 'assets/icons/paytm.svg'),
                       _paymentTile('PhonePe', 'assets/icons/phonepe.svg'),
                       _paymentTile('GPay', 'assets/icons/gpay.svg'),
-                      const SizedBox(height: 24),
-                      const Text('Cards', style: _sectionTitleStyle),
+                      SizedBox(height: 24.h),
+                     Text('Cards', style: _sectionTitleStyle),
                       _cardTile(),
-                      const SizedBox(height: 24),
-                      const Text('Cash', style: _sectionTitleStyle),
+                      SizedBox(height: 24.h),
+                     Text('Cash', style: _sectionTitleStyle),
                       _paymentTile('Cash', 'assets/icons/cash.svg'),
-                      const SizedBox(height: 24),
+                      SizedBox(height: 24.h),
                     ],
                   ),
                 ),
@@ -83,7 +84,7 @@ Widget build(BuildContext context) {
                       )
                     : null,
                 child: Container(
-                  height: 47,
+                  height: 47.h,
                   decoration: BoxDecoration(
                     color: selectedMethod != null
                         ? const Color(0xFFE47830)
@@ -97,7 +98,7 @@ Widget build(BuildContext context) {
                       color: selectedMethod != null
                           ? Colors.white
                           : const Color(0xFF858585),
-                      fontSize: 16,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.w400,
                       letterSpacing: 0.32,
                     ),
@@ -120,21 +121,21 @@ Widget _paymentTile(String title, String iconPath) {
   return GestureDetector(
     onTap: () => _onSelect(title),
     child: Padding(
-      padding: const EdgeInsets.only(top: 16),
+      padding: EdgeInsets.only(top: 16.r),
       child: Row(
         children: [
           Container(
-            width: 16,
-            height: 16,
+            width: 16.w,
+            height: 16.h,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(color: const Color(0xFF161616), width: 1),
+              border: Border.all(color: Color(0xFF161616), width: 1.w),
             ),
             child: isSelected
                 ? Center(
                     child: Container(
-                      width: 10,
-                      height: 10,
+                      width: 10.w,
+                      height: 10.h,
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                         color: Color(0xFFE47830),
@@ -143,11 +144,10 @@ Widget _paymentTile(String title, String iconPath) {
                   )
                 : null,
           ),
-          const SizedBox(width: 16),
+          SizedBox(width: 16.w),
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 16,
+            style: TextStyle(fontSize: 16.sp,
               fontWeight: FontWeight.w500,
               fontFamily: 'Inter',
               color: Color(0xFF161616),
@@ -155,14 +155,13 @@ Widget _paymentTile(String title, String iconPath) {
           ),
           const Spacer(),
           Container(
-  width: 35,
-  height: 35,
-  decoration: const BoxDecoration(
-    shape: BoxShape.circle,
+  width: 35.w,
+  height: 35.h,
+  decoration: BoxDecoration(shape: BoxShape.circle,
     color: Colors.white, // optional background
   ),
   child: Padding(
-    padding: const EdgeInsets.all(6), // optional for spacing inside circle
+    padding: EdgeInsets.all(6.r), // optional for spacing inside circle
     child: SvgPicture.asset(
       iconPath,
       fit: BoxFit.contain,
@@ -182,21 +181,21 @@ Widget _cardTile() {
   return GestureDetector(
     onTap: () => _onSelect('Card'),
     child: Padding(
-      padding: const EdgeInsets.only(top: 16),
+      padding: EdgeInsets.only(top: 16.r),
       child: Row(
         children: [
           Container(
-            width: 16,
-            height: 16,
+            width: 16.w,
+            height: 16.h,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(color: const Color(0xFF161616), width: 1),
+              border: Border.all(color: Color(0xFF161616), width: 1.w),
             ),
             child: isSelected
                 ? Center(
                     child: Container(
-                      width: 10,
-                      height: 10,
+                      width: 10.w,
+                      height: 10.h,
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                         color: Color(0xFFE47830),
@@ -205,13 +204,13 @@ Widget _cardTile() {
                   )
                 : null,
           ),
-          const SizedBox(width: 16),
+          SizedBox(width: 16.w),
 
           // Mastercard icon (left of card number)
           Container(
-  width: 32,
-  height: 32,
-  margin: const EdgeInsets.only(right: 10),
+  width: 32.w,
+  height: 32.h,
+  margin: EdgeInsets.only(right: 10.r),
   decoration: BoxDecoration(
     borderRadius: BorderRadius.circular(8),
     color: Colors.transparent, // or use a background if needed
@@ -225,10 +224,9 @@ Widget _cardTile() {
   ),
 ),
 
-          const Text(
-            '************2575',
+          Text('************2575',
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 16.sp,
               fontWeight: FontWeight.w500,
               fontFamily: 'Inter',
               color: Color(0xFF161616),
@@ -238,8 +236,8 @@ Widget _cardTile() {
 
           // card.png on the right
           Container(
-  width: 32,
-  height: 32,
+  width: 32.w,
+  height: 32.h,
   decoration: BoxDecoration(
     borderRadius: BorderRadius.circular(8),
     color: Colors.transparent, // optional if background is needed
@@ -261,8 +259,8 @@ Widget _cardTile() {
 
 }
 
-const _sectionTitleStyle = TextStyle(
-  fontSize: 16,
+final _sectionTitleStyle = TextStyle(
+  fontSize: 16.sp,
   fontWeight: FontWeight.w700,
   fontFamily: 'SF Pro Display',
   color: Color(0xFF161616),

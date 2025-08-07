@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
 
 class ChayanHeader extends StatelessWidget {
@@ -31,7 +32,7 @@ class ChayanHeader extends StatelessWidget {
             color: backgroundColor,
           ),
           Container(
-            height: 56,
+            height: 56.h,
             color: backgroundColor,
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Row(
@@ -40,21 +41,21 @@ class ChayanHeader extends StatelessWidget {
                   onTap: onBack ?? () => Navigator.pop(context),
                   child: const Icon(Icons.arrow_back_ios_new, size: 20, color: Colors.black),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 12.w),
                 Expanded(
                   child: Center(
                     child: Text(
                       title,
-                      style: const TextStyle(
+                      style:  TextStyle(
                         fontFamily: 'SFProDisplay',
                         fontWeight: FontWeight.w700,
-                        fontSize: 18,
+                        fontSize: 18.sp,
                         color: Colors.black,
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(width: 32), // Right side spacer to balance
+                SizedBox(width: 32.w), // Right side spacer to balance
               ],
             ),
           ),

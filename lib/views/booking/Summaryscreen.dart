@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../widgets/chayan_header.dart';
 import 'showReschedulePopup.dart';
 import 'showScheduleAddressPopup.dart';
@@ -26,7 +27,7 @@ class SummaryScreen extends StatelessWidget {
                         // Selected Services Card
                         // Selected Services Title + Card (Updated)
 Container(
-  padding: const EdgeInsets.all(16),
+  padding: EdgeInsets.all(16.r),
   decoration: BoxDecoration(
     color: const Color(0xFFE5E9FF),
     borderRadius: BorderRadius.circular(20),
@@ -34,14 +35,13 @@ Container(
   child: Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      const Text(
-        'Selected Services',
+      Text('Selected Services',
         style: TextStyle(
-          fontSize: 16,
+          fontSize: 16.sp,
           fontWeight: FontWeight.w700,
         ),
       ),
-      const SizedBox(height: 12),
+      SizedBox(height: 12.h),
       Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -49,41 +49,41 @@ Container(
             borderRadius: BorderRadius.circular(12),
             child: Image.asset(
               'assets/facial.webp',
-              width: 60,
-              height: 60,
+              width: 60.w,
+              height: 60.h,
               fit: BoxFit.cover,
             ),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children:  [
                     Expanded(
                       child: Text(
                         'Diamond Facial',
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 14.sp,
                           fontWeight: FontWeight.w500,
                           color: Colors.black,
                         ),
                       ),
                     ),
-                    SizedBox(width: 8),
+                    SizedBox(width: 8.w),
                     Text(
                       '₹699',
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.w700,
                         color: Color(0xFFFA9441),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8.h),
                 const BulletText('45 mins'),
                 const BulletText('For all skin types. Pinacolada mask.'),
                 const BulletText('6-step process. Includes 10-min massage'),
@@ -97,19 +97,18 @@ Container(
 ),
 
 
-                        const SizedBox(height: 20),
+                        SizedBox(height: 20.h),
 
                         // Frequently Added Together
-                        const Text(
-                          'Frequently added together',
+                        Text('Frequently added together',
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 16.sp,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
-                        const SizedBox(height: 12),
+                        SizedBox(height: 12.h),
                         SizedBox(
-                          height: 240,
+                          height: 240.h,
                           child: ListView(
                             scrollDirection: Axis.horizontal,
                             children: [
@@ -119,19 +118,19 @@ Container(
                             ],
                           ),
                         ),
-                        const SizedBox(height: 20),
+                        SizedBox(height: 20.h),
 
                         // Coupons
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: const [
+                          children:  [
                             Row(
                               children: [
                                 Icon(Icons.local_offer_outlined, size: 20),
-                                SizedBox(width: 8),
+                                SizedBox(width: 8.w),
                                 Text(
                                   'Coupons and offers',
-                                  style: TextStyle(fontSize: 14),
+                                  style: TextStyle(fontSize: 14.sp),
                                 ),
                               ],
                             ),
@@ -144,11 +143,11 @@ Container(
                             ),
                           ],
                         ),
-                        const SizedBox(height: 20),
+                        SizedBox(height: 20.h),
 
                         // Payment Summary
                         Container(
-                          padding: const EdgeInsets.all(16),
+                          padding: EdgeInsets.all(16.r),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(20),
@@ -156,20 +155,19 @@ Container(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
-                                'Payment Summary',
+                              Text('Payment Summary',
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 16.sp,
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
-                              const SizedBox(height: 12),
+                              SizedBox(height: 12.h),
                               const PriceRow(title: 'Item Total', amount: '₹699'),
                               const PriceRow(title: 'Item Discount', amount: '-₹50', color: Color(0xFF52B46B)),
                               const PriceRow(title: 'Service Fee', amount: '₹50'),
-                              const Divider(height: 20),
+                              Divider(height: 20.h),
                               const PriceRow(title: 'Grand Total', amount: '₹749', isBold: true),
-                              const SizedBox(height: 12),
+                              SizedBox(height: 12.h),
                               Center(
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -177,11 +175,11 @@ Container(
                                     color: const Color(0x33FFAD33),
                                     borderRadius: BorderRadius.circular(6),
                                   ),
-                                  child: const Text(
+                                  child:  Text(
                                     'Hurray ! You saved ₹50 on final bill',
                                     style: TextStyle(
                                       color: Color(0xFFFA9441),
-                                      fontSize: 12,
+                                      fontSize: 12.sp,
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
@@ -190,7 +188,7 @@ Container(
                             ],
                           ),
                         ),
-                        const SizedBox(height: 100),
+                        SizedBox(height: 100.h),
                       ],
                     ),
                   ),
@@ -200,9 +198,9 @@ Container(
 
             // Bottom Buttons
             Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
+              bottom: 0.r,
+              left: 0.r,
+              right: 0.r,
               child: Container(
                 color: Colors.white,
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -213,7 +211,7 @@ Container(
  onTap: () {
       showScheduleAddressPopup(context);
     },        child: Container(
-          height: 47,
+          height: 47.h,
           decoration: ShapeDecoration(
             color: Colors.black,
             shape: RoundedRectangleBorder(
@@ -221,24 +219,23 @@ Container(
             ),
           ),
           alignment: Alignment.center,
-          child: const Text(
-            'Schedule for later',
+          child: Text('Schedule for later',
             style: TextStyle(
               color: Colors.white,
-              fontSize: 14,
+              fontSize: 14.sp,
               fontWeight: FontWeight.w500,
             ),
           ),
         ),
       ),
     ),
-    const SizedBox(width: 16),
+    SizedBox(width: 16.w),
     Expanded(
       child: InkWell(
        onTap: () {
       showReschedulePopup(context); // Call your popup function
     },        child: Container(
-          height: 47,
+          height: 47.h,
           decoration: ShapeDecoration(
             color: Color(0xFFE47830),
             shape: RoundedRectangleBorder(
@@ -246,11 +243,10 @@ Container(
             ),
           ),
           alignment: Alignment.center,
-          child: const Text(
-            'Request Now',
+          child: Text('Request Now',
             style: TextStyle(
               color: Colors.white,
-              fontSize: 14,
+              fontSize: 14.sp,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -270,9 +266,9 @@ Container(
 
   Widget buildAddCard(String asset, String title, String price) {
     return Container(
-      width: 140,
-      margin: const EdgeInsets.only(right: 16),
-      padding: const EdgeInsets.all(8),
+      width: 140.w,
+      margin: EdgeInsets.only(right: 16.r),
+      padding: EdgeInsets.all(8.r),
       decoration: BoxDecoration(
         color: const Color(0xFFF3F3F3),
         borderRadius: BorderRadius.circular(25),
@@ -283,22 +279,22 @@ Container(
             borderRadius: BorderRadius.circular(14),
             child: Image.asset(
               asset,
-              width: 120,
-              height: 120,
+              width: 120.w,
+              height: 120.h,
               fit: BoxFit.cover,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
           Text(
             title,
-            style: const TextStyle(fontWeight: FontWeight.w500),
+            style: TextStyle(fontWeight: FontWeight.w500),
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4.h),
           Text(price),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
           Container(
-            width: 120,
-            height: 30,
+            width: 120.w,
+            height: 30.h,
             decoration: BoxDecoration(
               color: const Color(0xFFE47830),
               borderRadius: BorderRadius.circular(30),
@@ -311,9 +307,8 @@ Container(
               ],
             ),
             alignment: Alignment.center,
-            child: const Text(
-              'Add',
-              style: TextStyle(color: Colors.white, fontSize: 14),
+            child: Text('Add',
+              style: TextStyle(color: Colors.white, fontSize: 14.sp),
             ),
           ),
         ],
@@ -331,14 +326,13 @@ class BulletText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Padding(
-          padding: EdgeInsets.only(right: 6, top: 4),
+        Padding(padding: EdgeInsets.only(right: 6.r, top: 4.r),
           child: CircleAvatar(radius: 2, backgroundColor: Color(0xFF757575)),
         ),
         Flexible(
           child: Text(
             text,
-            style: const TextStyle(color: Color(0xFF757575), fontSize: 14),
+            style: TextStyle(color: Color(0xFF757575), fontSize: 14.sp),
           ),
         ),
       ],
@@ -370,14 +364,14 @@ class PriceRow extends StatelessWidget {
           Text(
             title,
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 14.sp,
               fontWeight: isBold ? FontWeight.w700 : FontWeight.w400,
             ),
           ),
           Text(
             amount,
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 14.sp,
               color: color ?? Colors.black,
               fontWeight: isBold ? FontWeight.w700 : FontWeight.w400,
             ),

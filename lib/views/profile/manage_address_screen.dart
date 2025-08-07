@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../widgets/chayan_header.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -42,7 +43,7 @@ class _ManageAddressScreenState extends State<ManageAddressScreen> {
             onBack: () => Navigator.pop(context),
             onBackTap: () {},
           ),
-        const SizedBox(height: 16), // <-- Added spacing here
+        SizedBox(height: 16.h), // <-- Added spacing here
 
           Expanded(
             child: Padding(
@@ -55,14 +56,14 @@ class _ManageAddressScreenState extends State<ManageAddressScreen> {
                       // TODO: Open address adding flow
                     },
                     child: Row(
-                      children: const [
+                      children: [
                         Icon(Icons.add, color: Color(0xFFE47830), size: 20),
-                        SizedBox(width: 8),
+                        SizedBox(width: 8.w),
                         Text(
                           'Add another address',
                           style: TextStyle(
                             color: Color(0xFFE47830),
-                            fontSize: 16,
+                            fontSize: 16.sp,
                             fontWeight: FontWeight.w500,
                             fontFamily: 'Inter',
                           ),
@@ -70,10 +71,10 @@ class _ManageAddressScreenState extends State<ManageAddressScreen> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20.h),
 
                   Container(
-                    padding: const EdgeInsets.all(16),
+                    padding: EdgeInsets.all(16.r),
                     decoration: const BoxDecoration(
                       border: Border(
                         top: BorderSide(color: Color(0xFFEBEBEB)),
@@ -87,14 +88,14 @@ class _ManageAddressScreenState extends State<ManageAddressScreen> {
                           children: [
                            SvgPicture.asset(
                           'assets/icons/home.svg',
-                            width: 20,
-                            height: 20,
+                            width: 20.w,
+                            height: 20.h,
                             color: Colors.black, ),
-                            const SizedBox(width: 8),
+                            SizedBox(width: 8.w),
                             Text(
                               locationLabel,
-                              style: const TextStyle(
-                                fontSize: 16,
+                              style:  TextStyle(
+                                fontSize: 16.sp,
                                 fontWeight: FontWeight.w600,
                                 fontFamily: 'Inter',
                               ),
@@ -116,14 +117,14 @@ PopupMenuButton<String>(
 ),
                           ],
                         ),
-                        const SizedBox(height: 8),
+                        SizedBox(height: 8.h),
                         Text(
                           '$address\nPh: $phone',
-                          style: const TextStyle(
-                            fontSize: 14,
+                          style:  TextStyle(
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.w500,
                             fontFamily: 'Inter',
-                            height: 1.5,
+                            height: 1.5.h,
                             color: Color(0xFF757575),
                           ),
                         ),
@@ -138,196 +139,211 @@ PopupMenuButton<String>(
       ),
     );
   }
-  void _showUpdateAddressBottomSheet() {
+ void _showUpdateAddressBottomSheet() {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
     builder: (context) {
-      return Container(
-        width: double.infinity,
-        height: MediaQuery.of(context).size.height,
-        color: Colors.black.withOpacity(0.3),
-        child: Stack(
-          children: [
-            Positioned(
-              top: 114,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 24),
-                    Row(
-                      children: [
-                        const Expanded(
-                          child: Text(
-                            'Madhapur, Hyderabad',
+      return DraggableScrollableSheet(
+        expand: false,
+        initialChildSize: 0.8,
+        maxChildSize: 0.95,
+        minChildSize: 0.5,
+        builder: (_, controller) {
+          return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            child: SafeArea(
+              top: false,
+              child: Column(
+                children: [
+                  SizedBox(height: 16.h),
+                  Container(
+                    width: 40.w,
+                    height: 4.h,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(2.r),
+                    ),
+                  ),
+                  SizedBox(height: 16.h),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      controller: controller,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Madhapur, Hyderabad',
+                                  style: TextStyle(
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: 'Inter',
+                                  ),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {},
+                                child: Text(
+                                  'Set as Default',
+                                  style: TextStyle(
+                                    color: Color(0xFFE47830),
+                                    fontSize: 12.sp,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: 'Inter',
+                                  ),
+                                ),
+                                style: TextButton.styleFrom(
+                                  side: const BorderSide(color: Color(0xFFE47830)),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                ),
+                              )
+                            ],
+                          ),
+                          SizedBox(height: 4.h),
+                          Text(
+                            'Plot no.209, Kavuri Hills, Madhapur, Telangana 500033\nPh: +91234567890',
                             style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
+                              fontSize: 13.sp,
+                              color: Color(0xFF757575),
                               fontFamily: 'Inter',
                             ),
                           ),
-                        ),
-                        TextButton(
-                          onPressed: () {}, // handle set default
-                          child: const Text(
-                            'Set as Default',
+                          SizedBox(height: 24.h),
+
+                          Text(
+                            'House/Flat Number *',
                             style: TextStyle(
-                              color: Color(0xFFE47830),
-                              fontSize: 12,
+                              fontSize: 10.sp,
+                              color: Color(0xFFABABAB),
+                              fontFamily: 'SF Pro Display',
+                            ),
+                          ),
+                          SizedBox(height: 4.h),
+                          TextFormField(
+                            initialValue: 'Plot no.209',
+                            style: TextStyle(
+                              fontSize: 14.sp,
                               fontWeight: FontWeight.w500,
                               fontFamily: 'Inter',
                             ),
-                          ),
-                          style: TextButton.styleFrom(
-                            side: const BorderSide(color: Color(0xFFE47830)),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(6),
+                            decoration: InputDecoration(
+                              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                             ),
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                           ),
-                        )
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-                    const Text(
-                      'Plot no.209, Kavuri Hills, Madhapur, Telangana 500033\nPh: +91234567890',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Color(0xFF757575),
-                        fontFamily: 'Inter',
-                      ),
-                    ),
-                    const SizedBox(height: 24),
+                          SizedBox(height: 16.h),
 
-                    const Text(
-                      'House/Flat Number *',
-                      style: TextStyle(
-                        fontSize: 10,
-                        color: Color(0xFFABABAB),
-                        fontFamily: 'SF Pro Display',
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    TextFormField(
-                      initialValue: 'Plot no.209',
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: 'Inter',
-                      ),
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
+                          TextFormField(
+                            decoration: InputDecoration(
+                              labelText: 'Landmark (Optional)',
+                              labelStyle: TextStyle(
+                                fontSize: 14.sp,
+                                color: Color(0xFFABABAB),
+                                fontFamily: 'SF Pro Display',
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 20.h),
 
-                    TextFormField(
-                      decoration: InputDecoration(
-                        labelText: 'Landmark (Optional)',
-                        labelStyle: const TextStyle(
-                          fontSize: 14,
-                          color: Color(0xFFABABAB),
-                          fontFamily: 'SF Pro Display',
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
+                          Text(
+                            'Save as',
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              fontFamily: 'SF Pro Display',
+                              color: Color(0xFF757575),
+                            ),
+                          ),
+                          SizedBox(height: 10.h),
+
+                          Row(
+                            children: [
+                              ChoiceChip(
+                                label: const Text('Home'),
+                                selected: true,
+                                selectedColor: const Color(0xFFE6EAFF),
+                                labelStyle: const TextStyle(
+                                  color: Color(0xFFE47830),
+                                  fontWeight: FontWeight.w500,
+                                  fontFamily: 'Inter',
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  side: const BorderSide(color: Color(0xFFE47830)),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                onSelected: (_) {},
+                              ),
+                              SizedBox(width: 10.w),
+                              ChoiceChip(
+                                label: const Text('Other'),
+                                selected: false,
+                                labelStyle: const TextStyle(
+                                  color: Color(0xFFABABAB),
+                                  fontFamily: 'SF Pro Display',
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  side: const BorderSide(color: Color(0xFFE3E3E3)),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                onSelected: (_) {},
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 24.h),
+
+                          SizedBox(
+                            width: double.infinity,
+                            height: 47.h,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFFE47830),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              onPressed: () => Navigator.pop(context),
+                              child: Text(
+                                'Update address',
+                                style: TextStyle(
+                                  fontFamily: 'SF Pro Display',
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 16.sp,
+                                  letterSpacing: 0.3,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 16.h),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 20),
-
-                    const Text(
-                      'Save as',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'SF Pro Display',
-                        color: Color(0xFF757575),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-
-                    Row(
-                      children: [
-                        ChoiceChip(
-                          label: const Text('Home'),
-                          selected: true,
-                          selectedColor: const Color(0xFFE6EAFF),
-                          labelStyle: const TextStyle(
-                            color: Color(0xFFE47830),
-                            fontWeight: FontWeight.w500,
-                            fontFamily: 'Inter',
-                          ),
-                          shape: RoundedRectangleBorder(
-                            side: const BorderSide(color: Color(0xFFE47830)),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          onSelected: (_) {},
-                        ),
-                        const SizedBox(width: 10),
-                        ChoiceChip(
-                          label: const Text('Other'),
-                          selected: false,
-                          labelStyle: const TextStyle(
-                            color: Color(0xFFABABAB),
-                            fontFamily: 'SF Pro Display',
-                          ),
-                          shape: RoundedRectangleBorder(
-                            side: const BorderSide(color: Color(0xFFE3E3E3)),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          onSelected: (_) {},
-                        ),
-                      ],
-                    ),
-                    const Spacer(),
-
-                    SizedBox(
-                      width: double.infinity,
-                      height: 47,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFE47830),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        onPressed: () => Navigator.pop(context),
-                        child: const Text(
-                          'Update address',
-                          style: TextStyle(
-                            fontFamily: 'SF Pro Display',
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16,
-                            letterSpacing: 0.3,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          );
+        },
       );
     },
   );
 }
+
 
 void _confirmDelete() {
   showDialog(
@@ -345,8 +361,7 @@ void _confirmDelete() {
             // Handle deletion
             Navigator.pop(context);
           },
-          child: const Text(
-            'Delete',
+          child: Text('Delete',
             style: TextStyle(color: Colors.red),
           ),
         ),

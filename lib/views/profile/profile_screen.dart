@@ -1,4 +1,5 @@
 import 'package:chayankaro/views/booking/PaymentScreen.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:chayankaro/views/booking/Summaryscreen.dart';
 import 'package:chayankaro/views/rewards/ReferAndEarnScreen.dart';
 import 'package:flutter/material.dart';
@@ -46,45 +47,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
 Widget buildQuickAction(String label, String iconAssetPath) {
   return Container(
-    width: 97,
-    height: 100,
+    width: 97.w,
+    height: 100.h,
     decoration: ShapeDecoration(
       color: Colors.white,
       shape: RoundedRectangleBorder(
-        side: const BorderSide(
-          width: 1,
-          color: Color(0xB5E47830),
+        side: BorderSide(
+          width: 1.w,
+          color: const Color(0xB5E47830),
         ),
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(15.r),
       ),
     ),
     child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 10.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            width: 30,
-            height: 30,
+            width: 30.w,
+            height: 30.h,
             decoration: const ShapeDecoration(
               shape: OvalBorder(),
             ),
             child: SvgPicture.asset(
               iconAssetPath,
-              width: 30,
-              height: 30,
-              fit: BoxFit.cover,
+              width: 30.w,
+              height: 30.h,
+              fit: BoxFit.contain,
             ),
           ),
-          const SizedBox(height: 8),
-          Expanded(
+          SizedBox(height: 8.h),
+          SizedBox(
+            height: 36.h, // Allocate enough vertical space for 2 lines
             child: Text(
               label,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                color: Color(0xFF161616),
-                fontSize: 14,
+              style: TextStyle(
+                color: const Color(0xFF161616),
+                fontSize: 12.sp, // Slightly reduced to prevent cutoff
                 fontFamily: 'Inter',
                 fontWeight: FontWeight.w500,
               ),
@@ -96,26 +98,29 @@ Widget buildQuickAction(String label, String iconAssetPath) {
   );
 }
 
-  Widget buildListItem(String iconPath, String label, {VoidCallback? onTap}) {
+
+Widget buildListItem(String iconPath, String label, {VoidCallback? onTap}) {
   return ListTile(
+    contentPadding: EdgeInsets.symmetric(horizontal: 4.w),
     leading: SvgPicture.asset(
       iconPath,
-      width: 20,
-      height: 20,
-      color: Colors.black
+      width: 20.w,
+      height: 20.h,
+      color: Colors.black,
     ),
     title: Text(
       label,
-      style: const TextStyle(
+      style: TextStyle(
         fontFamily: 'Inter',
         fontWeight: FontWeight.w500,
-        fontSize: 16,
+        fontSize: 16.sp,
       ),
     ),
-    trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+    trailing: Icon(Icons.arrow_forward_ios, size: 16.sp),
     onTap: onTap,
   );
 }
+
 
 
   @override
@@ -127,43 +132,42 @@ Widget buildQuickAction(String label, String iconAssetPath) {
           ChayanHeader(title: 'Profile', onBackTap: () {  },),
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding:  EdgeInsets.symmetric(horizontal: 16.w),
               children: [
-                const SizedBox(height: 24),
+                SizedBox(height: 24.h),
                 Row(
                   children: [
-                    const CircleAvatar(
-                      radius: 40,
+                    CircleAvatar(radius: 40,
                       backgroundImage: AssetImage('assets/userprofile.webp'),
                     ),
-                    const SizedBox(width: 16),
+                    SizedBox(width: 16.w),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      children:  [
                         Text(
                           'Ayush Srivastav (LALA)',
                           style: TextStyle(
                             fontFamily: 'Inter',
                             fontWeight: FontWeight.w600,
-                            fontSize: 16,
+                            fontSize: 16.sp,
                           ),
                         ),
-                        SizedBox(height: 4),
+                        SizedBox(height: 4.h),
                         Text(
                           '+91 7355640235',
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 12.sp,
                             fontWeight: FontWeight.w500,
                             color: Color(0xFF161616),
                           ),
                         ),
-                        SizedBox(height: 2),
+                        SizedBox(height: 2.h),
                         Opacity(
                           opacity: 0.55,
                           child: Text(
                             '9.9 Rating',
                             style: TextStyle(
-                              fontSize: 10,
+                              fontSize: 10.sp,
                               fontWeight: FontWeight.w500,
                               color: Color(0xFF161616),
                             ),
@@ -180,17 +184,17 @@ Widget buildQuickAction(String label, String iconAssetPath) {
                         );
                       },
                       child: Container(
-                        padding: const EdgeInsets.all(10),
+                        padding: EdgeInsets.all(10.r),
                         decoration: BoxDecoration(
                           color: const Color(0xFFE47830),
-                          borderRadius: BorderRadius.circular(15),
+                          borderRadius: BorderRadius.circular(15.r),
                         ),
-                        child: const Icon(Icons.edit, color: Colors.white, size: 20),
+                        child: Icon(Icons.edit, color: Colors.white, size: 20),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: 24.h),
                Row(
   mainAxisAlignment: MainAxisAlignment.spaceBetween,
   children: [
@@ -210,7 +214,7 @@ GestureDetector(
   ],
 ),
 
-                const SizedBox(height: 24),
+                SizedBox(height: 24.h),
                 const Divider(color: Color(0xFFEBEBEB)),
                 buildListItem('assets/icons/location.svg', "Manage Address", onTap: () {
   Navigator.push(context, MaterialPageRoute(builder: (_) => const ManageAddressScreen()));
@@ -229,12 +233,12 @@ buildListItem('assets/icons/settings.svg', "Settings", onTap: () {
                 }),
 buildListItem('assets/icons/logout.svg', "Logout"),
 
-                const SizedBox(height: 20),
+                SizedBox(height: 20.h),
                 Container(
-  padding: const EdgeInsets.all(20),
+  padding: EdgeInsets.all(20.r),
   decoration: BoxDecoration(
     color: const Color(0xFFFFEDE0),
-    borderRadius: BorderRadius.circular(12),
+    borderRadius: BorderRadius.circular(12.r),
   ),
   child: Row(
     children: [
@@ -242,38 +246,38 @@ buildListItem('assets/icons/logout.svg', "Logout"),
       Expanded(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children:  [
             Text(
               'Refer & earn 100 coins',
               style: TextStyle(
                 fontFamily: 'SF Pro',
                 fontWeight: FontWeight.w700,
-                fontSize: 18,
+                fontSize: 18.sp,
               ),
             ),
-            SizedBox(height: 6),
+            SizedBox(height: 6.h),
             Text(
               'Get 100 coins when your friend completes their first booking',
               style: TextStyle(
                 fontFamily: 'SF Pro',
-                fontSize: 14,
+                fontSize: 14.sp,
               ),
             ),
           ],
         ),
       ),
-      const SizedBox(width: 16),
+      SizedBox(width: 16.w),
       // Move the gift icon to the right
       SvgPicture.asset(
         'assets/icons/gifty.svg',
-        height: 57,
-        width: 57,
+        height: 57.h,
+        width: 57.w,
       ),
     ],
   ),
 ),
 
-                const SizedBox(height: 30),
+                SizedBox(height: 30.h),
               ],
             ),
           ),

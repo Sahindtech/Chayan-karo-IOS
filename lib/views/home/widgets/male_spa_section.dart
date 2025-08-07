@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../services/MaleSpaScreen.dart';
 
 class MaleSpaSection extends StatelessWidget {
@@ -13,10 +14,9 @@ class MaleSpaSection extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              'Spa - Men',
+            Text('Spa - Men',
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.w600,
                 fontFamily: 'SF Pro',
               ),
@@ -28,12 +28,11 @@ class MaleSpaSection extends StatelessWidget {
                   MaterialPageRoute(builder: (_) => MaleSpaScreen()),
                 );
               },
-              child: const Padding(
-                padding: EdgeInsets.only(right: 16),
+              child: Padding(padding: EdgeInsets.only(right: 16.r),
                 child: Text(
                   'View all >',
                   style: TextStyle(
-                    fontSize: 13,
+                    fontSize: 13.sp,
                     color: Color(0xFFFF6F00),
                   ),
                 ),
@@ -41,15 +40,15 @@ class MaleSpaSection extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12.h),
 
         // Horizontal Scroll Cards
         SizedBox(
-          height: 164, // Only image height now
+          height: 164.h, // Only image height now
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             itemCount: _maleSpaItems.length,
-            separatorBuilder: (_, __) => const SizedBox(width: 12),
+            separatorBuilder: (_, __) => SizedBox(width: 12.w),
             itemBuilder: (context, index) {
               final item = _maleSpaItems[index];
               return _MaleSpaCard(
@@ -91,11 +90,11 @@ class _MaleSpaCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 144,
-      height: 164,
+      width: 144.w,
+      height: 164.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: const Color(0xFFFFD9BE), width: 1),
+        border: Border.all(color: Color(0xFFFFD9BE), width: 1.w),
         image: DecorationImage(
           image: AssetImage(imagePath),
           fit: BoxFit.cover,
@@ -115,8 +114,7 @@ class _MaleSpaCard extends StatelessWidget {
           ),
           child: Text(
             label,
-            style: const TextStyle(
-              fontSize: 10,
+            style: TextStyle(fontSize: 10.sp,
               fontWeight: FontWeight.w600,
               fontFamily: 'Inter',
             ),

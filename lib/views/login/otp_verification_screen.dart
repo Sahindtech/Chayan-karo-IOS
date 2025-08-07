@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:async';
 import '../../widgets/location_popup_screen.dart';
 
@@ -46,7 +47,8 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     String otp = _otpControllers.map((e) => e.text).join();
     if (otp.length == 4) {
       // TODO: Replace this with real login logic
-Navigator.pushReplacementNamed(context, '/home');    } else {
+      Navigator.pushReplacementNamed(context, '/home');
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Please enter the 4-digit OTP")),
       );
@@ -64,26 +66,27 @@ Navigator.pushReplacementNamed(context, '/home');    } else {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: List.generate(4, (index) {
-        return Container(
-          width: 55,
-          height: 55,
+        return SizedBox(
+          width: 55.w,
+          height: 55.h,
           child: TextField(
             controller: _otpControllers[index],
             keyboardType: TextInputType.number,
             textAlign: TextAlign.center,
             maxLength: 1,
             style: TextStyle(
-              fontSize: 22,
+              fontSize: 22.sp,
               fontFamily: 'SFProSemibold',
               color: Colors.black,
             ),
             decoration: InputDecoration(
               counterText: '',
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12.r),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Color(0xFFFF6F00), width: 2),
+                borderSide: BorderSide(color: Color(0xFFFF6F00), width: 2.w),
+                borderRadius: BorderRadius.circular(12.r),
               ),
             ),
             onChanged: (value) {
@@ -109,46 +112,46 @@ Navigator.pushReplacementNamed(context, '/home');    } else {
         foregroundColor: Colors.black,
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(height: 20),
+            SizedBox(height: 20.h),
             Center(
               child: Text(
                 "Enter verification code",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 24,
+                  fontSize: 24.sp,
                   fontFamily: 'SFProDisplay',
                   fontWeight: FontWeight.w700,
                   color: Colors.black,
                 ),
               ),
             ),
-            SizedBox(height: 8),
+            SizedBox(height: 8.h),
             Center(
               child: Text(
                 "We have sent you a 4 digit verification code on +91 $_phoneNumber",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 14.sp,
                   fontFamily: 'SFProRegular',
                   color: Colors.black87,
                 ),
               ),
             ),
-            SizedBox(height: 32),
+            SizedBox(height: 32.h),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
               child: _buildOtpFields(),
             ),
-            SizedBox(height: 16),
+            SizedBox(height: 16.h),
             if (!_canResend)
               Text(
                 "Resend available in $_secondsRemaining sec",
                 style: TextStyle(
-                  fontSize: 13,
+                  fontSize: 13.sp,
                   fontFamily: 'SFProRegular',
                   color: Colors.grey[600],
                 ),
@@ -162,6 +165,7 @@ Navigator.pushReplacementNamed(context, '/home');    } else {
                 child: Text(
                   "Resend OTP",
                   style: TextStyle(
+                    fontSize: 14.sp,
                     fontFamily: 'SFProSemibold',
                     color: Color(0xFFFF6F00),
                   ),
@@ -172,21 +176,21 @@ Navigator.pushReplacementNamed(context, '/home');    } else {
               onPressed: _loginWithOtp,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xFFFF6F00),
-                minimumSize: Size(double.infinity, 55),
+                minimumSize: Size(double.infinity, 55.h),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(12.r),
                 ),
               ),
               child: Text(
                 "Login",
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 16.sp,
                   fontFamily: 'SFProSemibold',
                   color: Colors.white,
                 ),
               ),
             ),
-            SizedBox(height: 24),
+            SizedBox(height: 24.h),
           ],
         ),
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../widgets/custom_bottom_nav_bar.dart';
 import '../../widgets/common_top_bar.dart'; // ✅ new import
 import 'package:flutter_svg/flutter_svg.dart';
@@ -24,7 +25,7 @@ class AllMostUsedServicesScreen extends StatelessWidget {
               title: 'Most used services',
               showShareIcon: true,
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12.h),
 
             // Grid of Services
             Expanded(
@@ -60,12 +61,12 @@ class AllMostUsedServicesScreen extends StatelessWidget {
                             child: Image.asset(
                               service['image']!,
                               width: double.infinity,
-                              height: 110,
+                              height: 110.h,
                               fit: BoxFit.cover,
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: EdgeInsets.all(8.0.r),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -73,47 +74,46 @@ class AllMostUsedServicesScreen extends StatelessWidget {
                                   service['title'] ?? '',
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                    fontSize: 14,
+                                  style: TextStyle(fontSize: 14.sp,
                                     fontWeight: FontWeight.w600,
                                     fontFamily: 'SFPro',
                                   ),
                                 ),
-                                const SizedBox(height: 4),
+                                SizedBox(height: 4.h),
                                 Row(
                                   children: [
                                     SvgPicture.asset(
                                       'assets/icons/star.svg',
-                                      height: 14,
-                                      width: 14,
+                                      height: 14.h,
+                                      width: 14.w,
                                       color: Colors.black,
                                     ),
-                                    const SizedBox(width: 4),
-                                    const Text(
+                                    SizedBox(width: 4.w),
+                                    Text(
                                       '4.8 (23k)',
                                       style: TextStyle(
-                                        fontSize: 12,
+                                        fontSize: 12.sp,
                                         color: Colors.black54,
                                       ),
                                     ),
                                   ],
                                 ),
-                                const SizedBox(height: 6),
+                                SizedBox(height: 6.h),
                                 Row(
-                                  children: const [
+                                  children:  [
                                     Text(
                                       '₹799',
                                       style: TextStyle(
-                                        fontSize: 12,
+                                        fontSize: 12.sp,
                                         decoration: TextDecoration.lineThrough,
                                         color: Colors.black38,
                                       ),
                                     ),
-                                    SizedBox(width: 6),
+                                    SizedBox(width: 6.w),
                                     Text(
                                       '₹499',
                                       style: TextStyle(
-                                        fontSize: 14,
+                                        fontSize: 14.sp,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.orange,
                                       ),

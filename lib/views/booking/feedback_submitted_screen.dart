@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../home/home_screen.dart';
@@ -30,33 +31,31 @@ class FeedbackSubmittedScreen extends StatelessWidget {
               title: 'Feedback',
               onBackTap: () => Navigator.pop(context),
             ),
-            const SizedBox(height: 40),
+            SizedBox(height: 40.h),
             SvgPicture.asset(
               'assets/icons/feedtick.svg',
               semanticsLabel: 'Feedback Tick',
-              width: 120,
-              height: 120,
+              width: 120.w,
+              height: 120.h,
             ),
-            const SizedBox(height: 32),
-            const Text(
-              'Feedback Submitted',
+            SizedBox(height: 32.h),
+            Text('Feedback Submitted',
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 18.sp,
                 fontWeight: FontWeight.w700,
                 fontFamily: 'Inter',
               ),
             ),
-            const SizedBox(height: 12),
-            const Text(
-              'Thank You! Your Feedback has been\nsubmitted Successfully',
+            SizedBox(height: 12.h),
+            Text('Thank You! Your Feedback has been\nsubmitted Successfully',
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 13,
+                fontSize: 13.sp,
                 fontWeight: FontWeight.w400,
                 fontFamily: 'Inter',
               ),
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: 24.h),
             OutlinedButton(
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(color: Color(0xFFE47830)),
@@ -71,18 +70,18 @@ class FeedbackSubmittedScreen extends StatelessWidget {
                   (route) => false,
                 );
               },
-              child: const Text(
+              child: Text(
                 'Go Back',
                 style: TextStyle(
                   color: Color(0xFFE47830),
                   fontWeight: FontWeight.w500,
-                  fontSize: 14,
+                  fontSize: 14.sp,
                 ),
               ),
             ),
             const Spacer(),
             Padding(
-              padding: const EdgeInsets.only(bottom: 8),
+              padding: EdgeInsets.only(bottom: 8.r),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -90,12 +89,12 @@ class FeedbackSubmittedScreen extends StatelessWidget {
                     iconPath: 'assets/icons/insta.svg',
                     onTap: () => _launchUrl(instagramUrl),
                   ),
-                  const SizedBox(width: 24),
+                  SizedBox(width: 24.w),
                   _buildSocialIcon(
                     iconPath: 'assets/icons/fb.svg',
                     onTap: () => _launchUrl(facebookUrl),
                   ),
-                  const SizedBox(width: 24),
+                  SizedBox(width: 24.w),
                   _buildSocialIcon(
                     iconPath: 'assets/icons/youtube.svg',
                     onTap: () => _launchUrl(youtubeUrl),
@@ -103,16 +102,15 @@ class FeedbackSubmittedScreen extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 6),
-            const Text(
-              'Our Social Links',
+            SizedBox(height: 6.h),
+            Text('Our Social Links',
               style: TextStyle(
-                fontSize: 14,
+                fontSize: 14.sp,
                 fontFamily: 'Inter',
                 fontWeight: FontWeight.w500,
               ),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
           ],
         ),
       ),
@@ -125,7 +123,7 @@ class FeedbackSubmittedScreen extends StatelessWidget {
   }) {
     return InkWell(
       onTap: onTap,
-      child: SvgPicture.asset(iconPath, width: 35),
+      child: SvgPicture.asset(iconPath, width: 35.w),
     );
   }
 }

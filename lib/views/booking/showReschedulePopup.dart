@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../chayan_sathi/chayan_sathi_screen.dart';
 
 void showReschedulePopup(BuildContext context) {
@@ -36,34 +37,31 @@ class _RescheduleContentState extends State<_RescheduleContent> {
   top: false, // don't affect top design
   child: Container(
     width: MediaQuery.of(context).size.width,
-    height: 530,
+    height: 530.h,
     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-    decoration: const BoxDecoration(
-      color: Colors.white,
+    decoration: BoxDecoration(color: Colors.white,
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Select date and time',
+        Text('Select date and time',
           style: TextStyle(
             fontFamily: 'SF Pro Display',
-            fontSize: 18,
+            fontSize: 18.sp,
             fontWeight: FontWeight.w600,
             color: Colors.black,
           ),
         ),
-        const SizedBox(height: 4),
-        const Text(
-          'Your service will take approx. 45 mins',
+        SizedBox(height: 4.h),
+        Text('Your service will take approx. 45 mins',
           style: TextStyle(
             fontFamily: 'SF Pro Display',
-            fontSize: 14,
+            fontSize: 14.sp,
             color: Color(0xFF7D7F88),
           ),
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: 24.h),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: dates.map((d) {
@@ -78,7 +76,7 @@ class _RescheduleContentState extends State<_RescheduleContent> {
             );
           }).toList(),
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: 24.h),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: times.map((t) {
@@ -96,7 +94,7 @@ class _RescheduleContentState extends State<_RescheduleContent> {
         const Spacer(),
         SizedBox(
           width: double.infinity,
-          height: 50,
+          height: 50.h,
           child: ElevatedButton(
             onPressed: (selectedDate != null && selectedTime != null)
                 ? () {
@@ -120,11 +118,10 @@ class _RescheduleContentState extends State<_RescheduleContent> {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            child: const Text(
-              'Proceed to checkout',
+            child: Text('Proceed to checkout',
               style: TextStyle(
                 fontFamily: 'SF Pro Display',
-                fontSize: 16,
+                fontSize: 16.sp,
               ),
             ),
           ),
@@ -138,10 +135,10 @@ class _RescheduleContentState extends State<_RescheduleContent> {
 
   Widget _buildDateChip(String day, String date, bool isSelected) {
     return Container(
-      width: 80,
-      height: 60,
+      width: 80.w,
+      height: 60.h,
       decoration: BoxDecoration(
-        color: isSelected ? const Color(0xFFF2F2FF) : Colors.white,
+        color: isSelected ? Color(0xFFF2F2FF) : Colors.white,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: isSelected ? const Color(0xFFE47830) : const Color(0xFFE0E0E0),
@@ -154,7 +151,7 @@ class _RescheduleContentState extends State<_RescheduleContent> {
             day,
             style: TextStyle(
               fontFamily: 'SF Pro Display',
-              fontSize: 14,
+              fontSize: 14.sp,
               color: isSelected ? const Color(0xFFE47830) : Colors.black,
             ),
           ),
@@ -162,7 +159,7 @@ class _RescheduleContentState extends State<_RescheduleContent> {
             date,
             style: TextStyle(
               fontFamily: 'SF Pro Display',
-              fontSize: 16,
+              fontSize: 16.sp,
               fontWeight: FontWeight.w600,
               color: isSelected ? const Color(0xFFE47830) : Colors.black,
             ),
@@ -174,11 +171,11 @@ class _RescheduleContentState extends State<_RescheduleContent> {
 
   Widget _buildTimeChip(String time, bool isSelected) {
     return Container(
-      width: 100,
-      height: 48,
+      width: 100.w,
+      height: 48.h,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: isSelected ? const Color(0xFFF2F2FF) : Colors.white,
+        color: isSelected ? Color(0xFFF2F2FF) : Colors.white,
         border: Border.all(
           color: isSelected ? const Color(0xFFE47830) : const Color(0xFFE0E0E0),
         ),
@@ -188,7 +185,7 @@ class _RescheduleContentState extends State<_RescheduleContent> {
         time,
         style: TextStyle(
           fontFamily: 'SF Pro Display',
-          fontSize: 14,
+          fontSize: 14.sp,
           fontWeight: FontWeight.w500,
           color: isSelected ? const Color(0xFFE47830) : Colors.black,
         ),
