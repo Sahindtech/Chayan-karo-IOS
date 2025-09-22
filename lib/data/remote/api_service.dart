@@ -1,7 +1,8 @@
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
 import '../../models/auth_models.dart';
-import '../../models/home_models.dart';  // Keep your existing home models
+import '../../models/home_models.dart';
+import '../../models/customer_models.dart';  // Add customer models import
 
 part 'api_service.g.dart';
 
@@ -18,6 +19,10 @@ abstract class ApiService {
 
   @POST('/Authentication/RefreshToken')
   Future<AuthResponse> refreshToken(@Body() RefreshTokenRequest request);
+
+  // Customer Profile endpoint
+  @GET('/Customer/GetCustomer')
+  Future<CustomerResponse> getCustomer(@Header("Authorization") String authorization);
 
   // Home endpoints (keeping your existing ones)
   @GET("/home/data")

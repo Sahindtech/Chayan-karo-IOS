@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'dart:async';
-import '../data/repository/auth_repository.dart';
+import '../data/repository/auth_repository.dart'; // Fixed import path
 import '../data/local/database.dart';
 
 class OtpController extends GetxController {
@@ -153,28 +153,52 @@ class OtpController extends GetxController {
       } else {
         // Handle Object response (Retrofit/Model response)
         print('📋 Processing Object response');
+        
         try {
-          // Safely access object properties
+          // Access the AuthResponse properties
           type = response.type;
           
-          // Handle different possible result types
-          if (response.result is Map<String, dynamic>) {
-            final resultMap = response.result as Map<String, dynamic>;
-            message = resultMap['message'] as String?;
-            token = resultMap['result'] as String?;
-          } else if (response.result is String) {
-            // If result is directly a string (like JWT)
-            token = response.result as String?;
-            message = response.message;
-          } else {
-            message = response.message;
+          // CRITICAL FIX: Get the AuthResult object and extract the JWT
+          final authResult = response.result;
+          
+          if (authResult != null) {
+            print('🔍 Debug - AuthResult type: ${authResult.runtimeType}');
+            
+            try {
+              // Try to access the message and result (JWT) from AuthResult
+              message = authResult.message;
+              token = authResult.result; // This should be the JWT token string
+              
+              print('🔍 Debug - Message from AuthResult: $message');
+              print('🔍 Debug - Token from AuthResult: ${token?.substring(0, 30) ?? 'null'}...');
+              
+            } catch (e) {
+              print('⚠️ Error accessing AuthResult properties: $e');
+              
+              // Fallback: try to convert to Map and access
+              if (authResult is Map<String, dynamic>) {
+                message = authResult['message'] as String?;
+                token = authResult['result'] as String?;
+              } else {
+                // Last resort: try dynamic access
+                try {
+                  message = (authResult as dynamic).message;
+                  token = (authResult as dynamic).result;
+                } catch (e2) {
+                  print('⚠️ Dynamic access also failed: $e2');
+                  message = 'Login successful';
+                  // Token will remain null, but we'll still proceed
+                }
+              }
+            }
           }
           
-          // Try to get access/refresh tokens if available
+          // Try to get refresh token if available
           try {
             refreshToken = response.refreshToken;
             if (response.accessToken != null) {
-              token = response.accessToken;
+              // Only override token if we don't have one from result
+              token ??= response.accessToken;
             }
           } catch (e) {
             print('⚠️ No access/refresh token properties found: $e');
@@ -192,8 +216,11 @@ class OtpController extends GetxController {
         }
       }
       
-      print('📋 Extracted - Type: $type, Message: $message');
-      print('📋 Token available: ${token != null}');
+      print('📋 Final Extracted Values:');
+      print('   Type: $type');
+      print('   Message: $message');
+      print('   Token available: ${token != null && token!.isNotEmpty}');
+      print('   Token length: ${token?.length ?? 0}');
       
       if (type == 'Authentication' && (
           message?.toLowerCase().contains('success') == true ||
@@ -211,8 +238,11 @@ class OtpController extends GetxController {
         
         if (token != null && token.isNotEmpty) {
           authData['jwt_token'] = token;
-          print('✅ JWT token extracted: ${token.substring(0, 20)}...');
+          print('🔑 JWT token will be saved: ${token.substring(0, 30)}...');
+        } else {
+          print('⚠️ WARNING: No JWT token found in response - this will cause profile API to fail!');
         }
+        
         if (refreshToken != null && refreshToken.isNotEmpty) {
           authData['refresh_token'] = refreshToken;
           print('✅ Refresh token extracted');
@@ -251,6 +281,7 @@ class OtpController extends GetxController {
     try {
       // Save user as logged in
       await _database.saveUserLoginStatus(true);
+      print('✅ User login status saved: true');
       
       // Prepare user data
       final userData = <String, dynamic>{
@@ -272,7 +303,17 @@ class OtpController extends GetxController {
         
         if (token != null && token.isNotEmpty) {
           await _database.saveAuthToken(token);
-          print('✅ JWT token saved: ${token.substring(0, 20)}...');
+          print('🔑 JWT token saved to database: ${token.substring(0, 30)}...');
+          
+          // Verify token was saved correctly
+          final savedToken = await _database.getAuthToken();
+          if (savedToken == token) {
+            print('✅ Token verification successful - database save confirmed');
+          } else {
+            print('❌ Token verification failed - database save issue!');
+          }
+        } else {
+          print('⚠️ WARNING: No token to save - profile API will fail!');
         }
         
         // Save refresh token if available
@@ -297,6 +338,7 @@ class OtpController extends GetxController {
       }
       
       await _database.saveUserData(userData);
+      print('✅ User data saved: ${userData.keys.join(', ')}');
       print('✅ User authentication data saved successfully');
       
     } catch (e) {
@@ -477,6 +519,32 @@ class OtpController extends GetxController {
 
     } catch (e) {
       print('❌ cURL phone test error: $e');
+    }
+  }
+
+  // Add this method to test token extraction specifically
+  Future<void> debugTokenExtraction() async {
+    try {
+      print('🧪 Testing token extraction...');
+      
+      final response = await _authRepository.verifyOtp(
+        phoneNumber: _phoneNumber.value,
+        otp: _otp.value,
+      );
+      
+      print('🔍 Response type: ${response.runtimeType}');
+      print('🔍 Response.type: ${response.type}');
+      print('🔍 Response.result type: ${response.result.runtimeType}');
+      
+      try {
+        print('🔍 Response.result.message: ${response.result.message}');
+        print('🔍 Response.result.result: ${response.result.result}');
+      } catch (e) {
+        print('⚠️ Error accessing result properties: $e');
+      }
+      
+    } catch (e) {
+      print('❌ Debug token extraction error: $e');
     }
   }
 }

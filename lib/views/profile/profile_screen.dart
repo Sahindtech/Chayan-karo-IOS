@@ -1,3 +1,4 @@
+// Updated ProfileScreen with Chayan Customer and no rating/refresh
 import 'package:chayankaro/views/profile/aboutscreen.dart';
 import '/views/booking/PaymentScreen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,6 +16,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../widgets/chayan_header.dart';
 import 'package:get/get.dart';
 import '../../controllers/home_controller.dart';
+import '../../controllers/profile_controller.dart';
 import '../../data/local/database.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -27,6 +29,16 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   int _selectedIndex = 4;
   bool _isLoggingOut = false;
+  
+  // Add ProfileController
+  late ProfileController _profileController;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize ProfileController
+    _profileController = Get.put(ProfileController());
+  }
 
   void _onItemTapped(int index) {
     if (index == _selectedIndex) return;
@@ -48,11 +60,153 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  // Logout functionality (REMOVED SNACKBAR)
+  // Updated user profile with Chayan Customer and no rating/refresh
+  Widget _buildUserProfile(double scaleFactor) {
+    return Obx(() {
+      // Show loading indicator while fetching profile
+      if (_profileController.isLoading && _profileController.customer == null) {
+        return Row(
+          children: [
+            CircleAvatar(
+              radius: 40 * scaleFactor,
+              backgroundColor: Colors.grey[300],
+              child: CircularProgressIndicator(
+                color: Color(0xFFE47830),
+                strokeWidth: 2,
+              ),
+            ),
+            SizedBox(width: 16.w * scaleFactor),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 150.w * scaleFactor,
+                  height: 16.h * scaleFactor,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                ),
+                SizedBox(height: 8.h * scaleFactor),
+                Container(
+                  width: 120.w * scaleFactor,
+                  height: 12.h * scaleFactor,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      }
+
+      // Show error state with retry option
+      if (_profileController.errorMessage.isNotEmpty && _profileController.customer == null) {
+        return Row(
+          children: [
+            CircleAvatar(
+              radius: 40 * scaleFactor,
+              backgroundImage: const AssetImage('assets/userprofile.webp'),
+            ),
+            SizedBox(width: 16.w * scaleFactor),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Failed to load profile',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16.sp * scaleFactor,
+                      color: Colors.red,
+                    ),
+                  ),
+                  SizedBox(height: 4.h * scaleFactor),
+                  GestureDetector(
+                    onTap: _profileController.refreshProfile,
+                    child: Text(
+                      'Tap to retry',
+                      style: TextStyle(
+                        fontSize: 12.sp * scaleFactor,
+                        fontWeight: FontWeight.w500,
+                        color: const Color(0xFFE47830),
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      }
+
+      // Show profile data with Chayan Customer as default
+      final customer = _profileController.customer;
+      
+      // Use Chayan Customer as default name if API data is null/empty
+      String userName = 'Chayan Customer';
+      if (customer?.fullName != null && customer!.fullName.isNotEmpty && customer.fullName != 'User') {
+        userName = customer.fullName;
+      }
+      
+      // Use API phone number if available, otherwise fallback
+      final userPhone = customer?.mobileNo ?? '7355640235';
+      
+      return Row(
+        children: [
+          CircleAvatar(
+            radius: 40 * scaleFactor,
+            backgroundImage: customer?.imgLink != null 
+              ? NetworkImage(customer!.imgLink!)
+              : const AssetImage('assets/userprofile.webp') as ImageProvider,
+            onBackgroundImageError: customer?.imgLink != null 
+              ? (exception, stackTrace) {
+                  // Fallback to default image on error
+                }
+              : null,
+          ),
+          SizedBox(width: 16.w * scaleFactor),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  userName,
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16.sp * scaleFactor,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                SizedBox(height: 4.h * scaleFactor),
+                Text(
+                  '+91 $userPhone',
+                  style: TextStyle(
+                    fontSize: 12.sp * scaleFactor,
+                    fontWeight: FontWeight.w500,
+                    color: const Color(0xFF161616),
+                  ),
+                ),
+                // Removed rating display completely
+              ],
+            ),
+          ),
+          // Removed refresh button
+        ],
+      );
+    });
+  }
+
+  // Rest of your existing methods remain the same...
   Future<void> _handleLogout() async {
     if (_isLoggingOut) return;
 
-    // Show confirmation dialog
     final bool? shouldLogout = await _showLogoutConfirmationDialog();
     if (shouldLogout != true) return;
 
@@ -61,17 +215,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
 
     try {
-      // Get database instance
       final database = Get.find<AppDatabase>();
-      
-      // Clear authentication data
       await database.clearAuthData();
-      
       print('✅ User logged out successfully');
-      
-      // Navigate to login screen silently (NO SNACKBAR)
       Get.offAllNamed('/login');
-      
     } catch (e) {
       print('❌ Error during logout: $e');
     } finally {
@@ -83,7 +230,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  // Show logout confirmation dialog
   Future<bool?> _showLogoutConfirmationDialog() async {
     return showDialog<bool>(
       context: context,
@@ -95,11 +241,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           title: Row(
             children: [
-              Icon(
-                Icons.logout,
-                color: Colors.orange,
-                size: 24.sp,
-              ),
+              Icon(Icons.logout, color: Colors.orange, size: 24.sp),
               SizedBox(width: 8.w),
               Text(
                 'Logout',
@@ -154,148 +296,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  // User profile WITHOUT pencil icon/edit functionality
-  Widget _buildUserProfile(double scaleFactor) {
-    return GetBuilder<HomeController>(
-      builder: (homeController) {
-        final userName = homeController.userName;
-        final userPhone = homeController.userPhone;
-        
-        return Row(
-          children: [
-            CircleAvatar(
-              radius: 40 * scaleFactor,
-              backgroundImage: const AssetImage('assets/userprofile.webp'),
-            ),
-            SizedBox(width: 16.w * scaleFactor),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  userName.isNotEmpty ? userName : 'Ayush Srivastav (LALA)',
-                  style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16.sp * scaleFactor,
-                  ),
-                ),
-                SizedBox(height: 4.h * scaleFactor),
-                Text(
-                  userPhone.isNotEmpty ? '+91 $userPhone' : '+91 7355640235',
-                  style: TextStyle(
-                    fontSize: 12.sp * scaleFactor,
-                    fontWeight: FontWeight.w500,
-                    color: const Color(0xFF161616),
-                  ),
-                ),
-                SizedBox(height: 2.h * scaleFactor),
-                Opacity(
-                  opacity: 0.55,
-                  child: Text(
-                    '9.9 Rating',
-                    style: TextStyle(
-                      fontSize: 10.sp * scaleFactor,
-                      fontWeight: FontWeight.w500,
-                      color: const Color(0xFF161616),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            // REMOVED: Pencil icon and edit functionality
-            const Spacer(),
-          ],
-        );
-      },
-    );
-  }
-
-  Widget buildQuickAction(String label, String iconAssetPath, double scaleFactor) {
-    return Container(
-      width: 97.w * scaleFactor,
-      height: 100.h * scaleFactor,
-      decoration: ShapeDecoration(
-        color: Colors.white,
-        shape: RoundedRectangleBorder(
-          side: BorderSide(
-            width: 1.w * scaleFactor,
-            color: const Color(0xB5E47830),
-          ),
-          borderRadius: BorderRadius.circular(15.r * scaleFactor),
-        ),
-      ),
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 8.w * scaleFactor, vertical: 10.h * scaleFactor),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 30.w * scaleFactor,
-              height: 30.h * scaleFactor,
-              decoration: const ShapeDecoration(
-                shape: OvalBorder(),
-              ),
-              child: SvgPicture.asset(
-                iconAssetPath,
-                width: 30.w * scaleFactor,
-                height: 30.h * scaleFactor,
-                fit: BoxFit.contain,
-              ),
-            ),
-            SizedBox(height: 8.h * scaleFactor),
-            SizedBox(
-              height: 36.h * scaleFactor,
-              child: Text(
-                label,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: const Color(0xFF161616),
-                  fontSize: 12.sp * scaleFactor,
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget buildListItem(String iconPath, String label, double scaleFactor, {VoidCallback? onTap}) {
-    return ListTile(
-      contentPadding: EdgeInsets.symmetric(horizontal: 4.w * scaleFactor),
-      leading: SvgPicture.asset(
-        iconPath,
-        width: 20.w * scaleFactor,
-        height: 20.h * scaleFactor,
-        color: Colors.black,
-      ),
-      title: Text(
-        label,
-        style: TextStyle(
-          fontFamily: 'Inter',
-          fontWeight: FontWeight.w500,
-          fontSize: 16.sp * scaleFactor,
-        ),
-      ),
-      trailing: _isLoggingOut && label == "Logout"
-          ? SizedBox(
-              width: 16.sp * scaleFactor,
-              height: 16.sp * scaleFactor,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation<Color>(
-                  const Color(0xFFE47830),
-                ),
-              ),
-            )
-          : Icon(Icons.arrow_forward_ios, size: 16.sp * scaleFactor),
-      onTap: onTap,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -314,7 +314,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   children: [
                     SizedBox(height: 24.h * scaleFactor),
                     
-                    // Updated user profile section (NO PENCIL ICON)
+                    // Updated user profile section with Chayan Customer
                     _buildUserProfile(scaleFactor),
                     
                     SizedBox(height: 24.h * scaleFactor),
@@ -338,7 +338,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     SizedBox(height: 24.h * scaleFactor),
                     const Divider(color: Color(0xFFEBEBEB)),
                     
-                    // Menu items
                     buildListItem('assets/icons/location.svg', "Manage Address", scaleFactor, onTap: () {
                       Get.to(() => const ManageAddressScreen());
                     }),
@@ -349,10 +348,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Get.to(() => AboutChaynkaroServicesScreen());
                     }),
                     buildListItem('assets/icons/settings.svg', "Settings", scaleFactor, onTap: () {
-                      Get.to(() => const EditProfileScreen());
+                      // Pass API data to EditProfileScreen
+                      Get.to(() => EditProfileScreen(customer: _profileController.customer));
                     }),
                     
-                    // Logout button (REMOVED SNACKBAR)
                     buildListItem(
                       'assets/icons/logout.svg', 
                       "Logout", 
@@ -362,9 +361,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     
                     SizedBox(height: 20.h * scaleFactor),
                     GestureDetector(
-                      onTap: () {
-                        Get.to(() => const ReferAndEarnScreen());
-                      },
+                      onTap: () => Get.to(() => const ReferAndEarnScreen()),
                       child: Container(
                         padding: EdgeInsets.all(20.r * scaleFactor),
                         decoration: BoxDecoration(
@@ -418,6 +415,85 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         );
       },
+    );
+  }
+
+  Widget buildQuickAction(String label, String iconAssetPath, double scaleFactor) {
+    return Container(
+      width: 97.w * scaleFactor,
+      height: 100.h * scaleFactor,
+      decoration: ShapeDecoration(
+        color: Colors.white,
+        shape: RoundedRectangleBorder(
+          side: BorderSide(width: 1.w * scaleFactor, color: const Color(0xB5E47830)),
+          borderRadius: BorderRadius.circular(15.r * scaleFactor),
+        ),
+      ),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 8.w * scaleFactor, vertical: 10.h * scaleFactor),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 30.w * scaleFactor,
+              height: 30.h * scaleFactor,
+              decoration: const ShapeDecoration(shape: OvalBorder()),
+              child: SvgPicture.asset(
+                iconAssetPath,
+                width: 30.w * scaleFactor,
+                height: 30.h * scaleFactor,
+                fit: BoxFit.contain,
+              ),
+            ),
+            SizedBox(height: 8.h * scaleFactor),
+            SizedBox(
+              height: 36.h * scaleFactor,
+              child: Text(
+                label,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: const Color(0xFF161616),
+                  fontSize: 12.sp * scaleFactor,
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildListItem(String iconPath, String label, double scaleFactor, {VoidCallback? onTap}) {
+    return ListTile(
+      contentPadding: EdgeInsets.symmetric(horizontal: 4.w * scaleFactor),
+      leading: SvgPicture.asset(
+        iconPath,
+        width: 20.w * scaleFactor,
+        height: 20.h * scaleFactor,
+        color: Colors.black,
+      ),
+      title: Text(
+        label,
+        style: TextStyle(
+          fontFamily: 'Inter',
+          fontWeight: FontWeight.w500,
+          fontSize: 16.sp * scaleFactor,
+        ),
+      ),
+      trailing: _isLoggingOut && label == "Logout"
+          ? SizedBox(
+              width: 16.sp * scaleFactor,
+              height: 16.sp * scaleFactor,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation<Color>(const Color(0xFFE47830)),
+              ),
+            )
+          : Icon(Icons.arrow_forward_ios, size: 16.sp * scaleFactor),
+      onTap: onTap,
     );
   }
 }

@@ -16,6 +16,7 @@ import 'di/app_binding.dart';
 // Import for testing and authentication
 import 'data/local/database.dart';
 import 'data/repository/home_repository.dart';
+import 'views/profile/profile_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -178,6 +179,11 @@ class ChayanKaroApp extends StatelessWidget {
                 page: () => const HomeScreen(),
                 binding: AppBinding(), // Ensure dependencies are available
               ),
+              GetPage(
+                name: '/profile',
+                page: () => const ProfileScreen(),
+                binding: AppBinding(),
+),
               GetPage(
                 name: '/cart',
                 page: () => CartScreen(),

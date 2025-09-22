@@ -10,13 +10,15 @@ import '../controllers/female_spa_controller.dart';
 import '../controllers/login_controller.dart';
 import '../controllers/otp_controller.dart';
 import '../controllers/male_spa_controller.dart';
+import '../controllers/profile_controller.dart'; // Add this
 
 // Services and Data
 import '../services/cache_service.dart';
-import '../data/repository/home_repository.dart';
-import '../data/repository/auth_repository.dart'; // Add this
+import '../data/repository/home_repository.dart';     // Fixed path
+import '../data/repository/auth_repository.dart';     // Fixed path
+import '../data/repository/profile_repository.dart';  // Fixed path
 import '../data/local/database.dart';
-import '../data/remote/network_client.dart';        // Add this
+import '../data/remote/network_client.dart';
 import '../data/remote/api_service.dart';
 
 class AppBinding extends Bindings {
@@ -37,14 +39,17 @@ class AppBinding extends Bindings {
     _registerControllers();
     
     print('🎉 All GetX dependencies registered successfully');
+    
+    // Debug: Print all registered dependencies
+    _debugRegisteredDependencies();
   }
   
   void _registerCoreServices() {
     print('📦 Registering core services...');
     
-    // Database - Permanent (needed throughout app lifecycle)
+    // Database - Use singleton pattern to prevent multiple instances
     Get.put<AppDatabase>(AppDatabase(), permanent: true);
-    print('✅ AppDatabase registered (permanent)');
+    print('✅ AppDatabase registered (permanent, singleton)');
     
     // Cache Service - Permanent
     Get.put<CacheService>(CacheService(), permanent: true);
@@ -75,12 +80,13 @@ class AppBinding extends Bindings {
       fenix: true,
     );
     print('✅ HomeRepository registered (lazy)');
+
+    // Profile Repository - Lazy loading
+    Get.lazyPut<ProfileRepository>(() => ProfileRepository(), fenix: true);
+    print('✅ ProfileRepository registered (lazy)');
     
     // Auth Repository - Lazy loading for login/auth screens
-    Get.lazyPut<AuthRepository>(
-      () => AuthRepository(),
-      fenix: true,
-    );
+    Get.lazyPut<AuthRepository>(() => AuthRepository(), fenix: true);
     print('✅ AuthRepository registered (lazy)');
   }
   
@@ -103,5 +109,53 @@ class AppBinding extends Bindings {
     // Home Controller - Lazy (main screen but not always needed immediately)
     Get.lazyPut<HomeController>(() => HomeController(), fenix: true);
     print('✅ HomeController registered (lazy)');
+    
+    // Profile Controller - Lazy (only needed when accessing profile screens)
+    Get.lazyPut<ProfileController>(() => ProfileController(), fenix: true);
+    print('✅ ProfileController registered (lazy)');
+  }
+
+  // Debug method to verify all dependencies are registered
+  void _debugRegisteredDependencies() {
+    print('🔍 Debugging registered dependencies:');
+    
+    try {
+      // Test core services
+      final database = Get.find<AppDatabase>();
+      print('   ✅ AppDatabase: ${database.runtimeType}');
+      
+      final cacheService = Get.find<CacheService>();
+      print('   ✅ CacheService: ${cacheService.runtimeType}');
+      
+      // Test network layer
+      final networkClient = Get.find<NetworkClient>();
+      print('   ✅ NetworkClient: ${networkClient.runtimeType}');
+      
+      final apiService = Get.find<ApiService>();
+      print('   ✅ ApiService: ${apiService.runtimeType}');
+      
+      // Test if lazy repositories can be found (without instantiating)
+      print('   📚 Repositories ready for lazy instantiation:');
+      print('      - HomeRepository: ${Get.isRegistered<HomeRepository>()}');
+      print('      - AuthRepository: ${Get.isRegistered<AuthRepository>()}');
+      print('      - ProfileRepository: ${Get.isRegistered<ProfileRepository>()}');
+      
+      // Test if lazy controllers can be found (without instantiating)
+      print('   🎮 Controllers ready:');
+      print('      - LoginController (lazy): ${Get.isRegistered<LoginController>()}');
+      print('      - OtpController (lazy): ${Get.isRegistered<OtpController>()}');
+      print('      - HomeController (lazy): ${Get.isRegistered<HomeController>()}');
+      print('      - ProfileController (lazy): ${Get.isRegistered<ProfileController>()}');
+      
+      // Test permanent controllers
+      print('   🎮 Permanent Controllers:');
+      print('      - CartController: ${Get.isRegistered<CartController>()}');
+      print('      - SalonServicesController: ${Get.isRegistered<SalonServicesController>()}');
+      
+      print('✅ All dependencies successfully registered and accessible');
+      
+    } catch (e) {
+      print('❌ Error in dependency registration: $e');
+    }
   }
 }
