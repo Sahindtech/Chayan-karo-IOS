@@ -1,33 +1,15 @@
 import 'package:dio/dio.dart';
-import 'package:get/get.dart' as getx;
 import 'api_service.dart';
 
 class NetworkClient {
-  static NetworkClient? _instance;
-  static final _lock = Object();
-  
-  late Dio _dio;
-  late ApiService _apiService;
+  // Singleton instance, initialized lazily and thread-safe
+  static final NetworkClient _instance = NetworkClient._internal();
 
-  // Private constructor
+  late final Dio _dio;
+  late final ApiService _apiService;
+
+  // Private named constructor
   NetworkClient._internal() {
-    _initializeDio();
-    _apiService = ApiService(_dio);
-  }
-
-  // Singleton factory
-  factory NetworkClient() {
-    if (_instance == null) {
-      synchronized(_lock, () {
-        _instance ??= NetworkClient._internal();
-      });
-    }
-    return _instance!;
-  }
-
-  ApiService get apiService => _apiService;
-
-  void _initializeDio() {
     _dio = Dio(BaseOptions(
       baseUrl: 'http://65.1.234.42:8081',
       connectTimeout: const Duration(seconds: 30),
@@ -43,49 +25,45 @@ class NetworkClient {
     _dio.interceptors.add(_createLoggingInterceptor());
     _dio.interceptors.add(_createAuthInterceptor());
     _dio.interceptors.add(_createErrorInterceptor());
+
+    _apiService = ApiService(_dio);
   }
 
-  LogInterceptor _createLoggingInterceptor() {
-    return LogInterceptor(
-      requestBody: true,
-      responseBody: true,
-      requestHeader: true,
-      responseHeader: false,
-      error: true,
-      logPrint: (obj) => print('🌐 API: $obj'),
-    );
-  }
+  // Dart recommended singleton factory
+  factory NetworkClient() => _instance;
 
-  InterceptorsWrapper _createAuthInterceptor() {
-    return InterceptorsWrapper(
-      onRequest: (options, handler) async {
-        // Add auth token if available
-        final token = await _getStoredToken();
-        if (token != null) {
-          options.headers['Authorization'] = 'Bearer $token';
-        }
-        handler.next(options);
-      },
-    );
-  }
+  ApiService get apiService => _apiService;
+  Dio get dio => _dio;
 
-  InterceptorsWrapper _createErrorInterceptor() {
-    return InterceptorsWrapper(
-      onError: (error, handler) {
-        _handleDioError(error);
-        handler.next(error);
-      },
-    );
-  }
+  LogInterceptor _createLoggingInterceptor() => LogInterceptor(
+    requestBody: true,
+    responseBody: true,
+    requestHeader: true,
+    responseHeader: false,
+    error: true,
+    logPrint: (obj) => print('🌐 API: $obj'),
+  );
+
+  InterceptorsWrapper _createAuthInterceptor() => InterceptorsWrapper(
+    onRequest: (options, handler) async {
+      final token = await _getStoredToken();
+      if (token != null) {
+        options.headers['Authorization'] = 'Bearer $token';
+      }
+      handler.next(options);
+    },
+  );
+
+  InterceptorsWrapper _createErrorInterceptor() => InterceptorsWrapper(
+    onError: (error, handler) {
+      _handleDioError(error);
+      handler.next(error);
+    },
+  );
 
   Future<String?> _getStoredToken() async {
-    try {
-      // Get token from your storage (SharedPreferences, Secure Storage, etc.)
-      // For now, return null - implement based on your storage solution
-      return null;
-    } catch (e) {
-      return null;
-    }
+    // Implement your token fetch logic here
+    return null;
   }
 
   void _handleDioError(DioException error) {
@@ -116,9 +94,4 @@ class NetworkClient {
         break;
     }
   }
-}
-
-// Helper function for synchronization
-void synchronized(Object lock, void Function() criticalSection) {
-  criticalSection();
 }

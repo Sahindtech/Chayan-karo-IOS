@@ -11,17 +11,17 @@ abstract class ApiService {
   factory ApiService(Dio dio, {String? baseUrl}) = _ApiService;
 
   // Auth endpoints
-  @POST('/Authentication/Login')
+  @POST('/Authentication/login')
   Future<OtpResponse> sendOtp(@Body() SendOtpRequest request);
 
-  @POST('/Authentication/VerifyOTP')
+  @POST('/Authentication/verifyOTP')
   Future<AuthResponse> verifyOtp(@Body() VerifyOtpRequest request);
 
   @POST('/Authentication/RefreshToken')
   Future<AuthResponse> refreshToken(@Body() RefreshTokenRequest request);
 
   // Customer Profile endpoint
-  @GET('/Customer/GetCustomer')
+  @GET('/Customer/getCustomer')
   Future<CustomerResponse> getCustomer(@Header("Authorization") String authorization);
 
   // Home endpoints (keeping your existing ones)

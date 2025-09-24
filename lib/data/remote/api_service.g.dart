@@ -32,7 +32,7 @@ class _ApiService implements ApiService {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/Authentication/Login',
+            '/Authentication/login',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -60,7 +60,7 @@ class _ApiService implements ApiService {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/Authentication/VerifyOTP',
+            '/Authentication/verifyOTP',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -116,7 +116,7 @@ class _ApiService implements ApiService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/Customer/GetCustomer',
+            '/Customer/getCustomer',
             queryParameters: queryParameters,
             data: _data,
           )
