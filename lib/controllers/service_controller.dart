@@ -1,4 +1,5 @@
 // lib/controllers/service_controller.dart
+import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import '../data/repository/service_repository.dart';
@@ -14,11 +15,13 @@ class ServiceController extends GetxController {
   final RxBool _hasError = false.obs;
   final RxString _errorMessage = ''.obs;
   final RxString _currentServiceCategoryId = ''.obs;
+  final RxBool _isEmpty = false.obs; // Track if category is empty (404)
 
   // Getters
   List<Service> get services => _services;
   bool get isLoading => _isLoading.value;
   bool get hasError => _hasError.value;
+  bool get isEmpty => _isEmpty.value; // New getter for empty state
   String get errorMessage => _errorMessage.value;
 
   @override
@@ -40,6 +43,7 @@ class ServiceController extends GetxController {
 
     _isLoading.value = true;
     _hasError.value = false;
+    _isEmpty.value = false;
     _errorMessage.value = '';
     _currentServiceCategoryId.value = serviceCategoryId;
 
@@ -52,7 +56,31 @@ class ServiceController extends GetxController {
       print('✅ Loaded ${_services.length} services');
       
       if (services.isEmpty) {
-        _errorMessage.value = 'No services available for this category';
+        _isEmpty.value = true;
+        _errorMessage.value = 'No services available for this category yet';
+        print('ℹ️ Category $serviceCategoryId is empty - no services available');
+      }
+    } on DioException catch (e) {
+      // Check if it's a 404 (already handled in repository, but double-check)
+      if (e.response?.statusCode == 404) {
+        print('ℹ️ 404: No services for category $serviceCategoryId');
+        _isEmpty.value = true;
+        _errorMessage.value = 'No services available yet';
+        _services.clear();
+      } else {
+        // Real error (500, network issue, etc.)
+        print('❌ Error loading services: $e');
+        _hasError.value = true;
+        _errorMessage.value = 'Failed to load services. Please try again.';
+        
+        Get.snackbar(
+          'Error',
+          'Failed to load services. Please try again.',
+          backgroundColor: Colors.red[100],
+          colorText: Colors.red[800],
+          snackPosition: SnackPosition.BOTTOM,
+          duration: Duration(seconds: 3),
+        );
       }
     } catch (e) {
       print('❌ Error loading services: $e');
@@ -78,6 +106,7 @@ class ServiceController extends GetxController {
     
     print('🔄 Refreshing services for category: ${_currentServiceCategoryId.value}');
     _hasError.value = false;
+    _isEmpty.value = false;
     _errorMessage.value = '';
 
     try {
@@ -86,14 +115,37 @@ class ServiceController extends GetxController {
       
       print('✅ Services refreshed successfully: ${services.length}');
       
-      Get.snackbar(
-        'Success',
-        'Services updated successfully',
-        backgroundColor: Colors.green[100],
-        colorText: Colors.green[800],
-        snackPosition: SnackPosition.BOTTOM,
-        duration: Duration(seconds: 2),
-      );
+      if (services.isEmpty) {
+        _isEmpty.value = true;
+        print('ℹ️ Category ${_currentServiceCategoryId.value} is empty after refresh');
+      } else {
+        Get.snackbar(
+          'Success',
+          'Services updated successfully',
+          backgroundColor: Colors.green[100],
+          colorText: Colors.green[800],
+          snackPosition: SnackPosition.BOTTOM,
+          duration: Duration(seconds: 2),
+        );
+      }
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404) {
+        print('ℹ️ 404: No services for category ${_currentServiceCategoryId.value}');
+        _isEmpty.value = true;
+        _services.clear();
+      } else {
+        print('❌ Error refreshing services: $e');
+        _hasError.value = true;
+        _errorMessage.value = 'Failed to refresh services: ${e.toString()}';
+        
+        Get.snackbar(
+          'Refresh Failed',
+          'Could not refresh services. Please check your connection.',
+          backgroundColor: Colors.orange[100],
+          colorText: Colors.orange[800],
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      }
     } catch (e) {
       print('❌ Error refreshing services: $e');
       _hasError.value = true;
@@ -119,6 +171,7 @@ class ServiceController extends GetxController {
     _services.clear();
     _currentServiceCategoryId.value = '';
     _hasError.value = false;
+    _isEmpty.value = false;
     _errorMessage.value = '';
   }
 

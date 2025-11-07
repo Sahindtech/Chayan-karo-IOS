@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get/get.dart';
 import '../../widgets/chayan_header.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../../controllers/location_controller.dart';
+import '../../models/location_models.dart';
 
 class ManageAddressScreen extends StatefulWidget {
   const ManageAddressScreen({super.key});
@@ -12,22 +14,14 @@ class ManageAddressScreen extends StatefulWidget {
 }
 
 class _ManageAddressScreenState extends State<ManageAddressScreen> {
-  String locationLabel = 'Home';
-  String address = 'Not Available';
-  String phone = '+91 0000000000';
+  final LocationController locationController = Get.find<LocationController>();
 
   @override
   void initState() {
     super.initState();
-    _loadSavedAddress();
-  }
-
-  Future<void> _loadSavedAddress() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      locationLabel = prefs.getString('location_label') ?? 'Home';
-      address = prefs.getString('location_address') ?? 'Not Available';
-      phone = prefs.getString('user_phone') ?? '+91 0000000000';
+    // Fetch addresses from API when screen loads
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      locationController.fetchCustomerAddresses();
     });
   }
 
@@ -45,7 +39,6 @@ class _ManageAddressScreenState extends State<ManageAddressScreen> {
               ChayanHeader(
                 title: 'Manage Address',
                 onBack: () => Navigator.pop(context),
-                //onBackTap: () {},
               ),
               SizedBox(height: 16.h * scaleFactor),
 
@@ -56,8 +49,14 @@ class _ManageAddressScreenState extends State<ManageAddressScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       GestureDetector(
-                        onTap: () {
-                          // TODO: Open address adding flow
+                        onTap: () async {
+                          // Navigate to location screen
+await Get.toNamed(
+      '/location_popup',
+      arguments: 'manage_address', // Pass source screen identifier
+    );                          
+                          // Refresh address list when coming back
+                          locationController.fetchCustomerAddresses();
                         },
                         child: Row(
                           children: [
@@ -75,91 +74,197 @@ class _ManageAddressScreenState extends State<ManageAddressScreen> {
                           ],
                         ),
                       ),
-                      SizedBox(height: 20.h * scaleFactor),
+                     // SizedBox(height: 5.h * scaleFactor),
 
-                      Container(
-                        padding: EdgeInsets.all(16.r * scaleFactor),
-                        decoration: const BoxDecoration(
-                          border: Border(
-                            top: BorderSide(color: Color(0xFFEBEBEB)),
-                            bottom: BorderSide(color: Color(0xFFEBEBEB)),
-                          ),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                SvgPicture.asset(
-                                  'assets/icons/home.svg',
-                                  width: 20.w * scaleFactor,
-                                  height: 20.h * scaleFactor,
-                                  color: Colors.black,
-                                ),
-                                SizedBox(width: 8.w * scaleFactor),
-                                Text(
-                                  locationLabel,
-                                  style: TextStyle(
-                                    fontSize: 16.sp * scaleFactor,
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: 'Inter',
+                      // Address List with GetX Observable
+                      Expanded(
+                        child: Obx(() {
+                          // Show loading indicator
+                          if (locationController.isLoadingAddresses.value) {
+                            return const Center(
+                              child: CircularProgressIndicator(
+                                color: Color(0xFFE47830),
+                              ),
+                            );
+                          }
+
+                          // Show error message
+                          if (locationController.error.value.isNotEmpty) {
+                            return Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.error_outline,
+                                    size: 48 * scaleFactor,
+                                    color: Colors.grey,
                                   ),
-                                ),
-                                const Spacer(),
-                                PopupMenuButton<String>(
-                                  onSelected: (value) {
-                                    if (value == 'edit') {
-                                      _showUpdateAddressBottomSheet(scaleFactor);
-                                    } else if (value == 'delete') {
-                                      _confirmDelete(scaleFactor); // Pass scaleFactor
-                                    }
-                                  },
-                                  itemBuilder: (context) => [
-                                    // FIXED: White background for popup menu items
-                                    PopupMenuItem(
-                                      value: 'edit',
-                                      child: Text(
-                                        'Edit',
-                                        style: TextStyle(
-                                          fontSize: 14.sp * scaleFactor,
-                                          color: Colors.black, // WHITE COLOR
-                                        ),
+                                  SizedBox(height: 16.h * scaleFactor),
+                                  Text(
+                                    'Failed to load addresses',
+                                    style: TextStyle(
+                                      fontSize: 16.sp * scaleFactor,
+                                      color: Colors.grey,
+                                      fontFamily: 'Inter',
+                                    ),
+                                  ),
+                                  SizedBox(height: 8.h * scaleFactor),
+                                  TextButton(
+                                    onPressed: () => locationController.fetchCustomerAddresses(),
+                                    child: Text(
+                                      'Retry',
+                                      style: TextStyle(
+                                        color: const Color(0xFFE47830),
+                                        fontSize: 14.sp * scaleFactor,
+                                        fontFamily: 'Inter',
                                       ),
                                     ),
-                                    PopupMenuItem(
-                                      value: 'delete',
-                                      child: Text(
-                                        'Delete',
-                                        style: TextStyle(
-                                          fontSize: 14.sp * scaleFactor,
-                                          color: Colors.black, // WHITE COLOR
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+
+                          // Show empty state
+                          if (locationController.addresses.isEmpty) {
+                            return Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.location_off_outlined,
+                                    size: 48 * scaleFactor,
+                                    color: Colors.grey,
+                                  ),
+                                  SizedBox(height: 16.h * scaleFactor),
+                                  Text(
+                                    'No addresses found',
+                                    style: TextStyle(
+                                      fontSize: 16.sp * scaleFactor,
+                                      color: Colors.grey,
+                                      fontFamily: 'Inter',
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+
+                          // Show address list
+                          return ListView.builder(
+                            itemCount: locationController.addresses.length,
+                            itemBuilder: (context, index) {
+                              final address = locationController.addresses[index];
+
+                              return Container(
+                                margin: EdgeInsets.only(bottom: 12.h * scaleFactor),
+                                padding: EdgeInsets.all(16.r * scaleFactor),
+                                decoration: const BoxDecoration(
+                                  border: Border(
+                                    top: BorderSide(color: Color(0xFFEBEBEB)),
+                                    bottom: BorderSide(color: Color(0xFFEBEBEB)),
+                                  ),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        SvgPicture.asset(
+                                          'assets/icons/home.svg',
+                                          width: 20.w * scaleFactor,
+                                          height: 20.h * scaleFactor,
+                                          color: Colors.black,
                                         ),
+                                        SizedBox(width: 8.w * scaleFactor),
+                                        Text(
+                                          '${address.city}',
+                                          style: TextStyle(
+                                            fontSize: 16.sp * scaleFactor,
+                                            fontWeight: FontWeight.w600,
+                                            fontFamily: 'Inter',
+                                          ),
+                                        ),
+                                        SizedBox(width: 8.w * scaleFactor),
+                                        // Show default badge
+                                        if (address.isDefault)
+                                          Container(
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 8.w * scaleFactor,
+                                              vertical: 2.h * scaleFactor,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: const Color(0xFFE6EAFF),
+                                              borderRadius: BorderRadius.circular(4.r * scaleFactor),
+                                              border: Border.all(color: const Color(0xFFE47830)),
+                                            ),
+                                            child: Text(
+                                              'Default',
+                                              style: TextStyle(
+                                                color: const Color(0xFFE47830),
+                                                fontSize: 10.sp * scaleFactor,
+                                                fontWeight: FontWeight.w500,
+                                                fontFamily: 'Inter',
+                                              ),
+                                            ),
+                                          ),
+                                        const Spacer(),
+                                        PopupMenuButton<String>(
+                                          onSelected: (value) {
+                                            if (value == 'edit') {
+                                              _showUpdateAddressBottomSheet(scaleFactor, address);
+                                            } else if (value == 'delete') {
+                                              _confirmDelete(scaleFactor, address.id);
+                                            }
+                                          },
+                                          itemBuilder: (context) => [
+                                            PopupMenuItem(
+                                              value: 'edit',
+                                              child: Text(
+                                                'Edit',
+                                                style: TextStyle(
+                                                  fontSize: 14.sp * scaleFactor,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                            ),
+                                            PopupMenuItem(
+                                              value: 'delete',
+                                              child: Text(
+                                                'Delete',
+                                                style: TextStyle(
+                                                  fontSize: 14.sp * scaleFactor,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                          color: Colors.white,
+                                          icon: Icon(
+                                            Icons.more_vert,
+                                            size: 20 * scaleFactor,
+                                            color: Colors.grey.shade700,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 8.h * scaleFactor),
+                                    Text(
+                                      '${address.addressLine1}, ${address.addressLine2}\n${address.city}, ${address.state} - ${address.postCode}',
+                                      style: TextStyle(
+                                        fontSize: 14.sp * scaleFactor,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: 'Inter',
+                                        height: 1.5,
+                                        color: const Color(0xFF757575),
                                       ),
                                     ),
                                   ],
-                                  // FIXED: Dark background for the popup menu
-                                  color: Colors.white,
-                                  icon: Icon(
-                                    Icons.more_vert,
-                                    size: 20 * scaleFactor,
-                                    color: Colors.grey.shade700,
-                                  ),
                                 ),
-                              ],
-                            ),
-                            SizedBox(height: 8.h * scaleFactor),
-                            Text(
-                              '$address\nPh: $phone',
-                              style: TextStyle(
-                                fontSize: 14.sp * scaleFactor,
-                                fontWeight: FontWeight.w500,
-                                fontFamily: 'Inter',
-                                height: 1.5,
-                                color: const Color(0xFF757575),
-                              ),
-                            ),
-                          ],
-                        ),
+                              );
+                            },
+                          );
+                        }),
                       ),
                     ],
                   ),
@@ -172,7 +277,7 @@ class _ManageAddressScreenState extends State<ManageAddressScreen> {
     );
   }
 
-  void _showUpdateAddressBottomSheet(double scaleFactor) {
+  void _showUpdateAddressBottomSheet(double scaleFactor, CustomerAddress address) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -215,7 +320,7 @@ class _ManageAddressScreenState extends State<ManageAddressScreen> {
                               children: [
                                 Expanded(
                                   child: Text(
-                                    'Madhapur, Hyderabad',
+                                    '${address.city}, ${address.state}',
                                     style: TextStyle(
                                       fontSize: 16.sp * scaleFactor,
                                       fontWeight: FontWeight.w600,
@@ -223,33 +328,36 @@ class _ManageAddressScreenState extends State<ManageAddressScreen> {
                                     ),
                                   ),
                                 ),
-                                TextButton(
-                                  onPressed: () {},
-                                  style: TextButton.styleFrom(
-                                    side: const BorderSide(color: Color(0xFFE47830)),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(6.r * scaleFactor),
+                                if (!address.isDefault)
+                                  TextButton(
+                                    onPressed: () {
+                                      // TODO: Implement set as default API call
+                                    },
+                                    style: TextButton.styleFrom(
+                                      side: const BorderSide(color: Color(0xFFE47830)),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(6.r * scaleFactor),
+                                      ),
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 8.h * scaleFactor,
+                                        vertical: 4.h * scaleFactor,
+                                      ),
                                     ),
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 8.h * scaleFactor,
-                                      vertical: 4.h * scaleFactor,
+                                    child: Text(
+                                      'Set as Default',
+                                      style: TextStyle(
+                                        color: const Color(0xFFE47830),
+                                        fontSize: 12.sp * scaleFactor,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: 'Inter',
+                                      ),
                                     ),
                                   ),
-                                  child: Text(
-                                    'Set as Default',
-                                    style: TextStyle(
-                                      color: const Color(0xFFE47830),
-                                      fontSize: 12.sp * scaleFactor,
-                                      fontWeight: FontWeight.w500,
-                                      fontFamily: 'Inter',
-                                    ),
-                                  ),
-                                ),
                               ],
                             ),
                             SizedBox(height: 4.h * scaleFactor),
                             Text(
-                              'Plot no.209, Kavuri Hills, Madhapur, Telangana 500033\nPh: +91234567890',
+                              '${address.addressLine1}, ${address.addressLine2}\n${address.city}, ${address.state} - ${address.postCode}',
                               style: TextStyle(
                                 fontSize: 13.sp * scaleFactor,
                                 color: const Color(0xFF757575),
@@ -268,7 +376,7 @@ class _ManageAddressScreenState extends State<ManageAddressScreen> {
                             ),
                             SizedBox(height: 4.h * scaleFactor),
                             TextFormField(
-                              initialValue: 'Plot no.209',
+                              initialValue: address.addressLine1,
                               style: TextStyle(
                                 fontSize: 14.sp * scaleFactor,
                                 fontWeight: FontWeight.w500,
@@ -286,6 +394,7 @@ class _ManageAddressScreenState extends State<ManageAddressScreen> {
                             SizedBox(height: 16.h * scaleFactor),
 
                             TextFormField(
+                              initialValue: address.addressLine2,
                               decoration: InputDecoration(
                                 labelText: 'Landmark (Optional)',
                                 labelStyle: TextStyle(
@@ -369,7 +478,10 @@ class _ManageAddressScreenState extends State<ManageAddressScreen> {
                               borderRadius: BorderRadius.circular(10.r * scaleFactor),
                             ),
                           ),
-                          onPressed: () => Navigator.pop(context),
+                          onPressed: () {
+                            // TODO: Implement update address API call
+                            Navigator.pop(context);
+                          },
                           child: Text(
                             'Update address',
                             style: TextStyle(
@@ -393,8 +505,7 @@ class _ManageAddressScreenState extends State<ManageAddressScreen> {
     );
   }
 
-  // FIXED: Updated confirm delete dialog with scaling and white button text
-  void _confirmDelete(double scaleFactor) {
+  void _confirmDelete(double scaleFactor, String addressId) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -430,7 +541,7 @@ class _ManageAddressScreenState extends State<ManageAddressScreen> {
           ),
           TextButton(
             onPressed: () {
-              // Handle deletion
+              // TODO: Implement delete API call with addressId
               Navigator.pop(context);
             },
             style: TextButton.styleFrom(
@@ -443,7 +554,7 @@ class _ManageAddressScreenState extends State<ManageAddressScreen> {
             child: Text(
               'Delete',
               style: TextStyle(
-                color: Colors.white, // WHITE COLOR
+                color: Colors.white,
                 fontSize: 14.sp * scaleFactor,
                 fontWeight: FontWeight.w600,
                 fontFamily: 'Inter',

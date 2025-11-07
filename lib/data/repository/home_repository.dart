@@ -12,12 +12,12 @@ class HomeRepository {
   // Dummy most used services data
   List<models.Service> _getDummyMostUsedServices() {
     return [
-      models.Service(title: 'Window AC frame Installation', image: 'assets/z1.webp'),
-      models.Service(title: 'Women Salon Services', image: 'assets/z2.webp'),
-      models.Service(title: 'Home Deep Cleaning', image: 'assets/z3.webp'),
-      models.Service(title: 'Spa for Men', image: 'assets/z4.webp'),
-      models.Service(title: 'Hair Cut & Styling', image: 'assets/z1.webp'),
-      models.Service(title: 'Kitchen Deep Clean', image: 'assets/z2.webp'),
+      models.Service(title: 'Hair Keratin Treatment', image: 'assets/x1.jpg'),
+      models.Service(title: 'Hair Trimming', image: 'assets/x2.jpg'),
+      models.Service(title: 'Full Body Bleach-Oxylife', image: 'assets/x3.jpg'),
+      models.Service(title: 'Chest Bleach-O3+', image: 'assets/x4.jpg'),
+      models.Service(title: 'Deep Tissue Massage-Back', image: 'assets/x5.jpg'),
+      models.Service(title: 'Swedish Massage-Full Body', image: 'assets/x6.jpg'),
     ];
   }
 

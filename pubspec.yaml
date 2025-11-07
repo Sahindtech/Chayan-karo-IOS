@@ -16,8 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.0+1
-
+version: 1.0.2+4
 environment:
   sdk: ^3.8.1
 
@@ -36,22 +35,27 @@ dependencies:
   font_awesome_flutter: ^10.7.0
   flutter_svg: ^2.0.9
   flutter_screenutil: ^5.9.3
-  
-  # State Management & Dependency Injection (GetX replaces both provider and get_it)
+  shimmer: ^3.0.0
+  cached_network_image: ^3.3.1
+  flutter_cache_manager: ^3.3.1
+
+
+
+  # State Management
   get: ^4.6.6
-  
+
   # Utilities
   url_launcher: ^6.2.5
   share_plus: ^7.2.2
   device_preview: ^1.1.1
-  
-  # Location (uncomment if needed)
-  # geolocator: ^10.1.0
-  # geocoding: ^2.1.0
-  
-  # Maps
-  flutter_map: ^6.1.0
-  latlong2: ^0.9.0
+
+  # 🌍 Location & Maps
+  google_maps_flutter: ^2.7.0
+  google_places_flutter: ^2.1.1
+  geolocator: ^10.1.0
+  geocoding: ^3.0.0
+  http: ^1.1.0
+
 
   # Networking
   dio: ^5.3.2
@@ -62,6 +66,8 @@ dependencies:
   sqlite3_flutter_libs: ^0.5.15
   path_provider: ^2.1.1
   path: ^1.8.3
+  razorpay_flutter: ^1.3.7
+  uuid: ^4.5.1
 
   # JSON Serialization
   json_annotation: ^4.9.0
@@ -69,15 +75,17 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  
+  # Linting & Tools
   flutter_lints: ^5.0.0
   flutter_launcher_icons: ^0.13.1
-
-  # Code Generation
+  
+  # 🔧 Code Generation (CRITICAL - These were missing!)
   build_runner: ^2.4.13
   retrofit_generator: ^10.0.4
   drift_dev: ^2.13.2
   json_serializable: ^6.8.0
- # analyzer: ^8.2.0           # Add this explicitly
+  analyzer: ^8.2.0
 
 
 # App Icon Configuration
@@ -100,7 +108,7 @@ flutter:
   
   assets:
     - assets/icons/logo.svg
-    - assets/onboard1.webp
+    - assets/onboard1.png
     - assets/onboard2.webp
     - assets/onboard3.webp
     - assets/chayankaro_logo.gif
@@ -117,10 +125,12 @@ flutter:
     - assets/m2.webp
     - assets/m3.webp
     - assets/m4.webp
-    - assets/z1.webp    
-    - assets/z2.webp
-    - assets/z3.webp
-    - assets/z4.webp
+    - assets/x1.jpg
+    - assets/x2.jpg
+    - assets/x3.jpg
+    - assets/x4.jpg
+    - assets/x5.jpg
+    - assets/x6.jpg 
     - assets/s1.webp
     - assets/s2.webp
     - assets/s3.webp
@@ -222,10 +232,16 @@ flutter:
     - assets/ms8.webp
     - assets/ms9.webp
     - assets/wet.webp
-
-
-
-
+    - assets/f1.png
+    - assets/f2.png
+    - assets/f3.png
+    - assets/f4.jpg
+    - assets/f5.png
+    - assets/cleaning.png
+    - assets/female_spa.png
+    - assets/female_hair_and_makeup.png
+    - assets/femalesalon.png
+    
   fonts:
     - family: SFPro
       fonts:

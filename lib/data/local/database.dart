@@ -1,3 +1,4 @@
+// lib/data/local/database.dart
 import 'dart:io';
 import 'dart:convert';
 import 'package:drift/drift.dart';
@@ -84,17 +85,24 @@ class UserPreferencesTable extends Table {
   Set<Column> get primaryKey => {key};
 }
 
-// Location Data table
+// ✨ ENHANCED Location Data table with full address details
 class LocationDataTable extends Table {
   @override
   String get tableName => 'location_data';
 
-  TextColumn get label => text()();
+  TextColumn get id => text()(); // ✨ NEW: Unique ID for each location
+  TextColumn get label => text()(); // HOME, WORK, OTHER
   TextColumn get address => text()();
+  RealColumn get latitude => real()(); // ✨ NEW: Latitude coordinate
+  RealColumn get longitude => real()(); // ✨ NEW: Longitude coordinate
+  TextColumn get houseNumber => text().nullable()(); // ✨ NEW: House/Flat number
+  TextColumn get landmark => text().nullable()(); // ✨ NEW: Landmark
+  BoolColumn get isActive => boolean().withDefault(const Constant(true))(); // ✨ NEW: Active flag
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)(); // ✨ NEW
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
 
   @override
-  Set<Column> get primaryKey => {label};
+  Set<Column> get primaryKey => {id}; // ✨ CHANGED: id is now primary key
 }
 
 // UPDATED: Cart Items table - Enhanced to support new cart functionality
@@ -164,7 +172,7 @@ class AppDatabase extends _$AppDatabase {
   }
 
   @override
-  int get schemaVersion => 6; // UPDATED: Increment schema version for enhanced cart
+  int get schemaVersion => 7; // ✨ UPDATED: Increment for location table changes
 
   // Migration strategy to handle schema updates
   @override
@@ -201,9 +209,210 @@ class AppDatabase extends _$AppDatabase {
           await m.addColumn(cartItemsTable, cartItemsTable.discountPercentage);
           await m.addColumn(cartItemsTable, cartItemsTable.dateAdded);
         }
+        if (from < 7) {
+          // ✨ NEW: Enhanced location table with coordinates and details
+          await m.deleteTable('location_data');
+          await m.createTable(locationDataTable);
+        }
       },
     );
   }
+
+  // =================================
+  // ✨ ENHANCED LOCATION METHODS
+  // =================================
+
+  /// Save complete location data to cache
+  Future<void> saveLocationFull({
+    required String label,
+    required String address,
+    required double latitude,
+    required double longitude,
+    String? houseNumber,
+    String? landmark,
+  }) async {
+    try {
+      final locationId = 'loc_${DateTime.now().millisecondsSinceEpoch}';
+      
+      await transaction(() async {
+        // Mark all existing locations as inactive
+        await (update(locationDataTable)).write(
+          LocationDataTableCompanion(
+            isActive: const Value(false),
+            updatedAt: Value(DateTime.now()),
+          ),
+        );
+        
+        // Insert new active location
+        await into(locationDataTable).insert(
+          LocationDataTableCompanion(
+            id: Value(locationId),
+            label: Value(label.toUpperCase()),
+            address: Value(address),
+            latitude: Value(latitude),
+            longitude: Value(longitude),
+            houseNumber: Value(houseNumber),
+            landmark: Value(landmark),
+            isActive: const Value(true),
+            createdAt: Value(DateTime.now()),
+            updatedAt: Value(DateTime.now()),
+          ),
+        );
+      });
+      
+      print('✅ Location saved to cache: $label - $address');
+    } catch (e) {
+      print('❌ Error saving location: $e');
+      throw e;
+    }
+  }
+
+  /// Get active (current) location
+  Future<Map<String, dynamic>?> getActiveLocation() async {
+    try {
+      final query = select(locationDataTable)..where((l) => l.isActive.equals(true));
+      final result = await query.getSingleOrNull();
+      
+      if (result == null) {
+        print('⚠️ No active location found');
+        return null;
+      }
+      
+      return {
+        'id': result.id,
+        'label': result.label,
+        'address': result.address,
+        'latitude': result.latitude,
+        'longitude': result.longitude,
+        'houseNumber': result.houseNumber,
+        'landmark': result.landmark,
+        'createdAt': result.createdAt.toIso8601String(),
+        'updatedAt': result.updatedAt.toIso8601String(),
+      };
+    } catch (e) {
+      print('❌ Error getting active location: $e');
+      return null;
+    }
+  }
+
+  /// Check if location exists in cache
+  Future<bool> hasLocationCached() async {
+    try {
+      final location = await getActiveLocation();
+      return location != null;
+    } catch (e) {
+      print('❌ Error checking location cache: $e');
+      return false;
+    }
+  }
+
+  /// Get location coordinates
+  Future<Map<String, double>?> getLocationCoordinates() async {
+    try {
+      final location = await getActiveLocation();
+      if (location == null) return null;
+      
+      return {
+        'latitude': location['latitude'],
+        'longitude': location['longitude'],
+      };
+    } catch (e) {
+      print('❌ Error getting location coordinates: $e');
+      return null;
+    }
+  }
+
+  /// Get all saved locations (history)
+  Future<List<Map<String, dynamic>>> getAllLocations() async {
+    try {
+      final locations = await (select(locationDataTable)
+        ..orderBy([
+          (l) => OrderingTerm(expression: l.updatedAt, mode: OrderingMode.desc)
+        ])
+      ).get();
+      
+      return locations.map((loc) => {
+        'id': loc.id,
+        'label': loc.label,
+        'address': loc.address,
+        'latitude': loc.latitude,
+        'longitude': loc.longitude,
+        'houseNumber': loc.houseNumber,
+        'landmark': loc.landmark,
+        'isActive': loc.isActive,
+        'createdAt': loc.createdAt.toIso8601String(),
+        'updatedAt': loc.updatedAt.toIso8601String(),
+      }).toList();
+    } catch (e) {
+      print('❌ Error getting all locations: $e');
+      return [];
+    }
+  }
+
+  /// Delete location by ID
+  Future<void> deleteLocation(String locationId) async {
+    try {
+      await (delete(locationDataTable)..where((l) => l.id.equals(locationId))).go();
+      print('🗑️ Location deleted: $locationId');
+    } catch (e) {
+      print('❌ Error deleting location: $e');
+      throw e;
+    }
+  }
+
+  /// Override: Get location label
+  Future<String?> getLocationLabel() async {
+    try {
+      final location = await getActiveLocation();
+      return location?['label'] ?? 'Home';
+    } catch (e) {
+      return 'Home';
+    }
+  }
+
+  /// Override: Get location address
+  Future<String?> getLocationAddress() async {
+    try {
+      final location = await getActiveLocation();
+      if (location == null) return 'Not Available';
+      
+      final parts = <String>[];
+      if (location['houseNumber'] != null) parts.add(location['houseNumber']);
+      if (location['landmark'] != null) parts.add(location['landmark']);
+      parts.add(location['address']);
+      
+      return parts.join(', ');
+    } catch (e) {
+      return 'Not Available';
+    }
+  }
+
+  /// Override: Save location (legacy method for compatibility)
+  Future<void> saveLocation(String label, String address) async {
+    // Redirect to enhanced version with default coordinates
+    await saveLocationFull(
+      label: label,
+      address: address,
+      latitude: 0.0,
+      longitude: 0.0,
+    );
+  }
+
+  /// Override: Clear location data
+  Future<void> clearLocationData() async {
+    try {
+      await delete(locationDataTable).go();
+      print('🗑️ All location data cleared');
+    } catch (e) {
+      print('❌ Error clearing location data: $e');
+      throw e;
+    }
+  }
+
+  // =================================
+  // ALL YOUR EXISTING METHODS BELOW
+  // (Exactly as they are in paste.txt)
+  // =================================
 
   // --- Authentication Methods ---
 
@@ -796,33 +1005,6 @@ class AppDatabase extends _$AppDatabase {
   Future<Map<String, String>> getAllUserPreferences() async {
     final prefs = await select(userPreferencesTable).get();
     return {for (var pref in prefs) pref.key: pref.value};
-  }
-
-  // --- Location Data ---
-
-  Future<String?> getLocationLabel() async {
-    final label = await getUserPreference('location_display_label');
-    return label ?? 'Home';
-  }
-
-  Future<String?> getLocationAddress() async {
-    final query = select(locationDataTable)..where((l) => l.label.equals('current_location'));
-    final result = await query.getSingleOrNull();
-    return result?.address ?? 'Not Available';
-  }
-
-  Future<void> saveLocation(String label, String address) async {
-    await into(locationDataTable).insertOnConflictUpdate(
-      LocationDataTableCompanion(
-          label: Value('current_location'),
-          address: Value(address),
-          updatedAt: Value(DateTime.now())),
-    );
-    await saveUserPreference('location_display_label', label);
-  }
-
-  Future<void> clearLocationData() async {
-    await delete(locationDataTable).go();
   }
 
   // --- ENHANCED Cart Items - Supporting both old and new cart models ---

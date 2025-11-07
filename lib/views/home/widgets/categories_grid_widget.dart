@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../../controllers/category_controller.dart';
 import '../../../models/category_models.dart';
-import '../../../services/universal_service_screen.dart'; // Your existing screen
+import '../../../services/universal_service_screen.dart';
 
 class CategoriesGridWidget extends StatelessWidget {
   final double scaleFactor;
@@ -18,8 +19,78 @@ class CategoriesGridWidget extends StatelessWidget {
   }) : super(key: key);
 
   void _navigateToCategory(Category category) {
-    // Navigate directly to your existing CategoryServiceScreen
     Get.to(() => CategoryServiceScreen(category: category));
+  }
+
+  // Helper method to check if URL is an SVG
+  bool _isSvgUrl(String url) {
+    return url.toLowerCase().endsWith('.svg');
+  }
+
+  // Helper method to build category icon (supports both SVG and raster images)
+  Widget _buildCategoryIcon(String imgUrl, double scaleFactor) {
+    final double width = 40.w * scaleFactor;
+    final double height = 40.h * scaleFactor;
+    final bool isSvg = _isSvgUrl(imgUrl);
+
+    if (isSvg) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: SvgPicture.network(
+          imgUrl,
+          width: width,
+          height: height,
+          fit: BoxFit.cover,
+          placeholderBuilder: (context) => Container(
+            width: width,
+            height: height,
+            decoration: BoxDecoration(
+              color: const Color(0xFFFF6F00).withOpacity(0.1), // brand color
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        ),
+      );
+    } else {
+      // Use CachedNetworkImage for proper caching
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: CachedNetworkImage(
+          imageUrl: imgUrl,
+          width: width,
+          height: height,
+          fit: BoxFit.cover,
+          placeholder: (context, url) => Container(
+            width: width,
+            height: height,
+            decoration: BoxDecoration(
+              color: const Color(0xFFFF6F00).withOpacity(0.1), // brand color
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+          errorWidget: (context, url, error) => _buildErrorPlaceholder(width, height, scaleFactor),
+          fadeInDuration: const Duration(milliseconds: 220),
+          fadeOutDuration: const Duration(milliseconds: 80),
+        ),
+      );
+    }
+  }
+
+  // Helper method to build error placeholder
+  Widget _buildErrorPlaceholder(double width, double height, double scaleFactor) {
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        color: const Color(0xFFFF6F00).withOpacity(0.1), // brand color
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Icon(
+        Icons.category,
+        color: const Color(0xFFFF6F00),
+        size: 24.sp * scaleFactor,
+      ),
+    );
   }
 
   @override
@@ -50,26 +121,26 @@ class CategoriesGridWidget extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
+                const Icon(
                   Icons.error_outline,
                   color: Colors.red,
                   size: 48,
                 ),
-                SizedBox(height: 8),
-                Text(
+                const SizedBox(height: 8),
+                const Text(
                   'Failed to load categories',
                   style: TextStyle(
                     color: Colors.red,
                     fontSize: 16,
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 ElevatedButton(
                   onPressed: () => categoryController.retry(),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFFFF6F00),
+                    backgroundColor: const Color(0xFFFF6F00),
                   ),
-                  child: Text(
+                  child: const Text(
                     'Retry',
                     style: TextStyle(color: Colors.white),
                   ),
@@ -97,7 +168,7 @@ class CategoriesGridWidget extends StatelessWidget {
         );
       }
 
-      // Display categories grid - clean and simple
+      // Display categories grid
       return Padding(
         padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
         child: GridView.builder(
@@ -112,7 +183,7 @@ class CategoriesGridWidget extends StatelessWidget {
           ),
           itemBuilder: (_, index) {
             final category = categories[index];
-            
+
             return GestureDetector(
               onTap: () => _navigateToCategory(category),
               child: Container(
@@ -137,31 +208,8 @@ class CategoriesGridWidget extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      // Category icon
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.network(
-                          category.imgLink,
-                          width: 40.w * scaleFactor,
-                          height: 40.h * scaleFactor,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return Container(
-                              width: 40.w * scaleFactor,
-                              height: 40.h * scaleFactor,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFFF6F00).withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Icon(
-                                Icons.category,
-                                color: const Color(0xFFFF6F00),
-                                size: 24.sp * scaleFactor,
-                              ),
-                            );
-                          },
-                        ),
-                      ),
+                      // Category icon - supports both SVG and raster images
+                      _buildCategoryIcon(category.imgLink, scaleFactor),
                       SizedBox(height: 6.h * scaleFactor),
                       Padding(
                         padding: EdgeInsets.symmetric(

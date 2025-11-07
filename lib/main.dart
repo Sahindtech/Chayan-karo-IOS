@@ -1,3 +1,4 @@
+// lib/main.dart - USING SPLASH SCREEN PROPERLY
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,109 +10,53 @@ import 'views/login/login_screen.dart';
 import 'views/login/otp_verification_screen.dart';
 import 'views/home/home_screen.dart';
 import 'views/cart/cart_screen.dart';
+import 'widgets/location_popup_screen.dart';
+import 'views/profile/profile_screen.dart';
+import 'widgets/choose_location_sheet.dart';
 
-// Import GetX DI setup
+// GetX dependency injection
 import 'di/app_binding.dart';
 
-// Import for testing and authentication
+// Database + repositories
 import 'data/local/database.dart';
-import 'data/repository/category_repository.dart'; // UPDATED: Use CategoryRepository instead of HomeRepository
-import 'views/profile/profile_screen.dart';
+import 'data/repository/category_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Initialize GetX dependencies
   await initializeDependencies();
-  
-  // Determine initial route based on authentication state
-  final String initialRoute = await _determineInitialRoute();
-  
-  // 🧪 QUICK DEPENDENCY TEST - Updated to use CategoryRepository
-  print('🔍 Testing GetX dependencies...');
-  
-  try {
-    // Test 1: Check if GetX can resolve dependencies
-    final database = Get.find<AppDatabase>();
-    final categoryRepository = CategoryRepository(); // UPDATED: Use CategoryRepository singleton
-    print('✅ GetX Dependencies resolved successfully');
-    
-    // Test 2: Quick database test - Skip category test for now since it requires authentication
-    print('✅ Database initialized successfully');
-    
-    // Test 3: Test database stats
-    final stats = await database.getDatabaseStats();
-    print('✅ Database stats: $stats');
-    
-    // Test 4: Check authentication state
-    final isLoggedIn = await database.isUserLoggedIn();
-    print('✅ User logged in: $isLoggedIn');
-    
-    print('🎉 All GetX tests passed! Dependencies are working correctly.');
-    
-  } catch (e) {
-    print('❌ GetX Test failed: $e');
-    print('Stack trace: ${StackTrace.current}');
-  }
-  // END TEST CODE
-  
-  runApp(ChayanKaroApp(initialRoute: initialRoute));
+
+  // ✨ ALWAYS START WITH SPLASH - Let splash screen handle routing
+  runApp(const ChayanKaroApp());
 }
 
-// NEW: Determine initial route based on authentication state
-Future<String> _determineInitialRoute() async {
-  try {
-    final database = Get.find<AppDatabase>();
-    
-    // Check authentication state
-    final isLoggedIn = await database.isUserLoggedIn();
-    final isSessionValid = await database.isSessionValid();
-    final hasSeenOnboarding = await database.hasSeenOnboarding();
-    
-    print('🔐 Auth Check: isLoggedIn=$isLoggedIn, sessionValid=$isSessionValid, hasSeenOnboarding=$hasSeenOnboarding');
-    
-    // If logged in and session is valid, go to home
-    if (isLoggedIn && isSessionValid) {
-      final userData = await database.getCurrentUser();
-      print('✅ User is logged in: ${userData['name']} - redirecting to home');
-      return '/home';
-    }
-    
-    // If session expired but was logged in, clear auth data
-    if (isLoggedIn && !isSessionValid) {
-      print('⚠️ Session expired - clearing auth data');
-      await database.clearAuthData();
-    }
-    
-    // If user has seen onboarding, go to login
-    if (hasSeenOnboarding) {
-      print('👀 User has seen onboarding - redirecting to login');
-      return '/login';
-    } else {
-      print('🆕 New user - showing onboarding');
-      return '/onboarding';
-    }
-  } catch (e) {
-    print('❌ Error checking auth state: $e');
-    // Fallback to splash screen on error
-    return '/';
-  }
-}
-
-// Initialize dependencies function
+// ==========================================================
+// INITIALIZE DEPENDENCIES
+// ==========================================================
 Future<void> initializeDependencies() async {
   print('🚀 Initializing GetX dependencies...');
-  
-  // Initialize core dependencies first
   AppBinding().dependencies();
-  
   print('✅ GetX dependencies initialized successfully');
+
+  // Optional quick tests
+  try {
+    final database = Get.find<AppDatabase>();
+    final categoryRepo = CategoryRepository();
+    print('✅ Database & Repository check passed.');
+
+    final stats = await database.getDatabaseStats();
+    print('📊 Database stats: $stats');
+  } catch (e) {
+    print('⚠️ Dependency test failed: $e');
+  }
 }
 
+// ==========================================================
+// APP ENTRY WIDGET
+// ==========================================================
 class ChayanKaroApp extends StatelessWidget {
-  final String initialRoute;
-  
-  const ChayanKaroApp({super.key, required this.initialRoute});
+  const ChayanKaroApp({super.key});
 
   static const bool kEnableDeviceLogs = true;
 
@@ -141,50 +86,19 @@ class ChayanKaroApp extends StatelessWidget {
               primaryColor: const Color(0xFFFF6F00),
               scaffoldBackgroundColor: Colors.white,
             ),
-            // GetX binding for dependency injection
             initialBinding: AppBinding(),
-            
-            // Use dynamic initial route based on auth state
-            initialRoute: initialRoute,
-            
-            // GetX route management
+            initialRoute: '/', // ✨ Always start with splash screen
             getPages: [
-              GetPage(
-                name: '/',
-                page: () => SplashScreen(),
-              ),
-              GetPage(
-                name: '/onboarding',
-                page: () => const OnboardingScreen(),
-              ),
-              GetPage(
-                name: '/login',
-                page: () => const LoginScreen(), // Fixed: Added const
-                binding: AppBinding(), // Ensure dependencies are available
-              ),
-              GetPage(
-                name: '/otp',
-                page: () => const OtpVerificationScreen(), // Fixed: Added const
-                binding: AppBinding(), // Ensure dependencies are available
-              ),
-              GetPage(
-                name: '/home',
-                page: () => const HomeScreen(),
-                binding: AppBinding(), // Ensure dependencies are available
-              ),
-              GetPage(
-                name: '/profile',
-                page: () => const ProfileScreen(),
-                binding: AppBinding(),
-              ),
-              GetPage(
-                name: '/cart',
-                page: () => CartScreen(),
-                binding: AppBinding(), // Ensure dependencies are available
-              ),
+              GetPage(name: '/', page: () => const SplashScreen()), // ✨ Your animated splash
+              GetPage(name: '/onboarding', page: () => const OnboardingScreen()),
+              GetPage(name: '/login', page: () => const LoginScreen(), binding: AppBinding()),
+              GetPage(name: '/otp', page: () => const OtpVerificationScreen(), binding: AppBinding()),
+              GetPage(name: '/home', page: () => const HomeScreen(), binding: AppBinding()),
+              GetPage(name: '/profile', page: () => const ProfileScreen(), binding: AppBinding()),
+              GetPage(name: '/cart', page: () => CartScreen(), binding: AppBinding()),
+              GetPage(name: '/location_popup', page: () => const LocationPopupScreen(), binding: AppBinding()),
+              GetPage(name: '/choice', page: () => const ChooseLocationSheet(), binding: AppBinding()),
             ],
-            
-            // Fallback for unknown routes
             unknownRoute: GetPage(
               name: '/notfound',
               page: () => Scaffold(
@@ -213,22 +127,20 @@ class ChayanKaroApp extends StatelessWidget {
   }
 }
 
+// ==========================================================
+// DEVICE SIZE HELPER (UNCHANGED)
+// ==========================================================
 class DesignSizeHelper {
   static Size getDesignSize(MediaQueryData mediaQuery) {
     final size = mediaQuery.size;
     final diagonalDp = sqrt(pow(size.width, 2) + pow(size.height, 2));
-
-    final bool isTablet =
-        diagonalDp >= 1100 || size.shortestSide >= 500;
-
+    final bool isTablet = diagonalDp >= 1100 || size.shortestSide >= 500;
     final bool isLargeTablet = isTablet && max(size.width, size.height) >= 1400;
     final bool isLandscape = size.width > size.height;
 
     const phoneSize = Size(390, 844);
 
-    if (!isTablet) {
-      return phoneSize;
-    }
+    if (!isTablet) return phoneSize;
 
     if (isLargeTablet) {
       return isLandscape ? const Size(1366, 1024) : const Size(1024, 1366);
@@ -240,8 +152,7 @@ class DesignSizeHelper {
   static void logDeviceInfo(MediaQueryData mediaQuery) {
     final size = mediaQuery.size;
     final diagonalDp = sqrt(pow(size.width, 2) + pow(size.height, 2));
-    final bool isTablet =
-        diagonalDp >= 1100 || size.shortestSide >= 500;
+    final bool isTablet = diagonalDp >= 1100 || size.shortestSide >= 500;
     final bool isLargeTablet = isTablet && max(size.width, size.height) >= 1400;
 
     debugPrint(

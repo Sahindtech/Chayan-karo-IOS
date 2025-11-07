@@ -10,9 +10,11 @@ import '../models/category_models.dart';
 import '../models/service_models.dart';
 import '../views/cart/cart_screen.dart';
 import '../views/booking/Summaryscreen.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
 
 class CategoryServiceScreen extends StatefulWidget {
-  final Category category; // Now takes the main Category
+  final Category category;
   final String? scrollToServiceCategoryId;
 
   const CategoryServiceScreen({
@@ -30,15 +32,9 @@ class _CategoryServiceScreenState extends State<CategoryServiceScreen> {
   late ServiceController serviceController;
   late CartController cartController;
 
-  // Track services that show increment/decrement controls on this page session
   final RxSet<String> _currentPageInteractedServices = <String>{}.obs;
-  // Track services selected on this page only
   final RxList<String> _currentPageSelectedServices = <String>[].obs;
-
-  // Dynamic category keys for scrolling
   final Map<String, GlobalKey> _serviceCategoryKeys = {};
-
-  // Store services for each service category
   final RxMap<String, List<Service>> _servicesByCategory = <String, List<Service>>{}.obs;
   final RxMap<String, bool> _loadingByCategory = <String, bool>{}.obs;
   final RxMap<String, bool> _errorByCategory = <String, bool>{}.obs;
@@ -51,7 +47,6 @@ class _CategoryServiceScreenState extends State<CategoryServiceScreen> {
 
     print('🟢 CategoryServiceScreen initialized for ${widget.category.categoryName}');
 
-    // Initialize keys for each service category
     for (var serviceCategory in widget.category.serviceCategory) {
       _serviceCategoryKeys[serviceCategory.serviceCategoryId] = GlobalKey();
     }
@@ -60,12 +55,10 @@ class _CategoryServiceScreenState extends State<CategoryServiceScreen> {
   }
 
   void _loadAllServices() async {
-    // Load services for each service category
     for (var serviceCategory in widget.category.serviceCategory) {
       _loadServicesForCategory(serviceCategory.serviceCategoryId);
     }
 
-    // Auto-scroll to specific service category if provided
     if (widget.scrollToServiceCategoryId != null) {
       _scrollToServiceCategory(widget.scrollToServiceCategoryId!);
     }
@@ -77,13 +70,8 @@ class _CategoryServiceScreenState extends State<CategoryServiceScreen> {
 
     try {
       print('🔄 Loading services for service category: $serviceCategoryId');
-
-      // Use the service controller to load services
       await serviceController.loadServices(serviceCategoryId);
-
-      // Store the services for this category
       _servicesByCategory[serviceCategoryId] = List.from(serviceController.services);
-
       print('✅ Loaded ${serviceController.services.length} services for category $serviceCategoryId');
     } catch (e) {
       print('❌ Error loading services for category $serviceCategoryId: $e');
@@ -107,18 +95,22 @@ class _CategoryServiceScreenState extends State<CategoryServiceScreen> {
     });
   }
 
-  // Add to cart with source information
-  void _addToCart(Service service) {
-    cartController.addServiceToCart(
-      service,
-      sourcePage: 'category_service_${widget.category.categoryId}',
-      sourceTitle: widget.category.categoryName,
-    );
-    _currentPageInteractedServices.add(service.id);
-    if (!_currentPageSelectedServices.contains(service.id)) {
-      _currentPageSelectedServices.add(service.id);
-    }
+void _addToCart(Service service) {
+  final catId = widget.category.categoryId;
+  final item = CartItem.fromService(
+    service,
+    sourcePage: 'category_service_${catId}',
+    sourceTitle: widget.category.categoryName,
+  ).copyWith(categoryId: catId);
+
+  print('[AddToCart] svc=${item.id} cat=${item.categoryId}');
+  Get.find<CartController>().addItem(item);
+
+  _currentPageInteractedServices.add(service.id);
+  if (!_currentPageSelectedServices.contains(service.id)) {
+    _currentPageSelectedServices.add(service.id);
   }
+}
 
   void _incrementCart(String serviceId) {
     cartController.incrementQuantity(serviceId);
@@ -145,7 +137,6 @@ class _CategoryServiceScreenState extends State<CategoryServiceScreen> {
     for (String serviceId in _currentPageSelectedServices) {
       final quantity = cartController.getQuantity(serviceId);
       if (quantity > 0) {
-        // Find service across all categories
         Service? service;
         for (var serviceList in _servicesByCategory.values) {
           service = serviceList.firstWhereOrNull((s) => s.id == serviceId);
@@ -166,6 +157,175 @@ class _CategoryServiceScreenState extends State<CategoryServiceScreen> {
     }
     return count;
   }
+
+  // Helper method to check if URL is an SVG
+  bool _isSvgUrl(String url) {
+    return url.toLowerCase().endsWith('.svg');
+  }
+
+  // Helper to check if category needs larger card format
+  bool _shouldUseLargeCard(String categoryName) {
+    final largeCategoryNames = [
+      'facial',
+      'manicure',
+      'pedicure',
+      'deep cleaning',
+      'move-in kitchen cleaning',
+      'bathroom cleaning',
+    ];
+    
+    return largeCategoryNames.any((name) => 
+      categoryName.toLowerCase().contains(name.toLowerCase())
+    );
+  }
+
+  // Universal image builder for network images
+
+Widget _buildNetworkImage({
+  required String imageUrl,
+  required double width,
+  required double height,
+  BoxFit fit = BoxFit.cover,
+  double borderRadius = 0,
+  double scaleFactor = 1.0,
+  Widget? errorWidget,
+}) {
+  final isSvg = _isSvgUrl(imageUrl);
+
+  final defaultErrorWidget = errorWidget ??
+      Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+          borderRadius: BorderRadius.circular(borderRadius),
+        ),
+        child: Icon(
+          Icons.image_not_supported,
+          color: Colors.grey,
+          size: (width / 3).clamp(24.0, 48.0),
+        ),
+      );
+
+  Widget imageWidget;
+
+  if (isSvg) {
+    imageWidget = Stack(
+      children: [
+        Container(
+          width: width,
+          height: height,
+          decoration: BoxDecoration(
+            color: Colors.grey[200],
+            borderRadius: BorderRadius.circular(borderRadius),
+          ),
+        ),
+        SvgPicture.network(
+          imageUrl,
+          width: width,
+          height: height,
+          fit: fit,
+          placeholderBuilder: (context) => const SizedBox.shrink(),
+        ),
+      ],
+    );
+  } else {
+    imageWidget = CachedNetworkImage(
+      imageUrl: imageUrl,
+      width: width,
+      height: height,
+      fit: fit,
+      placeholder: (context, url) => Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+          borderRadius: BorderRadius.circular(borderRadius),
+        ),
+      ),
+      errorWidget: (context, url, error) => defaultErrorWidget,
+      fadeInDuration: const Duration(milliseconds: 200),
+      fadeOutDuration: const Duration(milliseconds: 75),
+    );
+  }
+
+  if (borderRadius > 0) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(borderRadius),
+      child: imageWidget,
+    );
+  }
+
+  return imageWidget;
+}
+
+Widget _buildCategoryIcon(
+  String imgUrl,
+  double width,
+  double height,
+  double borderRadius,
+  double scaleFactor,
+) {
+  final isSvg = _isSvgUrl(imgUrl);
+
+  if (isSvg) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(borderRadius),
+      child: Stack(
+        children: [
+          Container(
+            width: width,
+            height: height,
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(borderRadius),
+            ),
+          ),
+          SvgPicture.network(
+            imgUrl,
+            width: width,
+            height: height,
+            fit: BoxFit.cover,
+            placeholderBuilder: (context) => const SizedBox.shrink(),
+          ),
+        ],
+      ),
+    );
+  } else {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(borderRadius),
+      child: CachedNetworkImage(
+        imageUrl: imgUrl,
+        width: width,
+        height: height,
+        fit: BoxFit.cover,
+        placeholder: (context, url) => Container(
+          width: width,
+          height: height,
+          decoration: BoxDecoration(
+            color: Colors.grey[200],
+            borderRadius: BorderRadius.circular(borderRadius),
+          ),
+        ),
+        errorWidget: (context, url, error) => Container(
+          width: width,
+          height: height,
+          decoration: BoxDecoration(
+            color: Colors.grey[200],
+            borderRadius: BorderRadius.circular(borderRadius),
+          ),
+          child: Icon(
+            Icons.home_repair_service,
+            color: Colors.grey,
+            size: 24 * scaleFactor,
+          ),
+        ),
+        fadeInDuration: const Duration(milliseconds: 200),
+        fadeOutDuration: const Duration(milliseconds: 75),
+      ),
+    );
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -269,10 +429,8 @@ class _CategoryServiceScreenState extends State<CategoryServiceScreen> {
               ),
             ),
             SizedBox(width: 8.w * scaleFactor),
-            // Cart icon (SVG like salon screen)
             Obx(() => GestureDetector(
                   onTap: () {
-                    // Navigate to CartScreen
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => CartScreen()),
@@ -321,79 +479,78 @@ class _CategoryServiceScreenState extends State<CategoryServiceScreen> {
     );
   }
 
-  Widget _buildTopBanner(double scaleFactor) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16.w * scaleFactor),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(12 * scaleFactor),
-        child: Stack(
-          children: [
-            // background image (same asset usage as salon screen — here category provides image URL)
-            Image.network(
-              widget.category.imgLink,
-              width: double.infinity,
-              height: 160.h * scaleFactor,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  width: double.infinity,
-                  height: 160.h * scaleFactor,
-                  color: Colors.grey[200],
-                  child: Icon(
-                    Icons.category,
-                    size: 48 * scaleFactor,
-                    color: const Color(0xFFFF6F00),
-                  ),
-                );
-              },
+Widget _buildTopBanner(double scaleFactor) {
+  return Padding(
+    padding: EdgeInsets.symmetric(horizontal: 16.w * scaleFactor),
+    child: ClipRRect(
+      borderRadius: BorderRadius.circular(12 * scaleFactor),
+      child: Stack(
+        children: [
+          _buildBannerImage(scaleFactor),
+          Container(
+            width: double.infinity,
+            height: 160.h * scaleFactor,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.transparent,
+                  Colors.black.withOpacity(0.35),
+                ],
+              ),
             ),
-
-            // subtle gradient overlay to match salon look
-            Container(
-              width: double.infinity,
-              height: 160.h * scaleFactor,
+          ),
+          Positioned(
+            bottom: 12.r * scaleFactor,
+            left: 12.r * scaleFactor,
+            child: Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: 12.h * scaleFactor,
+                vertical: 6.h * scaleFactor,
+              ),
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.transparent,
-                    Colors.black.withOpacity(0.35),
-                  ],
+                color: Colors.black.withOpacity(0.6),
+                borderRadius: BorderRadius.circular(20 * scaleFactor),
+              ),
+              child: Text(
+                widget.category.categoryName,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14.sp * scaleFactor,
                 ),
               ),
             ),
-
-            // white rounded chip (matches salon style)
-            Positioned(
-              bottom: 12.r * scaleFactor,
-              left: 12.r * scaleFactor,
-             child: Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 12.h * scaleFactor, 
-                  vertical: 6.h * scaleFactor
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.6),
-                  borderRadius: BorderRadius.circular(20 * scaleFactor),
-                ),
-                child: Text(
-                  widget.category.categoryName,
-                  style: TextStyle(
-                    color: Colors.white, 
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14.sp * scaleFactor,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
 
-  Widget _buildCategoryInfoBlock(double scaleFactor) {
+Widget _buildBannerImage(double scaleFactor) {
+  return Image.asset(
+    'assets/ms9.webp',
+    width: double.infinity,
+    height: 160.h * scaleFactor,
+    fit: BoxFit.cover,
+    errorBuilder: (context, error, stackTrace) {
+      return Container(
+        width: double.infinity,
+        height: 160.h * scaleFactor,
+        color: Colors.grey[200],
+        child: Icon(
+          Icons.category,
+          size: 48 * scaleFactor,
+          color: const Color(0xFFFF6F00),
+        ),
+      );
+    },
+  );
+}
+
+Widget _buildCategoryInfoBlock(double scaleFactor) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.w * scaleFactor),
       child: Column(
@@ -632,106 +789,101 @@ class _CategoryServiceScreenState extends State<CategoryServiceScreen> {
     );
   }
 
-  Widget _buildServiceCategoryGrid(double scaleFactor) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16.w * scaleFactor),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Categories",
-            style: TextStyle(
-              fontSize: 16.sp * scaleFactor,
-              fontWeight: FontWeight.w600,
-              color: Colors.black,
-            ),
+Widget _buildServiceCategoryGrid(double scaleFactor) {
+  return Padding(
+    padding: EdgeInsets.symmetric(horizontal: 16.w * scaleFactor),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Categories",
+          style: TextStyle(
+            fontSize: 16.sp * scaleFactor,
+            fontWeight: FontWeight.w600,
+            color: Colors.black,
           ),
-          SizedBox(height: 12.h * scaleFactor),
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: widget.category.serviceCategory.length,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              mainAxisSpacing: 20 * scaleFactor,
-              crossAxisSpacing: 16 * scaleFactor,
-              childAspectRatio: 0.78,
-            ),
-            itemBuilder: (context, index) {
-              final serviceCategory = widget.category.serviceCategory[index];
-              return GestureDetector(
-                onTap: () => _scrollToServiceCategory(serviceCategory.serviceCategoryId),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(
-                      color: const Color(0xFFFFD9BE),
-                      width: 1.w * scaleFactor,
-                    ),
-                    borderRadius: BorderRadius.circular(12 * scaleFactor),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0x33E47830),
-                        blurRadius: 6 * scaleFactor,
-                        offset: Offset(0, 4 * scaleFactor),
-                        spreadRadius: -2 * scaleFactor,
-                      ),
-                    ],
+        ),
+        SizedBox(height: 12.h * scaleFactor),
+        GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: widget.category.serviceCategory.length,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            mainAxisSpacing: 18 * scaleFactor,
+            crossAxisSpacing: 14 * scaleFactor,
+            childAspectRatio: 0.82,
+          ),
+          itemBuilder: (context, index) {
+            final serviceCategory = widget.category.serviceCategory[index];
+            return GestureDetector(
+              onTap: () => _scrollToServiceCategory(serviceCategory.serviceCategoryId),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(
+                    color: const Color(0xFFFFD9BE),
+                    width: 1.w * scaleFactor,
                   ),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 8.h * scaleFactor,
-                      vertical: 12.h * scaleFactor,
+                  borderRadius: BorderRadius.circular(12 * scaleFactor),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0x33E47830),
+                      blurRadius: 6 * scaleFactor,
+                      offset: Offset(0, 4 * scaleFactor),
+                      spreadRadius: -2 * scaleFactor,
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: 48.w * scaleFactor,
-                          height: 48.h * scaleFactor,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8 * scaleFactor),
-                            color: Colors.white,
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(8 * scaleFactor),
-                            child: Image.network(
-                              serviceCategory.imgLink,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Icon(
-                                  Icons.home_repair_service,
-                                  color: const Color(0xFFFF6F00),
-                                  size: 24 * scaleFactor,
-                                );
-                              },
-                            ),
-                          ),
+                  ],
+                ),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 6.w * scaleFactor,
+                    vertical: 10.h * scaleFactor,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 65.w * scaleFactor,
+                        height: 65.h * scaleFactor,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8 * scaleFactor),
+                          color: Colors.white,
                         ),
-                        SizedBox(height: 8.h * scaleFactor),
-                        Text(
+                        child: _buildCategoryIcon(
+                          serviceCategory.imgLink,
+                          65.w * scaleFactor,
+                          65.h * scaleFactor,
+                          8 * scaleFactor,
+                          scaleFactor,
+                        ),
+                      ),
+                      SizedBox(height: 6.h * scaleFactor),
+                      Flexible(
+                        child: Text(
                           serviceCategory.serviceCategoryName,
                           style: TextStyle(
-                            fontSize: 11.5.sp * scaleFactor,
+                            fontSize: 11.sp * scaleFactor,
                             fontWeight: FontWeight.w500,
                             color: Colors.black,
-                            height: 1.3,
+                            height: 1.2,
                           ),
                           textAlign: TextAlign.center,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-              );
-            },
-          ),
-        ],
-      ),
-    );
-  }
+              ),
+            );
+          },
+        ),
+      ],
+    ),
+  );
+}
 
   Widget _buildServiceCategorySections(double scaleFactor) {
     return Obx(() {
@@ -826,219 +978,319 @@ class _CategoryServiceScreenState extends State<CategoryServiceScreen> {
       );
     }
 
+    // Check if this category should use large cards
+    final useLargeCards = _shouldUseLargeCard(serviceCategory.serviceCategoryName);
+
     return Column(
-      children: services.map((service) => _buildServiceCard(service, scaleFactor)).toList(),
+      children: services.map((service) {
+        if (useLargeCards) {
+          return _buildLargeServiceCard(service, scaleFactor);
+        } else {
+          return _buildServiceCard(service, scaleFactor);
+        }
+      }).toList(),
     );
   }
 
-Widget _buildServiceCard(Service service, double scaleFactor) {
-  final RxBool isExpanded = false.obs;
+  Widget _buildServiceCard(Service service, double scaleFactor) {
+    final RxBool isExpanded = false.obs;
 
-  return Obx(() => Container(
-        margin: EdgeInsets.only(bottom: 16.r * scaleFactor),
-        padding: EdgeInsets.all(12.r * scaleFactor),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12 * scaleFactor),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.orange.withOpacity(0.05),
-              blurRadius: 10 * scaleFactor,
-              offset: Offset(0, 4 * scaleFactor),
-            ),
-          ],
-        ),
-        child: Column(
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Image
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(8 * scaleFactor),
-                  child: Image.network(
-                    service.imgLink,
+    return Obx(() => Container(
+          margin: EdgeInsets.only(bottom: 16.r * scaleFactor),
+          padding: EdgeInsets.all(12.r * scaleFactor),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12 * scaleFactor),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.orange.withOpacity(0.05),
+                blurRadius: 10 * scaleFactor,
+                offset: Offset(0, 4 * scaleFactor),
+              ),
+            ],
+          ),
+          child: Column(
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildNetworkImage(
+                    imageUrl: service.imgLink,
                     width: 70.w * scaleFactor,
                     height: 70.h * scaleFactor,
                     fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) => Container(
+                    borderRadius: 8 * scaleFactor,
+                    scaleFactor: scaleFactor,
+                    errorWidget: Container(
                       width: 70.w * scaleFactor,
                       height: 70.h * scaleFactor,
-                      color: Colors.grey[200],
-                      child: Icon(Icons.image_not_supported,
-                          color: Colors.grey, size: 30 * scaleFactor),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(8 * scaleFactor),
+                      ),
+                      child: Icon(
+                        Icons.image_not_supported,
+                        color: Colors.grey,
+                        size: 30 * scaleFactor,
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(width: 12.w * scaleFactor),
-
-                // Details
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Service name + arrow with forced line break
-                      GestureDetector(
-                        onTap: () => isExpanded.toggle(),
-                        behavior: HitTestBehavior.translucent,
-                        child: LayoutBuilder(
-                          builder: (context, constraints) {
-                            return _buildSmartServiceName(service.name, isExpanded, scaleFactor, constraints.maxWidth);
-                          },
+                  SizedBox(width: 12.w * scaleFactor),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        GestureDetector(
+                          onTap: () => isExpanded.toggle(),
+                          behavior: HitTestBehavior.translucent,
+                          child: LayoutBuilder(
+                            builder: (context, constraints) {
+                              return _buildSmartServiceName(
+                                  service.name, isExpanded, scaleFactor, constraints.maxWidth);
+                            },
+                          ),
                         ),
-                      ),
-
-                      SizedBox(height: 4.h * scaleFactor),
-
-                      // Rating + duration
-                      Row(
-                        children: [
-                          SvgPicture.asset('assets/icons/star.svg',
-                              width: 16.w * scaleFactor,
-                              height: 16.h * scaleFactor,
-                              color: Colors.black),
-                          SizedBox(width: 4.w * scaleFactor),
-                          Text(
-                            "${service.rating} | ${service.formattedDuration}",
+                        SizedBox(height: 4.h * scaleFactor),
+                        Row(
+                          children: [
+                            SvgPicture.asset('assets/icons/star.svg',
+                                width: 16.w * scaleFactor,
+                                height: 16.h * scaleFactor,
+                                color: Colors.black),
+                            SizedBox(width: 4.w * scaleFactor),
+                            Text(
+                              "${service.rating} | ${service.formattedDuration}",
+                              style: TextStyle(
+                                fontSize: 12.sp * scaleFactor,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 6.h * scaleFactor),
+                        Text(
+                          service.formattedPrice,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14.sp * scaleFactor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  _buildQuantitySelector(service, scaleFactor),
+                ],
+              ),
+              AnimatedCrossFade(
+                firstChild: const SizedBox.shrink(),
+                secondChild: service.description.isNotEmpty
+                    ? Padding(
+                        padding: EdgeInsets.only(
+                            top: 8.h * scaleFactor,
+                            left: 4.w * scaleFactor,
+                            right: 4.w * scaleFactor),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            service.description,
                             style: TextStyle(
                               fontSize: 12.sp * scaleFactor,
-                              color: Colors.grey,
+                              color: Colors.black87,
                             ),
                           ),
-                        ],
-                      ),
-
-                      SizedBox(height: 6.h * scaleFactor),
-
-                      // Price
-                      Text(
-                        service.formattedPrice,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14.sp * scaleFactor,
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                // Quantity selector
-                _buildQuantitySelector(service, scaleFactor),
-              ],
-            ),
-
-            // Expandable description
-            AnimatedCrossFade(
-              firstChild: const SizedBox.shrink(),
-              secondChild: service.description.isNotEmpty
-                  ? Padding(
-                      padding: EdgeInsets.only(
-                          top: 8.h * scaleFactor,
-                          left: 4.w * scaleFactor,
-                          right: 4.w * scaleFactor),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          service.description,
-                          style: TextStyle(
-                            fontSize: 12.sp * scaleFactor,
-                            color: Colors.black87,
-                          ),
-                        ),
-                      ),
-                    )
-                  : const SizedBox.shrink(),
-              crossFadeState: isExpanded.value
-                  ? CrossFadeState.showSecond
-                  : CrossFadeState.showFirst,
-              duration: const Duration(milliseconds: 200),
-            ),
-          ],
-        ),
-      ));
-}
-
-Widget _buildSmartServiceName(String serviceName, RxBool isExpanded, double scaleFactor, double availableWidth) {
-  final words = serviceName.split(' ');
-  final textStyle = TextStyle(
-    fontSize: 14.sp * scaleFactor,
-    fontWeight: FontWeight.bold,
-    color: Colors.black,
-  );
-  
-  // For services with 3+ words, check if we should force a line break
-  if (words.length >= 3) {
-    // Calculate width of full text + arrow
-    final fullTextPainter = TextPainter(
-      text: TextSpan(text: serviceName, style: textStyle),
-      maxLines: 1,
-      textDirection: TextDirection.ltr,
-    );
-    fullTextPainter.layout();
-    
-    final arrowWidth = 28 * scaleFactor; // Arrow + padding
-    final totalWidth = fullTextPainter.width + arrowWidth;
-    
-    // If text + arrow is close to or exceeds available width (80% threshold)
-    if (totalWidth > availableWidth * 0.8) {
-      // Force break: move last word to next line with arrow
-      final firstPart = words.sublist(0, words.length - 1).join(' ');
-      final lastWord = words.last;
-      
-      return RichText(
-        text: TextSpan(
-          children: [
-            TextSpan(text: firstPart, style: textStyle),
-            TextSpan(text: '\n$lastWord', style: textStyle),
-            WidgetSpan(
-              alignment: PlaceholderAlignment.middle,
-              child: Padding(
-                padding: EdgeInsets.only(left: 4.w * scaleFactor),
-                child: AnimatedRotation(
-                  turns: isExpanded.value ? 0.5 : 0,
-                  duration: const Duration(milliseconds: 200),
-                  child: Icon(
-                    Icons.keyboard_arrow_down_rounded,
-                    size: 20 * scaleFactor,
-                    color: Colors.black,
-                  ),
-                ),
+                      )
+                    : const SizedBox.shrink(),
+                crossFadeState:
+                    isExpanded.value ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                duration: const Duration(milliseconds: 200),
               ),
-            ),
-          ],
-        ),
-      );
-    }
+            ],
+          ),
+        ));
   }
-  
-  // Default: no forced line break
-  return RichText(
-    text: TextSpan(
-      children: [
-        TextSpan(text: serviceName, style: textStyle),
-        WidgetSpan(
-          alignment: PlaceholderAlignment.middle,
-          child: Padding(
-            padding: EdgeInsets.only(left: 4.w * scaleFactor),
-            child: AnimatedRotation(
-              turns: isExpanded.value ? 0.5 : 0,
-              duration: const Duration(milliseconds: 200),
-              child: Icon(
-                Icons.keyboard_arrow_down_rounded,
-                size: 20 * scaleFactor,
-                color: Colors.black,
+
+  Widget _buildLargeServiceCard(Service service, double scaleFactor) {
+    final RxBool isExpanded = false.obs;
+    
+    return Obx(() => Container(
+      margin: EdgeInsets.only(bottom: 16.r * scaleFactor),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12 * scaleFactor),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.orange.withOpacity(0.05),
+            blurRadius: 10 * scaleFactor,
+            offset: Offset(0, 4 * scaleFactor),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // 7:3 aspect ratio image
+          ClipRRect(
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(12 * scaleFactor),
+            ),
+            child: AspectRatio(
+              aspectRatio: 7 / 3,
+              child: _buildNetworkImage(
+                imageUrl: service.imgLink,
+                width: double.infinity,
+                height: 300.h * scaleFactor,
+                fit: BoxFit.cover,
+                borderRadius: 0,
+                scaleFactor: scaleFactor,
               ),
             ),
           ),
-        ),
-      ],
-    ),
-  );
-}
+          Padding(
+            padding: EdgeInsets.all(12.r * scaleFactor),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () => isExpanded.toggle(),
+                        child: Text(
+                          service.name,
+                          style: TextStyle(
+                            fontSize: 15.sp * scaleFactor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          maxLines: isExpanded.value ? null : 2,
+                          overflow: isExpanded.value ? null : TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                    _buildQuantitySelector(service, scaleFactor),
+                  ],
+                ),
+                SizedBox(height: 4.h * scaleFactor),
+                Row(
+                  children: [
+                    SvgPicture.asset(
+                      'assets/icons/star.svg',
+                      width: 18.w * scaleFactor,
+                      color: Colors.black,
+                    ),
+                    SizedBox(width: 4.w * scaleFactor),
+                    Text(
+                      "${service.rating} | ${service.formattedDuration}",
+                      style: TextStyle(
+                        fontSize: 12.sp * scaleFactor,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 6.h * scaleFactor),
+                Text(
+                  service.formattedPrice,
+                  style: TextStyle(
+                    fontSize: 16.sp * scaleFactor,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                if (service.description.isNotEmpty) ...[
+                  SizedBox(height: 8.h * scaleFactor),
+                  Text(
+                    service.description,
+                    style: TextStyle(
+                      fontSize: 12.sp * scaleFactor,
+                      color: Colors.black87,
+                    ),
+                    maxLines: isExpanded.value ? null : 3,
+                    overflow: isExpanded.value ? null : TextOverflow.ellipsis,
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
+      ),
+    ));
+  }
 
+  Widget _buildSmartServiceName(
+      String serviceName, RxBool isExpanded, double scaleFactor, double availableWidth) {
+    final words = serviceName.split(' ');
+    final textStyle = TextStyle(
+      fontSize: 14.sp * scaleFactor,
+      fontWeight: FontWeight.bold,
+      color: Colors.black,
+    );
 
+    if (words.length >= 3) {
+      final fullTextPainter = TextPainter(
+        text: TextSpan(text: serviceName, style: textStyle),
+        maxLines: 1,
+        textDirection: TextDirection.ltr,
+      );
+      fullTextPainter.layout();
 
+      final arrowWidth = 28 * scaleFactor;
+      final totalWidth = fullTextPainter.width + arrowWidth;
 
+      if (totalWidth > availableWidth * 0.8) {
+        final firstPart = words.sublist(0, words.length - 1).join(' ');
+        final lastWord = words.last;
+
+        return RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(text: firstPart, style: textStyle),
+              TextSpan(text: '\n$lastWord', style: textStyle),
+              WidgetSpan(
+                alignment: PlaceholderAlignment.middle,
+                child: Padding(
+                  padding: EdgeInsets.only(left: 4.w * scaleFactor),
+                  child: AnimatedRotation(
+                    turns: isExpanded.value ? 0.5 : 0,
+                    duration: const Duration(milliseconds: 200),
+                    child: Icon(
+                      Icons.keyboard_arrow_down_rounded,
+                      size: 20 * scaleFactor,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      }
+    }
+
+    return RichText(
+      text: TextSpan(
+        children: [
+          TextSpan(text: serviceName, style: textStyle),
+          WidgetSpan(
+            alignment: PlaceholderAlignment.middle,
+            child: Padding(
+              padding: EdgeInsets.only(left: 4.w * scaleFactor),
+              child: AnimatedRotation(
+                turns: isExpanded.value ? 0.5 : 0,
+                duration: const Duration(milliseconds: 200),
+                child: Icon(
+                  Icons.keyboard_arrow_down_rounded,
+                  size: 20 * scaleFactor,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget _buildQuantitySelector(Service service, double scaleFactor) {
     return Obx(() {
@@ -1136,7 +1388,7 @@ Widget _buildSmartServiceName(String serviceName, RxBool isExpanded, double scal
     });
   }
 
-  Widget _buildBottomBar(double scaleFactor) {
+Widget _buildBottomBar(double scaleFactor) {
     return Positioned(
       bottom: 0,
       left: 0,
@@ -1184,7 +1436,6 @@ Widget _buildSmartServiceName(String serviceName, RxBool isExpanded, double scal
                   ),
                 ],
               ),
-              // Buy Now button navigates to SummaryScreen (keeps same parameters as before)
               GestureDetector(
                 onTap: () {
                   Navigator.push(

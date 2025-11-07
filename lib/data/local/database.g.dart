@@ -1916,6 +1916,15 @@ class $LocationDataTableTable extends LocationDataTable
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $LocationDataTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _labelMeta = const VerificationMeta('label');
   @override
   late final GeneratedColumn<String> label = GeneratedColumn<String>(
@@ -1936,6 +1945,77 @@ class $LocationDataTableTable extends LocationDataTable
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _latitudeMeta = const VerificationMeta(
+    'latitude',
+  );
+  @override
+  late final GeneratedColumn<double> latitude = GeneratedColumn<double>(
+    'latitude',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _longitudeMeta = const VerificationMeta(
+    'longitude',
+  );
+  @override
+  late final GeneratedColumn<double> longitude = GeneratedColumn<double>(
+    'longitude',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _houseNumberMeta = const VerificationMeta(
+    'houseNumber',
+  );
+  @override
+  late final GeneratedColumn<String> houseNumber = GeneratedColumn<String>(
+    'house_number',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _landmarkMeta = const VerificationMeta(
+    'landmark',
+  );
+  @override
+  late final GeneratedColumn<String> landmark = GeneratedColumn<String>(
+    'landmark',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _isActiveMeta = const VerificationMeta(
+    'isActive',
+  );
+  @override
+  late final GeneratedColumn<bool> isActive = GeneratedColumn<bool>(
+    'is_active',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_active" IN (0, 1))',
+    ),
+    defaultValue: const Constant(true),
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
   static const VerificationMeta _updatedAtMeta = const VerificationMeta(
     'updatedAt',
   );
@@ -1949,7 +2029,18 @@ class $LocationDataTableTable extends LocationDataTable
     defaultValue: currentDateAndTime,
   );
   @override
-  List<GeneratedColumn> get $columns => [label, address, updatedAt];
+  List<GeneratedColumn> get $columns => [
+    id,
+    label,
+    address,
+    latitude,
+    longitude,
+    houseNumber,
+    landmark,
+    isActive,
+    createdAt,
+    updatedAt,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -1962,6 +2053,11 @@ class $LocationDataTableTable extends LocationDataTable
   }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
     if (data.containsKey('label')) {
       context.handle(
         _labelMeta,
@@ -1978,6 +2074,49 @@ class $LocationDataTableTable extends LocationDataTable
     } else if (isInserting) {
       context.missing(_addressMeta);
     }
+    if (data.containsKey('latitude')) {
+      context.handle(
+        _latitudeMeta,
+        latitude.isAcceptableOrUnknown(data['latitude']!, _latitudeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_latitudeMeta);
+    }
+    if (data.containsKey('longitude')) {
+      context.handle(
+        _longitudeMeta,
+        longitude.isAcceptableOrUnknown(data['longitude']!, _longitudeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_longitudeMeta);
+    }
+    if (data.containsKey('house_number')) {
+      context.handle(
+        _houseNumberMeta,
+        houseNumber.isAcceptableOrUnknown(
+          data['house_number']!,
+          _houseNumberMeta,
+        ),
+      );
+    }
+    if (data.containsKey('landmark')) {
+      context.handle(
+        _landmarkMeta,
+        landmark.isAcceptableOrUnknown(data['landmark']!, _landmarkMeta),
+      );
+    }
+    if (data.containsKey('is_active')) {
+      context.handle(
+        _isActiveMeta,
+        isActive.isAcceptableOrUnknown(data['is_active']!, _isActiveMeta),
+      );
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    }
     if (data.containsKey('updated_at')) {
       context.handle(
         _updatedAtMeta,
@@ -1988,11 +2127,15 @@ class $LocationDataTableTable extends LocationDataTable
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {label};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   LocationDataTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return LocationDataTableData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
       label: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}label'],
@@ -2000,6 +2143,30 @@ class $LocationDataTableTable extends LocationDataTable
       address: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}address'],
+      )!,
+      latitude: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}latitude'],
+      )!,
+      longitude: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}longitude'],
+      )!,
+      houseNumber: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}house_number'],
+      ),
+      landmark: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}landmark'],
+      ),
+      isActive: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_active'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
       )!,
       updatedAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
@@ -2016,27 +2183,63 @@ class $LocationDataTableTable extends LocationDataTable
 
 class LocationDataTableData extends DataClass
     implements Insertable<LocationDataTableData> {
+  final String id;
   final String label;
   final String address;
+  final double latitude;
+  final double longitude;
+  final String? houseNumber;
+  final String? landmark;
+  final bool isActive;
+  final DateTime createdAt;
   final DateTime updatedAt;
   const LocationDataTableData({
+    required this.id,
     required this.label,
     required this.address,
+    required this.latitude,
+    required this.longitude,
+    this.houseNumber,
+    this.landmark,
+    required this.isActive,
+    required this.createdAt,
     required this.updatedAt,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
     map['label'] = Variable<String>(label);
     map['address'] = Variable<String>(address);
+    map['latitude'] = Variable<double>(latitude);
+    map['longitude'] = Variable<double>(longitude);
+    if (!nullToAbsent || houseNumber != null) {
+      map['house_number'] = Variable<String>(houseNumber);
+    }
+    if (!nullToAbsent || landmark != null) {
+      map['landmark'] = Variable<String>(landmark);
+    }
+    map['is_active'] = Variable<bool>(isActive);
+    map['created_at'] = Variable<DateTime>(createdAt);
     map['updated_at'] = Variable<DateTime>(updatedAt);
     return map;
   }
 
   LocationDataTableCompanion toCompanion(bool nullToAbsent) {
     return LocationDataTableCompanion(
+      id: Value(id),
       label: Value(label),
       address: Value(address),
+      latitude: Value(latitude),
+      longitude: Value(longitude),
+      houseNumber: houseNumber == null && nullToAbsent
+          ? const Value.absent()
+          : Value(houseNumber),
+      landmark: landmark == null && nullToAbsent
+          ? const Value.absent()
+          : Value(landmark),
+      isActive: Value(isActive),
+      createdAt: Value(createdAt),
       updatedAt: Value(updatedAt),
     );
   }
@@ -2047,8 +2250,15 @@ class LocationDataTableData extends DataClass
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return LocationDataTableData(
+      id: serializer.fromJson<String>(json['id']),
       label: serializer.fromJson<String>(json['label']),
       address: serializer.fromJson<String>(json['address']),
+      latitude: serializer.fromJson<double>(json['latitude']),
+      longitude: serializer.fromJson<double>(json['longitude']),
+      houseNumber: serializer.fromJson<String?>(json['houseNumber']),
+      landmark: serializer.fromJson<String?>(json['landmark']),
+      isActive: serializer.fromJson<bool>(json['isActive']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
     );
   }
@@ -2056,25 +2266,55 @@ class LocationDataTableData extends DataClass
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
       'label': serializer.toJson<String>(label),
       'address': serializer.toJson<String>(address),
+      'latitude': serializer.toJson<double>(latitude),
+      'longitude': serializer.toJson<double>(longitude),
+      'houseNumber': serializer.toJson<String?>(houseNumber),
+      'landmark': serializer.toJson<String?>(landmark),
+      'isActive': serializer.toJson<bool>(isActive),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
     };
   }
 
   LocationDataTableData copyWith({
+    String? id,
     String? label,
     String? address,
+    double? latitude,
+    double? longitude,
+    Value<String?> houseNumber = const Value.absent(),
+    Value<String?> landmark = const Value.absent(),
+    bool? isActive,
+    DateTime? createdAt,
     DateTime? updatedAt,
   }) => LocationDataTableData(
+    id: id ?? this.id,
     label: label ?? this.label,
     address: address ?? this.address,
+    latitude: latitude ?? this.latitude,
+    longitude: longitude ?? this.longitude,
+    houseNumber: houseNumber.present ? houseNumber.value : this.houseNumber,
+    landmark: landmark.present ? landmark.value : this.landmark,
+    isActive: isActive ?? this.isActive,
+    createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt ?? this.updatedAt,
   );
   LocationDataTableData copyWithCompanion(LocationDataTableCompanion data) {
     return LocationDataTableData(
+      id: data.id.present ? data.id.value : this.id,
       label: data.label.present ? data.label.value : this.label,
       address: data.address.present ? data.address.value : this.address,
+      latitude: data.latitude.present ? data.latitude.value : this.latitude,
+      longitude: data.longitude.present ? data.longitude.value : this.longitude,
+      houseNumber: data.houseNumber.present
+          ? data.houseNumber.value
+          : this.houseNumber,
+      landmark: data.landmark.present ? data.landmark.value : this.landmark,
+      isActive: data.isActive.present ? data.isActive.value : this.isActive,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
     );
   }
@@ -2082,66 +2322,143 @@ class LocationDataTableData extends DataClass
   @override
   String toString() {
     return (StringBuffer('LocationDataTableData(')
+          ..write('id: $id, ')
           ..write('label: $label, ')
           ..write('address: $address, ')
+          ..write('latitude: $latitude, ')
+          ..write('longitude: $longitude, ')
+          ..write('houseNumber: $houseNumber, ')
+          ..write('landmark: $landmark, ')
+          ..write('isActive: $isActive, ')
+          ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(label, address, updatedAt);
+  int get hashCode => Object.hash(
+    id,
+    label,
+    address,
+    latitude,
+    longitude,
+    houseNumber,
+    landmark,
+    isActive,
+    createdAt,
+    updatedAt,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is LocationDataTableData &&
+          other.id == this.id &&
           other.label == this.label &&
           other.address == this.address &&
+          other.latitude == this.latitude &&
+          other.longitude == this.longitude &&
+          other.houseNumber == this.houseNumber &&
+          other.landmark == this.landmark &&
+          other.isActive == this.isActive &&
+          other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt);
 }
 
 class LocationDataTableCompanion
     extends UpdateCompanion<LocationDataTableData> {
+  final Value<String> id;
   final Value<String> label;
   final Value<String> address;
+  final Value<double> latitude;
+  final Value<double> longitude;
+  final Value<String?> houseNumber;
+  final Value<String?> landmark;
+  final Value<bool> isActive;
+  final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
   final Value<int> rowid;
   const LocationDataTableCompanion({
+    this.id = const Value.absent(),
     this.label = const Value.absent(),
     this.address = const Value.absent(),
+    this.latitude = const Value.absent(),
+    this.longitude = const Value.absent(),
+    this.houseNumber = const Value.absent(),
+    this.landmark = const Value.absent(),
+    this.isActive = const Value.absent(),
+    this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   LocationDataTableCompanion.insert({
+    required String id,
     required String label,
     required String address,
+    required double latitude,
+    required double longitude,
+    this.houseNumber = const Value.absent(),
+    this.landmark = const Value.absent(),
+    this.isActive = const Value.absent(),
+    this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.rowid = const Value.absent(),
-  }) : label = Value(label),
-       address = Value(address);
+  }) : id = Value(id),
+       label = Value(label),
+       address = Value(address),
+       latitude = Value(latitude),
+       longitude = Value(longitude);
   static Insertable<LocationDataTableData> custom({
+    Expression<String>? id,
     Expression<String>? label,
     Expression<String>? address,
+    Expression<double>? latitude,
+    Expression<double>? longitude,
+    Expression<String>? houseNumber,
+    Expression<String>? landmark,
+    Expression<bool>? isActive,
+    Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
+      if (id != null) 'id': id,
       if (label != null) 'label': label,
       if (address != null) 'address': address,
+      if (latitude != null) 'latitude': latitude,
+      if (longitude != null) 'longitude': longitude,
+      if (houseNumber != null) 'house_number': houseNumber,
+      if (landmark != null) 'landmark': landmark,
+      if (isActive != null) 'is_active': isActive,
+      if (createdAt != null) 'created_at': createdAt,
       if (updatedAt != null) 'updated_at': updatedAt,
       if (rowid != null) 'rowid': rowid,
     });
   }
 
   LocationDataTableCompanion copyWith({
+    Value<String>? id,
     Value<String>? label,
     Value<String>? address,
+    Value<double>? latitude,
+    Value<double>? longitude,
+    Value<String?>? houseNumber,
+    Value<String?>? landmark,
+    Value<bool>? isActive,
+    Value<DateTime>? createdAt,
     Value<DateTime>? updatedAt,
     Value<int>? rowid,
   }) {
     return LocationDataTableCompanion(
+      id: id ?? this.id,
       label: label ?? this.label,
       address: address ?? this.address,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
+      houseNumber: houseNumber ?? this.houseNumber,
+      landmark: landmark ?? this.landmark,
+      isActive: isActive ?? this.isActive,
+      createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       rowid: rowid ?? this.rowid,
     );
@@ -2150,11 +2467,32 @@ class LocationDataTableCompanion
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
     if (label.present) {
       map['label'] = Variable<String>(label.value);
     }
     if (address.present) {
       map['address'] = Variable<String>(address.value);
+    }
+    if (latitude.present) {
+      map['latitude'] = Variable<double>(latitude.value);
+    }
+    if (longitude.present) {
+      map['longitude'] = Variable<double>(longitude.value);
+    }
+    if (houseNumber.present) {
+      map['house_number'] = Variable<String>(houseNumber.value);
+    }
+    if (landmark.present) {
+      map['landmark'] = Variable<String>(landmark.value);
+    }
+    if (isActive.present) {
+      map['is_active'] = Variable<bool>(isActive.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
     }
     if (updatedAt.present) {
       map['updated_at'] = Variable<DateTime>(updatedAt.value);
@@ -2168,8 +2506,15 @@ class LocationDataTableCompanion
   @override
   String toString() {
     return (StringBuffer('LocationDataTableCompanion(')
+          ..write('id: $id, ')
           ..write('label: $label, ')
           ..write('address: $address, ')
+          ..write('latitude: $latitude, ')
+          ..write('longitude: $longitude, ')
+          ..write('houseNumber: $houseNumber, ')
+          ..write('landmark: $landmark, ')
+          ..write('isActive: $isActive, ')
+          ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('rowid: $rowid')
           ..write(')'))
@@ -4570,15 +4915,29 @@ typedef $$UserPreferencesTableTableProcessedTableManager =
     >;
 typedef $$LocationDataTableTableCreateCompanionBuilder =
     LocationDataTableCompanion Function({
+      required String id,
       required String label,
       required String address,
+      required double latitude,
+      required double longitude,
+      Value<String?> houseNumber,
+      Value<String?> landmark,
+      Value<bool> isActive,
+      Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
       Value<int> rowid,
     });
 typedef $$LocationDataTableTableUpdateCompanionBuilder =
     LocationDataTableCompanion Function({
+      Value<String> id,
       Value<String> label,
       Value<String> address,
+      Value<double> latitude,
+      Value<double> longitude,
+      Value<String?> houseNumber,
+      Value<String?> landmark,
+      Value<bool> isActive,
+      Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
       Value<int> rowid,
     });
@@ -4592,6 +4951,11 @@ class $$LocationDataTableTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnFilters<String> get label => $composableBuilder(
     column: $table.label,
     builder: (column) => ColumnFilters(column),
@@ -4599,6 +4963,36 @@ class $$LocationDataTableTableFilterComposer
 
   ColumnFilters<String> get address => $composableBuilder(
     column: $table.address,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get latitude => $composableBuilder(
+    column: $table.latitude,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get longitude => $composableBuilder(
+    column: $table.longitude,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get houseNumber => $composableBuilder(
+    column: $table.houseNumber,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get landmark => $composableBuilder(
+    column: $table.landmark,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isActive => $composableBuilder(
+    column: $table.isActive,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -4617,6 +5011,11 @@ class $$LocationDataTableTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get label => $composableBuilder(
     column: $table.label,
     builder: (column) => ColumnOrderings(column),
@@ -4624,6 +5023,36 @@ class $$LocationDataTableTableOrderingComposer
 
   ColumnOrderings<String> get address => $composableBuilder(
     column: $table.address,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get latitude => $composableBuilder(
+    column: $table.latitude,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get longitude => $composableBuilder(
+    column: $table.longitude,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get houseNumber => $composableBuilder(
+    column: $table.houseNumber,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get landmark => $composableBuilder(
+    column: $table.landmark,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isActive => $composableBuilder(
+    column: $table.isActive,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -4642,11 +5071,34 @@ class $$LocationDataTableTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
   GeneratedColumn<String> get label =>
       $composableBuilder(column: $table.label, builder: (column) => column);
 
   GeneratedColumn<String> get address =>
       $composableBuilder(column: $table.address, builder: (column) => column);
+
+  GeneratedColumn<double> get latitude =>
+      $composableBuilder(column: $table.latitude, builder: (column) => column);
+
+  GeneratedColumn<double> get longitude =>
+      $composableBuilder(column: $table.longitude, builder: (column) => column);
+
+  GeneratedColumn<String> get houseNumber => $composableBuilder(
+    column: $table.houseNumber,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get landmark =>
+      $composableBuilder(column: $table.landmark, builder: (column) => column);
+
+  GeneratedColumn<bool> get isActive =>
+      $composableBuilder(column: $table.isActive, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
 
   GeneratedColumn<DateTime> get updatedAt =>
       $composableBuilder(column: $table.updatedAt, builder: (column) => column);
@@ -4692,25 +5144,53 @@ class $$LocationDataTableTableTableManager
               ),
           updateCompanionCallback:
               ({
+                Value<String> id = const Value.absent(),
                 Value<String> label = const Value.absent(),
                 Value<String> address = const Value.absent(),
+                Value<double> latitude = const Value.absent(),
+                Value<double> longitude = const Value.absent(),
+                Value<String?> houseNumber = const Value.absent(),
+                Value<String?> landmark = const Value.absent(),
+                Value<bool> isActive = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => LocationDataTableCompanion(
+                id: id,
                 label: label,
                 address: address,
+                latitude: latitude,
+                longitude: longitude,
+                houseNumber: houseNumber,
+                landmark: landmark,
+                isActive: isActive,
+                createdAt: createdAt,
                 updatedAt: updatedAt,
                 rowid: rowid,
               ),
           createCompanionCallback:
               ({
+                required String id,
                 required String label,
                 required String address,
+                required double latitude,
+                required double longitude,
+                Value<String?> houseNumber = const Value.absent(),
+                Value<String?> landmark = const Value.absent(),
+                Value<bool> isActive = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => LocationDataTableCompanion.insert(
+                id: id,
                 label: label,
                 address: address,
+                latitude: latitude,
+                longitude: longitude,
+                houseNumber: houseNumber,
+                landmark: landmark,
+                isActive: isActive,
+                createdAt: createdAt,
                 updatedAt: updatedAt,
                 rowid: rowid,
               ),

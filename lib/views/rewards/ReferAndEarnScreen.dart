@@ -1,3 +1,4 @@
+import 'package:chayankaro/views/chayan_sathi/previouschayansathiscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
@@ -25,7 +26,7 @@ class _ReferAndEarnScreenState extends State<ReferAndEarnScreen> {
     if (index == _selectedIndex) return;
     switch (index) {
       case 0:
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => ChayanSathiScreen()));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => PreviousChayanSathiScreen()));
         break;
       case 1:
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => BookingScreen()));

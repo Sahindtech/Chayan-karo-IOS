@@ -1,3 +1,4 @@
+import 'package:chayankaro/views/chayan_sathi/previouschayansathiscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -5,7 +6,7 @@ import 'package:get/get.dart';
 // Controllers
 import '../../controllers/home_controller.dart';
 import '../../controllers/cart_controller.dart';
-import '../../controllers/category_controller.dart'; // ADD: CategoryController import
+import '../../controllers/category_controller.dart';
 
 // Widgets
 import './widgets/home_header_widget.dart';
@@ -20,6 +21,9 @@ import '../booking/booking_screen.dart';
 import '../rewards/ReferAndEarnScreen.dart';
 import '../profile/profile_screen.dart';
 
+// Repositories
+import '../../data/repository/location_repository.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -33,19 +37,32 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    
+
     // Add lifecycle observer to detect app resume
     WidgetsBinding.instance.addObserver(this);
-    
-    // Ensure controllers are initialized immediately
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+
+    // Initialize controllers immediately - no postFrameCallback delay
+    try {
+      Get.find<HomeController>();
+      Get.find<CartController>();
+      Get.find<CategoryController>();
+      print('✅ HomeScreen: Controllers initialized successfully');
+    } catch (e) {
+      print('❌ HomeScreen: Error initializing controllers: $e');
+    }
+
+    // Address presence check: enforce server-side address before allowing Home
+    Future.microtask(() async {
       try {
-        Get.find<HomeController>();
-        Get.find<CartController>();
-        Get.find<CategoryController>(); // ADD: Initialize CategoryController
-        print('✅ Controllers initialized successfully');
+        final repo = Get.find<LocationRepository>();
+        final list = await repo.getCustomerAddresses();
+        if (list.isEmpty) {
+          // No address on server → require user to pick location
+          Get.offAllNamed('/location_popup');
+        }
       } catch (e) {
-        print('❌ Error initializing controllers: $e');
+        // On API/network failure, fail-safe to Location to avoid showing Home without prerequisites
+        Get.offAllNamed('/location_popup');
       }
     });
   }
@@ -72,11 +89,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   void _onItemTapped(int index) {
     if (index == _selectedIndex) return;
-    
+
     setState(() => _selectedIndex = index);
     switch (index) {
       case 0:
-        Get.to(() => ChayanSathiScreen());
+        Get.to(() => PreviousChayanSathiScreen());
         break;
       case 1:
         Get.to(() => BookingScreen());
@@ -99,77 +116,68 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         final mediaQuery = MediaQuery.of(context);
 
         final horizontalPadding = 16.w * scaleFactor;
-        final bottomPadding = mediaQuery.padding.bottom + 
+        final bottomPadding = mediaQuery.padding.bottom +
             (isTablet ? 90.h * scaleFactor : 70.h * scaleFactor);
 
         return Scaffold(
           backgroundColor: const Color(0xFFFDFDFD),
           body: SafeArea(
             bottom: false,
-            child: Column(
-              children: [
-                // Loading state with animated three dots
-                Obx(() {
-                  final homeController = Get.find<HomeController>();
-                  
-                  if (homeController.isLoading) {
-                    return Expanded(
-                      child: Center(
-                        child: LoadingDotsAnimation(
-                          scaleFactor: scaleFactor,
-                        ),
-                      ),
-                    );
-                  }
-                  
-                  // Show main content when not loading
-                  return Expanded(
-                    child: RefreshIndicator(
-                      onRefresh: () async {
-                        final cartController = Get.find<CartController>();
-                        final categoryController = Get.find<CategoryController>(); // ADD: Get CategoryController
-                        await homeController.refreshData();
-                        await categoryController.refreshCategories(); // ADD: Refresh categories
-                        cartController.refreshCart();
-                      },
-                      child: SingleChildScrollView(
-                        //padding: EdgeInsets.only(bottom: bottomPadding),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Header Section
-                            HomeHeaderWidget(
-                              scaleFactor: scaleFactor,
-                              horizontalPadding: horizontalPadding,
-                            ),
+            child: RefreshIndicator(
+              onRefresh: () async {
+                final categoryController = Get.find<CategoryController>();
+                final homeController = Get.find<HomeController>();
+                final cartController = Get.find<CartController>();
 
-                            SizedBox(height: 16.h * scaleFactor),
-
-                            // Categories Grid - Now uses CategoryController internally
-                            CategoriesGridWidget(
-                              scaleFactor: scaleFactor,
-                              horizontalPadding: horizontalPadding,
-                            ),
-
-                            SizedBox(height: 20.h * scaleFactor),
-
-                            // Banner
-                            HomeBannerWidget(
-                              scaleFactor: scaleFactor,
-                              horizontalPadding: horizontalPadding,
-                            ),
-
-                            SizedBox(height: 24.h * scaleFactor),
-
-                            // Most Used Services
-                            MostUsedServicesWidget(scaleFactor: scaleFactor),
-                          ],
-                        ),
+                await Future.wait([
+                  categoryController.refreshCategories(),
+                  homeController.refreshData(),
+                ]);
+                cartController.refreshCart();
+              },
+              child: SingleChildScrollView(
+                padding: EdgeInsets.only(bottom: bottomPadding),
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Header Section - wrapped in RepaintBoundary
+                    RepaintBoundary(
+                      child: HomeHeaderWidget(
+                        scaleFactor: scaleFactor,
+                        horizontalPadding: horizontalPadding,
                       ),
                     ),
-                  );
-                }),
-              ],
+
+                    SizedBox(height: 16.h * scaleFactor),
+
+                    // Categories Grid - wrapped in RepaintBoundary
+                    RepaintBoundary(
+                      child: CategoriesGridWidget(
+                        scaleFactor: scaleFactor,
+                        horizontalPadding: horizontalPadding,
+                      ),
+                    ),
+
+                    SizedBox(height: 20.h * scaleFactor),
+
+                    // Banner - wrapped in RepaintBoundary
+                    RepaintBoundary(
+                      child: HomeBannerWidget(
+                        scaleFactor: scaleFactor,
+                        horizontalPadding: horizontalPadding,
+                      ),
+                    ),
+
+                    SizedBox(height: 24.h * scaleFactor),
+
+                    // Most Used Services - wrapped in RepaintBoundary
+                    RepaintBoundary(
+                      child: MostUsedServicesWidget(scaleFactor: scaleFactor),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
           bottomNavigationBar: CustomBottomNavBar(
@@ -178,126 +186,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           ),
         );
       },
-    );
-  }
-}
-
-// NEW: Three-dot loading animation widget
-class LoadingDotsAnimation extends StatefulWidget {
-  final double scaleFactor;
-  
-  const LoadingDotsAnimation({
-    Key? key,
-    this.scaleFactor = 1.0,
-  }) : super(key: key);
-
-  @override
-  State<LoadingDotsAnimation> createState() => _LoadingDotsAnimationState();
-}
-
-class _LoadingDotsAnimationState extends State<LoadingDotsAnimation>
-    with TickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _dot1Animation;
-  late Animation<double> _dot2Animation;
-  late Animation<double> _dot3Animation;
-
-  @override
-  void initState() {
-    super.initState();
-    
-    _controller = AnimationController(
-      duration: Duration(milliseconds: 1200),
-      vsync: this,
-    );
-
-    // Create staggered animations for each dot
-    _dot1Animation = Tween<double>(
-      begin: 0.4,
-      end: 1.0,
-    ).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: Interval(0.0, 0.3, curve: Curves.easeInOut),
-      ),
-    );
-
-    _dot2Animation = Tween<double>(
-      begin: 0.4,
-      end: 1.0,
-    ).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: Interval(0.2, 0.5, curve: Curves.easeInOut),
-      ),
-    );
-
-    _dot3Animation = Tween<double>(
-      begin: 0.4,
-      end: 1.0,
-    ).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: Interval(0.4, 0.7, curve: Curves.easeInOut),
-      ),
-    );
-
-    // Start the animation and repeat
-    _controller.repeat(reverse: false);
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        // Three animated dots
-        AnimatedBuilder(
-          animation: _controller,
-          builder: (context, child) {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildDot(_dot1Animation.value),
-                SizedBox(width: 8.w * widget.scaleFactor),
-                _buildDot(_dot2Animation.value),
-                SizedBox(width: 8.w * widget.scaleFactor),
-                _buildDot(_dot3Animation.value),
-              ],
-            );
-          },
-        ),
-        
-        SizedBox(height: 24.h * widget.scaleFactor),
-        
-        // Loading text
-        Text(
-          'Loading...',
-          style: TextStyle(
-            fontSize: 16.sp * widget.scaleFactor,
-            fontFamily: 'SFPro',
-            fontWeight: FontWeight.w500,
-            color: const Color(0xFF757575),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildDot(double opacity) {
-    return Container(
-      width: 12.w * widget.scaleFactor,
-      height: 12.h * widget.scaleFactor,
-      decoration: BoxDecoration(
-        color: const Color(0xFFFF6F00).withOpacity(opacity),
-        shape: BoxShape.circle,
-      ),
     );
   }
 }

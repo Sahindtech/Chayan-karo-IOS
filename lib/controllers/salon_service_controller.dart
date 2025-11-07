@@ -35,7 +35,7 @@ class SalonServicesController extends GetxController {
       ],
       'Facial': [
         {
-          'image': 'assets/s4.webp',
+          'image': 'assets/x1.jpg',
           'title': 'Diamond Facial',
           'price': '₹499',
           'originalPrice': '₹599',
@@ -44,13 +44,41 @@ class SalonServicesController extends GetxController {
           'desc': '• 45 mins\n• For all skin types. Pinacolada mask.\n• 6-step process. Includes 10-min massage',
         },
         {
-          'image': 'assets/s1.webp',
+          'image': 'assets/x2.jpg',
           'title': 'Gold Facial',
           'price': '₹699',
           'originalPrice': '₹799',
           'rating': '4.76',
           'duration': '60 mins',
           'desc': '• 60 mins\n• Anti-aging treatment\n• 7-step process. Includes face massage',
+        },
+        {
+          'image': 'assets/x3.jpg',
+          'title': 'Platinum Facial',
+          'price': '₹899',
+          'originalPrice': '₹999',
+          'rating': '4.76',
+          'duration': '75 mins',
+          'desc': '• 75 mins\n• For all skin types. Charcoal mask.\n• 8-step process. Includes 15-min massage',
+        },
+      
+        {
+          'image': 'assets/x5.jpg',
+          'title': 'Oxygen Facial',
+          'price': '₹999',
+          'originalPrice': '₹1199',
+          'rating': '4.76',
+          'duration': '90 mins',
+          'desc': '• 90 mins\n• For all skin types. Oxygen infusion.\n• 9-step process. Includes 20-min massage',
+        },
+        {
+          'image': 'assets/x4.jpg',
+          'title': 'Hydra Facial',
+          'price': '₹1299',
+          'originalPrice': '₹1499',
+          'rating': '4.76',
+          'duration': '90 mins',
+          'desc': '• 90 mins\n• For all skin types. Hydra mask.\n• 10-step process. Includes 20-min massage',
         },
       ],
     };

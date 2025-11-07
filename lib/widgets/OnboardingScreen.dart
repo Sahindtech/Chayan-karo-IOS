@@ -1,66 +1,60 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../data/local/database.dart'; // Import for database access
 
+
+
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
+
+
 
   @override
   State<OnboardingScreen> createState() => _OnboardingScreenState();
 }
+
+
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
   bool _isLoading = false; // Add loading state
 
-  final List<String> _images = [
-    "assets/onboard1.webp",
-    "assets/onboard2.webp",
-    "assets/onboard3.webp",
-  ];
 
+
+  // Same image for all slides
+  final String _image = "assets/onboard1.png";
+
+
+
+  // Updated content for each slide
   final List<String> _titles = [
-    'We Provide Professional Home services at a very friendly price',
-    'Easy Service booking & Scheduling',
-    'Get Beauty parlor at your home & other Personal Grooming needs',
+    'Professional home services at your doorstep',
+    'Choose your own service provider',
+    'Book your service in just a few taps',
   ];
 
-  /// Consistent tablet detection
-  bool isTablet(BuildContext context) {
-    final mq = MediaQuery.of(context);
-    final widthDp = mq.size.width;
-    final heightDp = mq.size.height;
-    final diagonalDp = math.sqrt(math.pow(widthDp, 2) + math.pow(heightDp, 2));
 
-    final isLargeEnough = diagonalDp >= 1100; // ~7" at mdpi
-    final isWideEnough = mq.size.shortestSide >= 500;
-
-    debugPrint(
-      '[Onboarding Tablet Check] widthDp: $widthDp, heightDp: $heightDp, diagonalDp: $diagonalDp, '
-      'isLargeEnough: $isLargeEnough, isWideEnough: $isWideEnough, '
-      'tablet: ${isLargeEnough || isWideEnough}',
-    );
-
-    return isLargeEnough || isWideEnough;
-  }
 
   void _nextPage() {
-    if (_currentPage < _images.length - 1) {
+    if (_currentPage < _titles.length - 1) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.ease,
       );
     } else {
-      _completeOnboarding(); // Updated to use database method
+      _completeOnboarding();
     }
   }
 
+
+
   void _skip() {
-    _completeOnboarding(); // Updated to use database method
+    _completeOnboarding();
   }
+
+
 
   // Complete onboarding with database integration (NO SNACKBARS)
   Future<void> _completeOnboarding() async {
@@ -69,6 +63,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     setState(() {
       _isLoading = true;
     });
+
+
 
     try {
       // Get database instance
@@ -96,6 +92,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     }
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -103,76 +101,61 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         final bool isTabletDevice = constraints.maxWidth > 600;
         final double scaleFactor = isTabletDevice ? constraints.maxWidth / 411 : 1.0;
 
+
+
         if (!isTabletDevice) {
-          // Phone UI remains unchanged
-          final bool tablet = isTablet(context);
-
-          // Sizes change based on tablet detection
-          double outerCircleSize = tablet ? 0.6.sw : 0.8.sw;
-          double innerCircleSize = tablet ? 0.5.sw : 0.7.sw;
-
+          // Phone UI
           return Scaffold(
             backgroundColor: Colors.white,
             body: Stack(
               children: [
-                PageView.builder(
-                  controller: _pageController,
-                  itemCount: _images.length,
-                  onPageChanged: (index) => setState(() => _currentPage = index),
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 24.w),
-                      child: Column(
-                        children: [
-                          SizedBox(height: tablet ? 80.h : 100.h),
-                          Center(
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                Container(
-                                  height: outerCircleSize,
-                                  width: outerCircleSize,
-                                  decoration: const BoxDecoration(
-                                    color: Color(0xFFF2F4FF),
-                                    shape: BoxShape.circle,
-                                  ),
-                                ),
-                                Container(
-                                  height: innerCircleSize,
-                                  width: innerCircleSize,
-                                  decoration: const BoxDecoration(
-                                    color: Color(0xFFE5EAFF),
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: ClipOval(
-                                    child: Image.asset(
-                                      _images[index],
-                                      width: innerCircleSize,
-                                      height: innerCircleSize,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: tablet ? 30.h : 40.h),
-                          Text(
-                            _titles[index],
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: const Color(0xFF1A1D1F),
-                              fontSize: tablet ? 34.sp : 28.sp,
-                              fontFamily: 'SF Pro Display',
-                              fontWeight: FontWeight.w700,
-                              height: 1.43,
-                            ),
-                          ),
-                        ],
+                Column(
+                  children: [
+                    SizedBox(height: 80.h),
+                    // Static image - stays in place
+                    Center(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(16.r),
+                        child: Image.asset(
+                          _image,
+                          width: 0.95.sw,
+                          height: 0.6.sh,
+                          fit: BoxFit.contain,
+                        ),
                       ),
-                    );
-                  },
+                    ),
+                    // Negative margin to pull text up
+                    Transform.translate(
+                      offset: Offset(0, -20.h),
+                      child: SizedBox(
+                        height: 120.h,
+                        child: PageView.builder(
+                          controller: _pageController,
+                          itemCount: _titles.length,
+                          onPageChanged: (index) => setState(() => _currentPage = index),
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 24.w),
+                              child: Text(
+                                _titles[index],
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: const Color(0xFF1A1D1F),
+                                  fontSize: 28.sp,
+                                  fontFamily: 'SF Pro Display',
+                                  fontWeight: FontWeight.w700,
+                                  height: 1.43,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
+
+
 
                 // Skip Button with loading state
                 Positioned(
@@ -214,6 +197,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   ),
                 ),
 
+
+
                 // Bottom Controls with loading state
                 Positioned(
                   bottom: 0.h,
@@ -246,7 +231,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                     ),
                                   )
                                 : Icon(
-                                    _currentPage == _images.length - 1
+                                    _currentPage == _titles.length - 1
                                         ? Icons.check
                                         : Icons.arrow_forward,
                                     color: Colors.white,
@@ -258,7 +243,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: List.generate(
-                            _images.length,
+                            _titles.length,
                             (index) => buildDot(index),
                           ),
                         ),
@@ -275,68 +260,53 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             backgroundColor: Colors.white,
             body: Stack(
               children: [
-                PageView.builder(
-                  controller: _pageController,
-                  itemCount: _images.length,
-                  onPageChanged: (index) => setState(() => _currentPage = index),
-                  itemBuilder: (context, index) {
-                    // Use tablet sizing for larger screens
-                    double outerCircleSize = 0.6.sw * scaleFactor;
-                    double innerCircleSize = 0.5.sw * scaleFactor;
-
-                    return Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 24.w * scaleFactor),
-                      child: Column(
-                        children: [
-                          SizedBox(height: 80.h * scaleFactor),
-                          Center(
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                Container(
-                                  height: outerCircleSize,
-                                  width: outerCircleSize,
-                                  decoration: const BoxDecoration(
-                                    color: Color(0xFFF2F4FF),
-                                    shape: BoxShape.circle,
-                                  ),
-                                ),
-                                Container(
-                                  height: innerCircleSize,
-                                  width: innerCircleSize,
-                                  decoration: const BoxDecoration(
-                                    color: Color(0xFFE5EAFF),
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: ClipOval(
-                                    child: Image.asset(
-                                      _images[index],
-                                      width: innerCircleSize,
-                                      height: innerCircleSize,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 30.h * scaleFactor),
-                          Text(
-                            _titles[index],
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: const Color(0xFF1A1D1F),
-                              fontSize: 34.sp * scaleFactor,
-                              fontFamily: 'SF Pro Display',
-                              fontWeight: FontWeight.w700,
-                              height: 1.43,
-                            ),
-                          ),
-                        ],
+                Column(
+                  children: [
+                    SizedBox(height: 60.h * scaleFactor),
+                    // Static image - stays in place
+                    Center(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(16.r * scaleFactor),
+                        child: Image.asset(
+                          _image,
+                          width: 0.75.sw * scaleFactor,
+                          height: 0.6.sh * scaleFactor,
+                          fit: BoxFit.contain,
+                        ),
                       ),
-                    );
-                  },
+                    ),
+                    // Negative margin to pull text up
+                    Transform.translate(
+                      offset: Offset(0, -30.h * scaleFactor),
+                      child: SizedBox(
+                        height: 140.h * scaleFactor,
+                        child: PageView.builder(
+                          controller: _pageController,
+                          itemCount: _titles.length,
+                          onPageChanged: (index) => setState(() => _currentPage = index),
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 24.w * scaleFactor),
+                              child: Text(
+                                _titles[index],
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: const Color(0xFF1A1D1F),
+                                  fontSize: 34.sp * scaleFactor,
+                                  fontFamily: 'SF Pro Display',
+                                  fontWeight: FontWeight.w700,
+                                  height: 1.43,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
+
+
 
                 // Skip Button - Scaled for tablets with loading state
                 Positioned(
@@ -378,6 +348,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   ),
                 ),
 
+
+
                 // Bottom Controls - Scaled for tablets with loading state
                 Positioned(
                   bottom: 0.h,
@@ -410,7 +382,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                     ),
                                   )
                                 : Icon(
-                                    _currentPage == _images.length - 1
+                                    _currentPage == _titles.length - 1
                                         ? Icons.check
                                         : Icons.arrow_forward,
                                     color: Colors.white,
@@ -422,7 +394,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: List.generate(
-                            _images.length,
+                            _titles.length,
                             (index) => buildDot(index, scaleFactor),
                           ),
                         ),
@@ -437,6 +409,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       },
     );
   }
+
+
 
   Widget buildDot(int index, [double scaleFactor = 1.0]) {
     return Container(

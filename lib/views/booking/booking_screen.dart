@@ -1,3 +1,4 @@
+import 'package:chayankaro/views/chayan_sathi/previouschayansathiscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../home/home_screen.dart';
@@ -23,7 +24,7 @@ class _BookingScreenState extends State<BookingScreen> {
 
     switch (index) {
       case 0:
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => ChayanSathiScreen()));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => PreviousChayanSathiScreen()));
         break;
       case 1:
         break;

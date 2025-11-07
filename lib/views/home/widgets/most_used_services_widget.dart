@@ -48,10 +48,8 @@ class MostUsedServicesWidget extends StatelessWidget {
                   onTap: () {
                     try {
                       if (homeController.mostUsedServices.isNotEmpty) {
-                        Get.to(() => AllMostUsedServicesScreen(
-                              mostUsedServices:
-                                  homeController.mostUsedServices.toList(),
-                            ));
+                       Get.to(() => const AllMostUsedServicesScreen());
+
                       } else {
                         Get.snackbar(
                           'No Services',

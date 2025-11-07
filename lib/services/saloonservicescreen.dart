@@ -579,12 +579,12 @@ class _SalonServiceScreenState extends State<SalonServiceScreen> {
 
   Widget _buildCategoryGrid(double scaleFactor) {
     final categories = [
-      {'title': 'Cleanup & Facials', 'image': 'assets/z2.webp'},
-      {'title': 'Bleach & Detan', 'image': 'assets/s1.webp'},
-      {'title': 'Waxing', 'image': 'assets/s2.webp'},
-      {'title': 'Manicure', 'image': 'assets/s3.webp'},
-      {'title': 'Massage', 'image': 'assets/s4.webp'},
-      {'title': 'Pedicure', 'image': 'assets/s5.webp'},
+      {'title': 'Cleanup & Facials', 'image': 'assets/f1.png'},
+      {'title': 'Bleach & Detan', 'image': 'assets/f2.png'},
+      {'title': 'Waxing', 'image': 'assets/f3.png'},
+      {'title': 'Manicure', 'image': 'assets/f4.jpg'},
+      {'title': 'Massage', 'image': 'assets/f5.png'},
+      {'title': 'Pedicure', 'image': 'assets/f1.png'},
     ];
 
     return Padding(
@@ -641,8 +641,8 @@ class _SalonServiceScreenState extends State<SalonServiceScreen> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(
-                          width: 48.w * scaleFactor,
-                          height: 48.h * scaleFactor,
+                          width: 60.w * scaleFactor,
+                          height: 60.h * scaleFactor,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8 * scaleFactor),
                             color: Colors.white,
@@ -781,92 +781,97 @@ class _SalonServiceScreenState extends State<SalonServiceScreen> {
   }
 
   Widget _buildFacialCard(SalonService service, double scaleFactor) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 16.r * scaleFactor),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12 * scaleFactor),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.orange.withOpacity(0.05),
-            blurRadius: 10 * scaleFactor,
-            offset: Offset(0, 4 * scaleFactor),
+  return Container(
+    margin: EdgeInsets.only(bottom: 16.r * scaleFactor),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(12 * scaleFactor),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.orange.withOpacity(0.05),
+          blurRadius: 10 * scaleFactor,
+          offset: Offset(0, 4 * scaleFactor),
+        ),
+      ],
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // --- Updated Section: 700x300 image with good appearance
+        ClipRRect(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(12.h * scaleFactor),
           ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius:
-                BorderRadius.vertical(top: Radius.circular(12.h * scaleFactor)),
+          child: AspectRatio(
+            aspectRatio: 7 / 3,
             child: Image.asset(
               service.image,
               width: double.infinity,
-              height: 180.h * scaleFactor,
+              height: 300.h * scaleFactor, // or try 300.w * scaleFactor if horizontal
               fit: BoxFit.cover,
             ),
           ),
-          Padding(
-            padding: EdgeInsets.all(12.r * scaleFactor),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                        child: Text(service.title,
-                            style: TextStyle(
-                                fontSize: 15.sp * scaleFactor,
-                                fontWeight: FontWeight.bold))),
-                    _buildQuantitySelector(service, scaleFactor),
-                  ],
-                ),
-                SizedBox(height: 4.h * scaleFactor),
-                Row(
-                  children: [
-                    SvgPicture.asset('assets/icons/star.svg',
-                        width: 18.w * scaleFactor, color: Colors.black),
-                    SizedBox(width: 4.w * scaleFactor),
-                    Text("${service.rating} | ${service.duration}",
-                        style: TextStyle(
-                            fontSize: 12.sp * scaleFactor, color: Colors.grey)),
-                  ],
-                ),
-                SizedBox(height: 6.h * scaleFactor),
-                Row(
-                  children: [
-                    Text(service.price,
-                        style: TextStyle(
-                            fontSize: 16.sp * scaleFactor,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black)),
-                    if (service.originalPrice != null) ...[
-                      SizedBox(width: 6.w * scaleFactor),
-                      Text(service.originalPrice!,
+        ),
+        Padding(
+          padding: EdgeInsets.all(12.r * scaleFactor),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                      child: Text(service.title,
                           style: TextStyle(
-                              fontSize: 14.sp * scaleFactor,
-                              decoration: TextDecoration.lineThrough,
-                              color: Colors.grey)),
-                    ],
-                  ],
-                ),
-                if (service.desc != null && service.desc!.isNotEmpty) ...[
-                  SizedBox(height: 8.h * scaleFactor),
-                  Text(
-                    service.desc!,
-                    style: TextStyle(
-                        fontSize: 12.sp * scaleFactor, color: Colors.black87),
-                  ),
+                              fontSize: 15.sp * scaleFactor,
+                              fontWeight: FontWeight.bold))),
+                  _buildQuantitySelector(service, scaleFactor),
                 ],
+              ),
+              SizedBox(height: 4.h * scaleFactor),
+              Row(
+                children: [
+                  SvgPicture.asset('assets/icons/star.svg',
+                      width: 18.w * scaleFactor, color: Colors.black),
+                  SizedBox(width: 4.w * scaleFactor),
+                  Text("${service.rating} | ${service.duration}",
+                      style: TextStyle(
+                          fontSize: 12.sp * scaleFactor, color: Colors.grey)),
+                ],
+              ),
+              SizedBox(height: 6.h * scaleFactor),
+              Row(
+                children: [
+                  Text(service.price,
+                      style: TextStyle(
+                          fontSize: 16.sp * scaleFactor,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black)),
+                  if (service.originalPrice != null) ...[
+                    SizedBox(width: 6.w * scaleFactor),
+                    Text(service.originalPrice!,
+                        style: TextStyle(
+                            fontSize: 14.sp * scaleFactor,
+                            decoration: TextDecoration.lineThrough,
+                            color: Colors.grey)),
+                  ],
+                ],
+              ),
+              if (service.desc != null && service.desc!.isNotEmpty) ...[
+                SizedBox(height: 8.h * scaleFactor),
+                Text(
+                  service.desc!,
+                  style: TextStyle(
+                      fontSize: 12.sp * scaleFactor, color: Colors.black87),
+                ),
               ],
-            ),
+            ],
           ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
+}
 
   Widget _buildQuantitySelector(SalonService service, double scaleFactor) {
     return Obx(() {

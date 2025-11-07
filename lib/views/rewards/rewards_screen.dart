@@ -1,3 +1,4 @@
+import 'package:chayankaro/views/chayan_sathi/previouschayansathiscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -28,7 +29,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
 
     switch (index) {
       case 0:
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => ChayanSathiScreen()));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => PreviousChayanSathiScreen()));
         break;
       case 1:
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => BookingScreen()));

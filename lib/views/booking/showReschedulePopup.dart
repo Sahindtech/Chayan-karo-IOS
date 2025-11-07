@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../chayan_sathi/chayan_sathi_screen.dart';
+import 'package:intl/intl.dart';
 
 Future<String?> showReschedulePopup(BuildContext context, {String? initialSlot}) {
   return showModalBottomSheet<String>(
@@ -15,7 +15,6 @@ Future<String?> showReschedulePopup(BuildContext context, {String? initialSlot})
 
 class _RescheduleContent extends StatefulWidget {
   final String? initialSlot;
-
   const _RescheduleContent({Key? key, this.initialSlot}) : super(key: key);
 
   @override
@@ -23,28 +22,38 @@ class _RescheduleContent extends StatefulWidget {
 }
 
 class _RescheduleContentState extends State<_RescheduleContent> {
+  // Selected day number like "05"
   String? selectedDate;
-  String? selectedTime;
 
-  final List<Map<String, String>> dates = [
-    {'day': 'Sat', 'date': '10'},
-    {'day': 'Sun', 'date': '11'},
-    {'day': 'Mon', 'date': '12'},
-  ];
-
-  final List<String> times = ['06:30 PM', '07:30 PM', '08:30 PM'];
+  // Four dates only: Today + next 3
+  late List<Map<String, String>> dates;
 
   @override
   void initState() {
     super.initState();
 
-    // Parse initialSlot like "10 06:30 PM"
-    if (widget.initialSlot != null) {
-      final parts = widget.initialSlot!.split(' ');
-      if (parts.length >= 2) {
-        selectedDate = parts[0];
-        selectedTime = widget.initialSlot!.substring(parts[0].length + 1);
+    final now = DateTime.now();
+    dates = List.generate(4, (index) {
+      final date = now.add(Duration(days: index));
+      String dayLabel;
+      if (index == 0) {
+        dayLabel = 'Today';
+      } else if (index == 1) {
+        dayLabel = 'Tomorrow';
+      } else {
+        dayLabel = DateFormat('EEE').format(date); // e.g., "Thu"
       }
+      return {
+        'day': dayLabel,
+        'date': DateFormat('dd').format(date),             // "05"
+        'fullDate': DateFormat('yyyy-MM-dd').format(date), // "2025-11-05"
+      };
+    });
+
+    // Try to preselect from initialSlot if a day number is present
+    if (widget.initialSlot != null && widget.initialSlot!.isNotEmpty) {
+      final match = RegExp(r'\b(\d{2})\b').firstMatch(widget.initialSlot!);
+      if (match != null) selectedDate = match.group(1);
     }
   }
 
@@ -57,7 +66,6 @@ class _RescheduleContentState extends State<_RescheduleContent> {
 
         final Widget content = Container(
           width: MediaQuery.of(context).size.width,
-          height: 530.h * scaleFactor,
           padding: EdgeInsets.symmetric(
             horizontal: 24.h * scaleFactor,
             vertical: 24.h * scaleFactor,
@@ -67,10 +75,11 @@ class _RescheduleContentState extends State<_RescheduleContent> {
             borderRadius: BorderRadius.vertical(top: Radius.circular(20.h * scaleFactor)),
           ),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Select date and time',
+                'Select date',
                 style: TextStyle(
                   fontFamily: 'SF Pro Display',
                   fontSize: 18.sp * scaleFactor,
@@ -78,80 +87,46 @@ class _RescheduleContentState extends State<_RescheduleContent> {
                   color: Colors.black,
                 ),
               ),
-              SizedBox(height: 4.h * scaleFactor),
-              Text(
-                'Your service will take approx. 45 mins',
-                style: TextStyle(
-                  fontFamily: 'SF Pro Display',
-                  fontSize: 14.sp * scaleFactor,
-                  color: Color(0xFF7D7F88),
-                ),
-              ),
-              SizedBox(height: 24.h * scaleFactor),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: dates.map((d) {
-                  bool isSelected = selectedDate == d['date'];
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selectedDate = d['date'];
-                      });
-                    },
-                    child: _buildDateChip(d['day']!, d['date']!, isSelected, scaleFactor),
-                  );
-                }).toList(),
-              ),
-              SizedBox(height: 24.h * scaleFactor),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: times.map((t) {
-                  bool isSelected = selectedTime == t;
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selectedTime = t;
-                      });
-                    },
-                    child: _buildTimeChip(t, isSelected, scaleFactor),
-                  );
-                }).toList(),
-              ),
-              const Spacer(),
-              SizedBox(
-                width: double.infinity,
-                height: 50.h * scaleFactor,
-                child: ElevatedButton(
-                  onPressed: (selectedDate != null && selectedTime != null)
-                      ? () {
-                          String slot = "$selectedDate $selectedTime";
-                          Navigator.pop(context, slot);
-                        }
-                      : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: selectedDate != null && selectedTime != null
-                        ? const Color(0xFFE47830)
-                        : const Color(0xFFEFEFEF),
-                    foregroundColor: selectedDate != null && selectedTime != null
-                        ? Colors.white
-                        : const Color(0xFFB3B3B3),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10 * scaleFactor),
+              SizedBox(height: 16.h * scaleFactor),
+
+              // Keep legacy chip visuals, but lay out in a responsive grid to avoid overflow
+              LayoutBuilder(
+                builder: (context, c) {
+                  final bool wide = c.maxWidth >= 600;
+                  final int crossAxisCount = wide ? 4 : 2;
+                  final double s = wide ? c.maxWidth / 411 : scaleFactor;
+
+                  return GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: crossAxisCount,
+                      crossAxisSpacing: 12.w * s,
+                      mainAxisSpacing: 12.h * s,
+                      childAspectRatio: 100 / 70, // matches chip size (width 100, height 70)
                     ),
-                  ),
-                  child: Text(
-                    'Proceed to checkout',
-                    style: TextStyle(
-                      fontFamily: 'SF Pro Display',
-                      fontSize: 16.sp * scaleFactor,
-                    ),
-                  ),
-                ),
+                    itemCount: dates.length,
+                    itemBuilder: (context, index) {
+                      final d = dates[index];
+                      final isSelected = selectedDate == d['date'];
+                      return GestureDetector(
+                        onTap: () {
+                          // Return only the day number for backward compatibility.
+                          Navigator.pop(context, d['date']);
+                        },
+                        child: _buildDateChip(d['day']!, d['date']!, isSelected, s),
+                      );
+                    },
+                  );
+                },
               ),
+
+              SizedBox(height: 12.h * scaleFactor),
             ],
           ),
         );
 
+        // Only chips; tap returns immediately. No time slots, no bottom CTA.
         return SafeArea(bottom: true, top: false, child: content);
       },
     );
@@ -159,10 +134,10 @@ class _RescheduleContentState extends State<_RescheduleContent> {
 
   Widget _buildDateChip(String day, String date, bool isSelected, [double scaleFactor = 1.0]) {
     return Container(
-      width: 80.w * scaleFactor,
-      height: 60.h * scaleFactor,
+      width: 100.w * scaleFactor,
+      height: 70.h * scaleFactor,
       decoration: BoxDecoration(
-        color: isSelected ? Color(0xFFF2F2FF) : Colors.white,
+        color: isSelected ? const Color(0xFFF2F2FF) : Colors.white,
         borderRadius: BorderRadius.circular(12 * scaleFactor),
         border: Border.all(
           color: isSelected ? const Color(0xFFE47830) : const Color(0xFFE0E0E0),
@@ -176,45 +151,22 @@ class _RescheduleContentState extends State<_RescheduleContent> {
             day,
             style: TextStyle(
               fontFamily: 'SF Pro Display',
-              fontSize: 14.sp * scaleFactor,
-              color: isSelected ? const Color(0xFFE47830) : Colors.black,
+              fontSize: 13.sp * scaleFactor,
+              fontWeight: FontWeight.w500,
+              color: isSelected ? const Color(0xFFE47830) : const Color(0xFF7D7F88),
             ),
           ),
+          SizedBox(height: 4.h * scaleFactor),
           Text(
             date,
             style: TextStyle(
               fontFamily: 'SF Pro Display',
-              fontSize: 16.sp * scaleFactor,
-              fontWeight: FontWeight.w600,
+              fontSize: 18.sp * scaleFactor,
+              fontWeight: FontWeight.w700,
               color: isSelected ? const Color(0xFFE47830) : Colors.black,
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildTimeChip(String time, bool isSelected, [double scaleFactor = 1.0]) {
-    return Container(
-      width: 100.w * scaleFactor,
-      height: 48.h * scaleFactor,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: isSelected ? Color(0xFFF2F2FF) : Colors.white,
-        border: Border.all(
-          color: isSelected ? const Color(0xFFE47830) : const Color(0xFFE0E0E0),
-          width: scaleFactor,
-        ),
-        borderRadius: BorderRadius.circular(10 * scaleFactor),
-      ),
-      child: Text(
-        time,
-        style: TextStyle(
-          fontFamily: 'SF Pro Display',
-          fontSize: 14.sp * scaleFactor,
-          fontWeight: FontWeight.w500,
-          color: isSelected ? const Color(0xFFE47830) : Colors.black,
-        ),
       ),
     );
   }

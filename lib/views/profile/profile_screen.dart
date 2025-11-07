@@ -1,4 +1,5 @@
 // Updated ProfileScreen with Chayan Customer and no rating/refresh
+import 'package:chayankaro/views/chayan_sathi/previouschayansathiscreen.dart';
 import 'package:chayankaro/views/profile/aboutscreen.dart';
 import '/views/booking/PaymentScreen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -44,7 +45,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (index == _selectedIndex) return;
     switch (index) {
       case 0:
-        Get.offAll(() => ChayanSathiScreen());
+        Get.offAll(() => PreviousChayanSathiScreen());
         break;
       case 1:
         Get.offAll(() => BookingScreen());

@@ -1,3 +1,4 @@
+// ServiceResponse unchanged
 class ServiceResponse {
   final String type;
   final List<Service> result;
@@ -27,11 +28,14 @@ class ServiceResponse {
 class Service {
   final String id;
   final String name;
-  final double price;  // Changed from int to double
+  final double price; // Changed from int to double
   final String description;
   final int duration;
   final String imgLink;
-  final double discountPercentage;  // Changed from int to double
+  final double discountPercentage; // Changed from int to double
+
+  // NEW: carry category id coming from API (common keys: serviceCategoryId/categoryId)
+  final String categoryId;
 
   Service({
     required this.id,
@@ -41,17 +45,22 @@ class Service {
     required this.duration,
     required this.imgLink,
     required this.discountPercentage,
+    this.categoryId = '',
   });
 
   factory Service.fromJson(Map<String, dynamic> json) {
+    // try multiple keys to be resilient to backend naming
+    final serviceCatId = json['serviceCategoryId']?.toString() ?? '';
+    final catId = json['categoryId']?.toString() ?? '';
     return Service(
       id: json['id']?.toString() ?? '',
       name: json['name']?.toString() ?? '',
-      price: _parseDouble(json['price']),  // Safe parsing
+      price: _parseDouble(json['price']),
       description: json['description']?.toString() ?? '',
-      duration: _parseInt(json['duration']),  // Safe parsing
+      duration: _parseInt(json['duration']),
       imgLink: json['imgLink']?.toString() ?? '',
-      discountPercentage: _parseDouble(json['discountPercentage']),  // Safe parsing
+      discountPercentage: _parseDouble(json['discountPercentage']),
+      categoryId: serviceCatId.isNotEmpty ? serviceCatId : catId,
     );
   }
 
@@ -82,6 +91,7 @@ class Service {
       'duration': duration,
       'imgLink': imgLink,
       'discountPercentage': discountPercentage,
+      if (categoryId.isNotEmpty) 'categoryId': categoryId,
     };
   }
 
@@ -106,14 +116,14 @@ class Service {
 
   String get formattedPrice => '₹${discountedPrice.toInt()}';
   String get formattedOriginalPrice => discountPercentage > 0 ? '₹${price.toInt()}' : '';
-  
+
   // Rating simulation (you can replace with actual API data later)
   String get rating => '4.8';
 
   // Check if service has discount
   bool get hasDiscount => discountPercentage > 0;
 
-  // Convert to CartItem format
+  // Convert to CartItem format (NEW: pass categoryId through)
   CartItem toCartItem({String? sourcePage, String? sourceTitle}) {
     return CartItem(
       id: id,
@@ -127,6 +137,7 @@ class Service {
       discountPercentage: discountPercentage.toInt(),
       sourcePage: sourcePage ?? 'unknown',
       sourceTitle: sourceTitle ?? 'Unknown Service',
+      categoryId: categoryId, // carry forward
     );
   }
 
@@ -140,7 +151,7 @@ class Service {
 
   @override
   String toString() {
-    return 'Service{id: $id, name: $name, price: $price, discountedPrice: $discountedPrice}';
+    return 'Service{id: $id, name: $name, price: $price, discountedPrice: $discountedPrice, categoryId: $categoryId}';
   }
 }
 
@@ -157,6 +168,10 @@ class CartItem {
   final int discountPercentage;
   final String sourcePage;
   final String sourceTitle;
+
+  // NEW: carry category id with the cart item
+  final String categoryId;
+
   int quantity;
   final DateTime dateAdded;
 
@@ -172,6 +187,7 @@ class CartItem {
     required this.discountPercentage,
     required this.sourcePage,
     required this.sourceTitle,
+    this.categoryId = '',
     this.quantity = 1,
     DateTime? dateAdded,
   }) : dateAdded = dateAdded ?? DateTime.now();
@@ -179,17 +195,17 @@ class CartItem {
   // Basic calculation getters
   double get totalPrice => price * quantity;
   double get totalOriginalPrice => originalPrice * quantity;
-  
+
   // ADDED: Missing formatted getters that were causing errors
   String get formattedPrice => '₹${price.toInt()}';
   String get formattedTotalPrice => '₹${totalPrice.toInt()}';
   String get formattedOriginalPrice => '₹${originalPrice.toInt()}';
-  
+
   // ADDED: Discount related getters
   bool get hasDiscount => discountPercentage > 0;
   double get discountAmount => originalPrice - price;
   double get totalDiscountAmount => discountAmount * quantity;
-  
+
   // ADDED: Savings calculation
   double get savingsPerItem => hasDiscount ? (originalPrice - price) : 0.0;
   double get totalSavings => savingsPerItem * quantity;
@@ -198,7 +214,7 @@ class CartItem {
   // ADDED: Utility getters for UI
   String get quantityText => quantity == 1 ? '$quantity item' : '$quantity items';
   String get priceDisplayText => hasDiscount ? formattedPrice : formattedOriginalPrice;
-  
+
   // ADDED: Service type detection (can be extended based on your needs)
   String get serviceType {
     if (sourcePage.contains('salon')) return 'Salon';
@@ -212,7 +228,7 @@ class CartItem {
   String get addedTimeAgo {
     final now = DateTime.now();
     final difference = now.difference(dateAdded);
-    
+
     if (difference.inMinutes < 1) {
       return 'Just now';
     } else if (difference.inMinutes < 60) {
@@ -237,6 +253,7 @@ class CartItem {
     int? discountPercentage,
     String? sourcePage,
     String? sourceTitle,
+    String? categoryId,
     int? quantity,
     DateTime? dateAdded,
   }) {
@@ -252,10 +269,11 @@ class CartItem {
       discountPercentage: discountPercentage ?? this.discountPercentage,
       sourcePage: sourcePage ?? this.sourcePage,
       sourceTitle: sourceTitle ?? this.sourceTitle,
+      categoryId: categoryId ?? this.categoryId,
       quantity: quantity ?? this.quantity,
       dateAdded: dateAdded ?? this.dateAdded,
     );
-  }
+    }
 
   // ADDED: Comprehensive JSON serialization
   Map<String, dynamic> toJson() {
@@ -271,6 +289,7 @@ class CartItem {
       'discountPercentage': discountPercentage,
       'sourcePage': sourcePage,
       'sourceTitle': sourceTitle,
+      'categoryId': categoryId, // NEW
       'quantity': quantity,
       'dateAdded': dateAdded.toIso8601String(),
     };
@@ -290,8 +309,9 @@ class CartItem {
       discountPercentage: (json['discountPercentage'] as num?)?.toInt() ?? 0,
       sourcePage: json['sourcePage']?.toString() ?? 'unknown',
       sourceTitle: json['sourceTitle']?.toString() ?? 'Unknown Service',
+      categoryId: json['categoryId']?.toString() ?? '', // NEW
       quantity: (json['quantity'] as num?)?.toInt() ?? 1,
-      dateAdded: json['dateAdded'] != null 
+      dateAdded: json['dateAdded'] != null
           ? DateTime.tryParse(json['dateAdded'].toString()) ?? DateTime.now()
           : DateTime.now(),
     );
@@ -316,31 +336,33 @@ class CartItem {
       discountPercentage: service.discountPercentage.toInt(),
       sourcePage: sourcePage ?? 'unknown',
       sourceTitle: sourceTitle ?? 'Unknown Service',
+      categoryId: service.categoryId, // NEW: carry forward
       quantity: quantity,
     );
   }
 
   // ADDED: Validation methods
   bool get isValid {
-    return id.isNotEmpty && 
-           name.isNotEmpty && 
-           price >= 0 && 
-           originalPrice >= 0 && 
-           quantity > 0;
+    return id.isNotEmpty &&
+        name.isNotEmpty &&
+        price >= 0 &&
+        originalPrice >= 0 &&
+        quantity > 0;
   }
 
-  bool get hasValidImage => image.isNotEmpty && 
-      (image.startsWith('http') || image.startsWith('assets'));
+  bool get hasValidImage =>
+      image.isNotEmpty && (image.startsWith('http') || image.startsWith('assets'));
 
-  bool get hasValidRating => rating.isNotEmpty && 
-      double.tryParse(rating) != null && 
-      double.parse(rating) >= 0 && 
+  bool get hasValidRating =>
+      rating.isNotEmpty &&
+      double.tryParse(rating) != null &&
+      double.parse(rating) >= 0 &&
       double.parse(rating) <= 5;
 
   // ADDED: Comparison methods
   bool hasSameService(CartItem other) => id == other.id;
-  
-  bool hasSameSource(CartItem other) => 
+
+  bool hasSameSource(CartItem other) =>
       sourcePage == other.sourcePage && sourceTitle == other.sourceTitle;
 
   // ADDED: Cart item summary for display
@@ -369,28 +391,31 @@ class CartItem {
 
   @override
   String toString() {
-    return 'CartItem{id: $id, name: $name, quantity: $quantity, totalPrice: $totalPrice, source: $sourceTitle}';
+    return 'CartItem{id: $id, name: $name, categoryId: $categoryId, quantity: $quantity, totalPrice: $totalPrice, source: $sourceTitle}';
   }
 }
 
-// ADDED: Cart summary helper class
+// ADDED: Cart summary helper class (unchanged)
 class CartSummary {
   final List<CartItem> items;
-  
+
   CartSummary(this.items);
-  
+
   int get totalItems => items.fold(0, (sum, item) => sum + item.quantity);
   int get uniqueItems => items.length;
   double get totalPrice => items.fold(0.0, (sum, item) => sum + item.totalPrice);
-  double get totalOriginalPrice => items.fold(0.0, (sum, item) => sum + item.totalOriginalPrice);
+  double get totalOriginalPrice =>
+      items.fold(0.0, (sum, item) => sum + item.totalOriginalPrice);
   double get totalSavings => totalOriginalPrice - totalPrice;
-  
+
   String get formattedTotalPrice => '₹${totalPrice.toInt()}';
-  String get formattedTotalSavings => totalSavings > 0 ? '₹${totalSavings.toInt()}' : '';
-  String get formattedItemCount => totalItems == 1 ? '$totalItems item' : '$totalItems items';
-  
+  String get formattedTotalSavings =>
+      totalSavings > 0 ? '₹${totalSavings.toInt()}' : '';
+  String get formattedItemCount =>
+      totalItems == 1 ? '$totalItems item' : '$totalItems items';
+
   bool get hasDiscounts => items.any((item) => item.hasDiscount);
-  
+
   Map<String, List<CartItem>> get groupedBySource {
     Map<String, List<CartItem>> grouped = {};
     for (var item in items) {
@@ -402,7 +427,7 @@ class CartSummary {
     }
     return grouped;
   }
-  
+
   Map<String, List<CartItem>> get groupedByServiceType {
     Map<String, List<CartItem>> grouped = {};
     for (var item in items) {
@@ -414,13 +439,15 @@ class CartSummary {
     }
     return grouped;
   }
-  
-  List<CartItem> get discountedItems => items.where((item) => item.hasDiscount).toList();
-  List<CartItem> get regularItems => items.where((item) => !item.hasDiscount).toList();
-  
-  CartItem? get mostExpensiveItem => items.isEmpty ? null : 
-      items.reduce((a, b) => a.price > b.price ? a : b);
-      
-  CartItem? get cheapestItem => items.isEmpty ? null : 
-      items.reduce((a, b) => a.price < b.price ? a : b);
+
+  List<CartItem> get discountedItems =>
+      items.where((item) => item.hasDiscount).toList();
+  List<CartItem> get regularItems =>
+      items.where((item) => !item.hasDiscount).toList();
+
+  CartItem? get mostExpensiveItem =>
+      items.isEmpty ? null : items.reduce((a, b) => a.price > b.price ? a : b);
+
+  CartItem? get cheapestItem =>
+      items.isEmpty ? null : items.reduce((a, b) => a.price < b.price ? a : b);
 }

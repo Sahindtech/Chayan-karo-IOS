@@ -1,4 +1,5 @@
 // lib/data/repository/service_repository.dart
+import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import '../../models/service_models.dart';
 import '../remote/network_client.dart';
@@ -44,13 +45,30 @@ class ServiceRepository {
       print('💾 Saved ${services.length} services for category $serviceCategoryId to database');
       
       return services;
+    } on DioException catch (e) {
+      // Handle 404 - category exists but has no services yet
+      if (e.response?.statusCode == 404) {
+        print('ℹ️ No services available for category $serviceCategoryId (404 - Not Found)');
+        return []; // Return empty list, not an error
+      }
+      
+      print('❌ Error fetching services for category $serviceCategoryId: $e');
+      
+      // Try to return cached data for other errors
+      final cachedServices = await _database.getServicesByCategory(serviceCategoryId);
+      if (cachedServices.isNotEmpty) {
+        print('🔄 Returning cached services for category $serviceCategoryId due to API error');
+        return cachedServices;
+      }
+      
+      throw e;
     } catch (e) {
       print('❌ Error fetching services for category $serviceCategoryId: $e');
       
       // Try to return cached data even if expired
       final cachedServices = await _database.getServicesByCategory(serviceCategoryId);
       if (cachedServices.isNotEmpty) {
-        print('🔄 Returning cached services for category $serviceCategoryId due to API error');
+        print('🔄 Returning cached services for category $serviceCategoryId due to error');
         return cachedServices;
       }
       
@@ -76,6 +94,17 @@ class ServiceRepository {
       print('💾 Refreshed and saved ${services.length} services for category $serviceCategoryId to database');
       
       return services;
+    } on DioException catch (e) {
+      // Handle 404 - category exists but has no services yet
+      if (e.response?.statusCode == 404) {
+        print('ℹ️ No services available for category $serviceCategoryId (404 - Not Found)');
+        // Clear any stale cached data
+        await _database.clearServicesByCategory(serviceCategoryId);
+        return []; // Return empty list, not an error
+      }
+      
+      print('❌ Error refreshing services for category $serviceCategoryId: $e');
+      throw e;
     } catch (e) {
       print('❌ Error refreshing services for category $serviceCategoryId: $e');
       throw e;

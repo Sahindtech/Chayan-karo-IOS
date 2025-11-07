@@ -1,21 +1,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.chayankaro.app">
+    package="com.chayankaroindia.app">
 
-    <!-- INTERNET PERMISSIONS - REQUIRED FOR API CALLS -->
+    <!-- ✅ INTERNET & NETWORK PERMISSIONS -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
-    <!-- Location permissions (currently disabled to avoid Play Store rejection)
-         Uncomment these only if location features are actively used in the app 
-         and you have updated your Play Console privacy policy & disclosures. -->
-    <!--
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    -->
+    <!-- ✅ LOCATION PERMISSIONS (required for map + current location) -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
-        android:label="chayankaro"
+        android:label="ChayanKaro"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:networkSecurityConfig="@xml/network_security_config"
@@ -47,6 +43,13 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+        <!-- ✅ ADD YOUR GOOGLE MAPS API KEY HERE -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAJsorrGKIgn2WoWP22VDCF1Utr8-Y1eqI" />
+        <!-- Make sure this key is enabled for Maps SDK, Places API, and Geocoding API -->
+
     </application>
 
     <!-- Query for text processing apps (used by Flutter's ProcessTextPlugin) -->

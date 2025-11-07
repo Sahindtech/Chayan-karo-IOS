@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.chayankaro.app" // Match your package name
+    namespace = "com.chayankaroindia.app" // Match your package name
     compileSdk = 35 // Updated to 35 for plugin compatibility
     ndkVersion = "27.0.12077973" // Keep for plugin compatibility
 
@@ -20,11 +20,11 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.chayankaro.app" // Permanent Play Store ID
+        applicationId = "com.chayankaroindia.app" // Permanent Play Store ID
         minSdk = flutter.minSdkVersion
         targetSdk = 35 // Update targetSdk to 35 as per compileSdk
-        versionCode = 3 // Increment for each upload
-        versionName = "1.0.1"
+        versionCode = 5 // Increment for each upload
+        versionName = "1.0.2"
     }
 
     signingConfigs {
