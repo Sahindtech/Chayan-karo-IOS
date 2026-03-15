@@ -439,15 +439,18 @@ SizedBox(height: 4.h),
                     color: Colors.black.withOpacity(0.4),
                   ),
                 ),
-                onChanged: (_) {
-                  // Clear specific error when user types
-                  if (errorText != null) {
-                    setState(() {
-                      if (label == 'Full Name') _nameError = null;
-                      if (label == 'Email') _emailError = null;
-                    });
-                  }
-                },
+                onChanged: (value) {
+  // 1. Clear specific error when user types
+  if (errorText != null) {
+    setState(() {
+      if (label == 'Full Name') _nameError = null;
+      if (label == 'Email') _emailError = null;
+    });
+  }
+  
+  // 2. Add this to force the checkmark/X icon to update instantly
+  setState(() {}); 
+},
               ).withId(testId),
             ),
             // Only show the Checkmark/X icon if there is NO error to avoid clutter

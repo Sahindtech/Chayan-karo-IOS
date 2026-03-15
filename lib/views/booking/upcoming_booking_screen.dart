@@ -152,28 +152,25 @@ class UpcomingBookingScreen extends StatelessWidget {
 
         // Pricing: forward-calculated billing
        // --- Updated Financial Logic ---
+// --- Updated Financial Logic ---
 final bool hasAmountData = booking?.bookingAmount != null;
 
-// 1. Actual Amount: The 100% item total (Price after item-level discount, before coupon)
+// 1. Total of items before any discount (Sum of 'price')
+final double itemTotal = services.fold<double>(0, (s, e) => s + e.price.toDouble());
+
+// 2. The amount after item-level/coupon discount
 final double actualAmount = hasAmountData 
     ? booking!.bookingAmount!.actualAmount.toDouble() 
     : services.fold<double>(0, (s, e) => s + e.discountPrice.toDouble());
 
-// 2. Platform Fee: 20% of the actual amount
-final double platformFee = hasAmountData 
-    ? booking!.bookingAmount!.plateFormFee.toDouble() 
-    : (actualAmount * 0.20);
+// 3. Coupon Savings (Difference between original price and actual amount)
+final double couponDiscount = itemTotal - actualAmount;
 
-// 3. Provider Share: 80% of the actual amount (For display/internal logic)
-final int perService = (actualAmount * 0.80).round();
-
-// 4. GST: 18% applied ONLY on the 20% platform fee
+// 4. Taxes & Fees (prioritize backend value)
 final int gstOnPlatform = hasAmountData 
     ? booking!.bookingAmount!.gstAmount.toInt() 
-    : (platformFee * 0.18).round();
-
-// 5. Total: (Actual Amount + GST) 
-// Note: If you stored a global coupon discount in the DB, you would subtract it here.
+    : ((itemTotal * 0.20) * 0.18).round();
+// 5. Grand Total (Actual amount + taxes)
 final int total = (actualAmount + gstOnPlatform).round();
 
 final inr = NumberFormat.currency(
@@ -291,8 +288,7 @@ final inr = NumberFormat.currency(
                                 child: _serviceLine(
                                   title: s.serviceIName,
                                   subtitle: s.categoryName,
-                                  durationMinutes:
-                                      booking!.totalDuration,
+                                  durationMinutes: s.serviceDuration ?? 0,
                                   scaleFactor: scaleFactor,
                                 ),
                               ),
@@ -312,6 +308,24 @@ final inr = NumberFormat.currency(
                               scaleFactor: scaleFactor,
                             ),
                           ],
+                          if (hasData && (booking?.totalDuration ?? 0) > 0)
+  Padding(
+    padding: EdgeInsets.only(top: 8.h * scaleFactor, bottom: 16.h * scaleFactor, left: 4.w),
+    child: Row(
+      children: [
+        Icon(Icons.access_time_filled, size: 18.sp * scaleFactor, color: const Color(0xFFE47830)),
+        SizedBox(width: 8.w),
+        Text(
+          "Total Duration: ${booking!.totalDuration} mins",
+          style: TextStyle(
+            fontSize: 14.sp * scaleFactor,
+            fontWeight: FontWeight.w700,
+            color: Colors.black,
+          ),
+        ),
+      ],
+    ),
+  ),
 
                           SizedBox(height: 20.h * scaleFactor),
 
@@ -345,6 +359,34 @@ final inr = NumberFormat.currency(
                                     height:
                                         16.h * scaleFactor),
                                         // --- NEW LINES START HERE ---
+                                        // --- ADD THE COUPON UI HERE ---
+if (booking?.coupon != null)
+  Padding(
+    padding: EdgeInsets.only(bottom: 12.h * scaleFactor),
+    child: Container(
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
+      decoration: BoxDecoration(
+        color: const Color(0xFFE8F5E9),
+        borderRadius: BorderRadius.circular(6.r),
+        border: Border.all(color: Colors.green.shade200),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.local_offer, size: 14.sp, color: Colors.green.shade700),
+          SizedBox(width: 6.w),
+          Text(
+            '${booking!.coupon!.couponCode} Applied', // Now dynamic!
+            style: TextStyle(
+              color: Colors.green.shade700,
+              fontSize: 12.sp * scaleFactor,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      ),
+    ),
+  ),
                                 // 1. Booking Reference Number
                                 if (booking?.bookingReferenceNumber != null)
                                   _detailRow(
@@ -374,9 +416,16 @@ final inr = NumberFormat.currency(
                                 // --- NEW LINES END HERE ---
                                _billingRow(
   'Item Total', // Changed label for clarity
-  inr.format(actualAmount),
+  inr.format(itemTotal),
   scaleFactor: scaleFactor,
 ),
+if (booking?.coupon != null || couponDiscount > 0)
+  _billingRow(
+    'Coupon Discount', 
+    "- ${inr.format(couponDiscount)}",
+    valueColor: Colors.green.shade700, // Make it green
+    scaleFactor: scaleFactor,
+  ),
 _billingRow(
   'Taxes & Fees (GST)', 
   inr.format(gstOnPlatform),

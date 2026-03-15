@@ -534,17 +534,19 @@ final int gstOnFee = (platformShare * 0.18).round();
 final int subTotal = servicePriceInclusive + gstOnFee;
 
 double discountAmount = 0.0;
-int? discountPercentage; // New field to pass to API
+int? discountPercentage;
 
 if (selected != null) {
-  if (subTotal >= selected.minPurchaseAmount) {
+  // Check minimum purchase against the item total, not the subtotal
+  if (itemTotal >= selected.minPurchaseAmount) { 
     if (selected.discountType == "PERCENTAGE") {
       discountPercentage = selected.discountPercentage.toInt();
-      discountAmount = subTotal * (selected.discountPercentage / 100);
+      // Apply discount ONLY to itemTotal
+      discountAmount = itemTotal * (selected.discountPercentage / 100); 
     } else {
       discountAmount = selected.amount;
-      // Calculate effective percentage for the API
-      discountPercentage = ((discountAmount / subTotal) * 100).round();
+      // Calculate effective percentage based on itemTotal
+      discountPercentage = ((discountAmount / itemTotal) * 100).round();
     }
   } else {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -553,7 +555,8 @@ if (selected != null) {
   }
 }
 
-// 4. Final calculation for the user to pay
+// Final total calculation: (Service + GST) - Discount
+//final int subTotal = servicePriceInclusive + gstOnFee; 
 final int totalRaw = (subTotal - discountAmount).toInt();
 final int total = totalRaw > 0 ? totalRaw : 0;
         
@@ -814,17 +817,17 @@ final int total = totalRaw > 0 ? totalRaw : 0;
                                 );
                                 
 // --- ADD THIS LOGIC TO SYNC WITH BUILD CALCULATIONS ---
+// --- SYNC WITH UPDATED CALCULATIONS ---
 int couponPctForMapper = 0;
 if (selected != null) {
   if (selected.discountType == "PERCENTAGE") {
     couponPctForMapper = selected.discountPercentage.toInt();
   } else {
-    // For FLAT discounts, calculate the effective percentage for the items
-    couponPctForMapper = ((discountAmount / subTotal) * 100).round();
+    // UPDATED: Use itemTotal as the denominator instead of subTotal
+    couponPctForMapper = ((discountAmount / itemTotal) * 100).round();
   }
 }
 
-// Pass the percentage to the mapper so 'discountPrice' per item is correct
 final bookingItems = _mapCartToBookingItems(currentPageItems, couponPct: couponPctForMapper);
                                 final totalDuration = _estimateTotalDurationMinutes(currentPageItems);
                                 final spId = saathi!['id'].toString();

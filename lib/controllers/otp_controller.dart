@@ -53,8 +53,7 @@ bool get isExistingUser => _isExistingUser.value;
     final args = Get.arguments as Map<String, dynamic>?;
     if (args != null && args.containsKey('phone')) {
       _phoneNumber.value = args['phone'];
-      _isExistingUser.value = args['userExists'] ?? false; // Catch the boolean here
-    }
+_isExistingUser.value = args['isExistingUser'] ?? false;    }
 
     // Initialize OTP controllers and focus nodes
     otpControllers = List.generate(4, (index) => TextEditingController());

@@ -117,6 +117,26 @@ Map<String, dynamic> _$BookingServiceReadToJson(BookingServiceRead instance) =>
       'serviceDuration': instance.serviceDuration,
     };
 
+Coupon _$CouponFromJson(Map<String, dynamic> json) => Coupon(
+  id: json['id'] as String,
+  couponType: json['couponType'] as String,
+  couponCode: json['couponCode'] as String,
+  amount: json['amount'] as num,
+  minPurchaseAmount: json['minPurchaseAmount'] as num,
+  discountPercentage: (json['discountPercentage'] as num).toInt(),
+  sameUserLimit: (json['sameUserLimit'] as num).toInt(),
+);
+
+Map<String, dynamic> _$CouponToJson(Coupon instance) => <String, dynamic>{
+  'id': instance.id,
+  'couponType': instance.couponType,
+  'couponCode': instance.couponCode,
+  'amount': instance.amount,
+  'minPurchaseAmount': instance.minPurchaseAmount,
+  'discountPercentage': instance.discountPercentage,
+  'sameUserLimit': instance.sameUserLimit,
+};
+
 CustomerBooking _$CustomerBookingFromJson(Map<String, dynamic> json) =>
     CustomerBooking(
       id: json['id'] as String,
@@ -136,6 +156,9 @@ CustomerBooking _$CustomerBookingFromJson(Map<String, dynamic> json) =>
           : BookingAmount.fromJson(
               json['bookingAmount'] as Map<String, dynamic>,
             ),
+      coupon: json['coupon'] == null
+          ? null
+          : Coupon.fromJson(json['coupon'] as Map<String, dynamic>),
       feedbackSubmitted: json['feedbackSubmitted'] as bool? ?? false,
       bookingService: (json['bookingService'] as List<dynamic>)
           .map((e) => BookingServiceRead.fromJson(e as Map<String, dynamic>))
@@ -167,6 +190,7 @@ Map<String, dynamic> _$CustomerBookingToJson(CustomerBooking instance) =>
       'paymentMode': instance.paymentMode,
       'paymentStatus': instance.paymentStatus,
       'bookingAmount': instance.bookingAmount,
+      'coupon': instance.coupon,
       'feedbackSubmitted': instance.feedbackSubmitted,
       'bookingService': instance.bookingService,
       'customerDetails': instance.customerDetails,

@@ -24,37 +24,26 @@ class OtpResponse {
   final String type;
   final OtpResult result;
 
-  const OtpResponse({
-    required this.type,
-    required this.result,
-  });
+  const OtpResponse({required this.type, required this.result});
 
-  factory OtpResponse.fromJson(Map<String, dynamic> json) =>
-      _$OtpResponseFromJson(json);
+  factory OtpResponse.fromJson(Map<String, dynamic> json) => _$OtpResponseFromJson(json);
 
-  Map<String, dynamic> toJson() => _$OtpResponseToJson(this);
-
-  // Helper method to check if the request was successful
-  bool get success => type == "Authentication" && result.message.isNotEmpty;
+  bool get success => type == "Authentication";
   String get message => result.message;
+  
+  // NEW: Helper to check if the user exists based on the 'result' field
+  bool get isExistingUser => result.result == true; 
 }
 
 @JsonSerializable()
 class OtpResult {
   final String message;
-  final String result;
+  final dynamic result; // Changed from String to dynamic to accept bool
 
-  const OtpResult({
-    required this.message,
-    required this.result,
-  });
+  const OtpResult({required this.message, required this.result});
 
-  factory OtpResult.fromJson(Map<String, dynamic> json) =>
-      _$OtpResultFromJson(json);
-
-  Map<String, dynamic> toJson() => _$OtpResultToJson(this);
+  factory OtpResult.fromJson(Map<String, dynamic> json) => _$OtpResultFromJson(json);
 }
-
 @JsonSerializable()
 class VerifyOtpRequest {
   @JsonKey(name: 'mobileNo')

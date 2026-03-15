@@ -20,6 +20,8 @@ class LoginController extends GetxController {
   bool get isButtonEnabled => _isButtonEnabled.value;
   bool get isLoading => _isLoading.value;
   String get errorMessage => _errorMessage.value;
+  final _isExistingUser = false.obs;
+  bool get isExistingUser => _isExistingUser.value;
 
   @override
   void onInit() {
@@ -73,10 +75,12 @@ class LoginController extends GetxController {
       if (response.success) {
         print('✅ OTP sent successfully to: +91$phone');
         print('📥 Response: type=${response.type}, message=${response.message}');
+        _isExistingUser.value = response.isExistingUser;
         
         Get.toNamed('/otp', arguments: {
           'phone': phone,
           'message': response.message, 
+         'isExistingUser': response.isExistingUser
         });
       } else {
         _errorMessage.value = response.message;

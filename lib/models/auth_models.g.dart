@@ -20,10 +20,8 @@ OtpResponse _$OtpResponseFromJson(Map<String, dynamic> json) => OtpResponse(
 Map<String, dynamic> _$OtpResponseToJson(OtpResponse instance) =>
     <String, dynamic>{'type': instance.type, 'result': instance.result};
 
-OtpResult _$OtpResultFromJson(Map<String, dynamic> json) => OtpResult(
-  message: json['message'] as String,
-  result: json['result'] as String,
-);
+OtpResult _$OtpResultFromJson(Map<String, dynamic> json) =>
+    OtpResult(message: json['message'] as String, result: json['result']);
 
 Map<String, dynamic> _$OtpResultToJson(OtpResult instance) => <String, dynamic>{
   'message': instance.message,

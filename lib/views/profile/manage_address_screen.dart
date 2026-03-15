@@ -239,16 +239,16 @@ class _ManageAddressScreenState extends State<ManageAddressScreen> {
                                         const Spacer(),
                                         PopupMenuButton<String>(
                                           onSelected: (value) async {
-                                            if (value == 'edit') {
+                                          /*  if (value == 'edit') {
                                               _showUpdateAddressBottomSheet(scaleFactor, address);
-                                            } else if (value == 'delete') {
+                                            } else */ if (value == 'delete') {
                                               _confirmDelete(scaleFactor, address.id);
                                             } else if (value == 'make_default') {
                                               await _setAsDefault(address);
                                             }
                                           },
                                           itemBuilder: (context) => [
-                                            PopupMenuItem(
+                                           /* PopupMenuItem(
                                               value: 'edit',
                                               child: Text(
                                                 'Edit',
@@ -257,7 +257,7 @@ class _ManageAddressScreenState extends State<ManageAddressScreen> {
                                                   color: Colors.black,
                                                 ),
                                               ),
-                                            ),
+                                            ),*/
                                             PopupMenuItem(
                                               value: 'make_default',
                                               enabled: !isSelectedDefault,
@@ -321,7 +321,7 @@ class _ManageAddressScreenState extends State<ManageAddressScreen> {
     );
   }
 
-  void _showUpdateAddressBottomSheet(double scaleFactor, CustomerAddress address) {
+ /* void _showUpdateAddressBottomSheet(double scaleFactor, CustomerAddress address) {
     final addressLine1 = address.addressLine1.trim();
     final addressLine2 = address.addressLine2.trim();
     final cityStatePin = '${address.city}, ${address.state} - ${address.postCode}'.trim();
@@ -563,7 +563,7 @@ class _ManageAddressScreenState extends State<ManageAddressScreen> {
         );
       },
     );
-  }
+  } */
  void _confirmDelete(double scaleFactor, String addressId) {
     showDialog(
       context: context,

@@ -139,6 +139,30 @@ class BookingServiceRead {
 }
 
 @JsonSerializable()
+class Coupon {
+  final String id;
+  final String couponType;
+  final String couponCode;
+  final num amount;
+  final num minPurchaseAmount;
+  final int discountPercentage;
+  final int sameUserLimit;
+
+  Coupon({
+    required this.id,
+    required this.couponType,
+    required this.couponCode,
+    required this.amount,
+    required this.minPurchaseAmount,
+    required this.discountPercentage,
+    required this.sameUserLimit,
+  });
+
+  factory Coupon.fromJson(Map<String, dynamic> json) => _$CouponFromJson(json);
+  Map<String, dynamic> toJson() => _$CouponToJson(this);
+}
+
+@JsonSerializable()
 class CustomerBooking {
   final String id;
   final String spId;
@@ -155,6 +179,7 @@ class CustomerBooking {
   final String? paymentMode;   // "ONLINE", "CASH"
   final String? paymentStatus; // "Paid", "UnPaid"
   final BookingAmount? bookingAmount;
+  final Coupon? coupon;
   @JsonKey(defaultValue: false)
   final bool feedbackSubmitted;
 
@@ -180,6 +205,7 @@ class CustomerBooking {
     this.paymentMode,
     this.paymentStatus,
     this.bookingAmount, // ✅ ADD THIS
+    this.coupon, // ✅ ADD THIS
     this.feedbackSubmitted = false, // ✅
     required this.bookingService,
     required this.customerDetails,

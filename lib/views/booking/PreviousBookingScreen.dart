@@ -101,7 +101,7 @@ class PreviousBookingScreen extends StatelessWidget {
         // Service list cards (dot-leading, like Upcoming)
         final cards = booking.bookingService.map((svc) {
           final title = svc.categoryName.isNotEmpty ? svc.categoryName : (svc.serviceIName);
-          final duration = _durationLabel(booking.totalDuration);
+final duration = _durationLabel(svc.serviceDuration ?? 0);
           final details = svc.serviceIName;
           return _bookingCard(
             title: title,
@@ -157,6 +157,57 @@ class PreviousBookingScreen extends StatelessWidget {
 
                   // Render each service card
                   ...cards.expand((w) => [w, SizedBox(height: 16.h * scaleFactor)]).toList(),
+                  // ADD THIS: Total Duration Summary
+if (booking.totalDuration > 0)
+  Padding(
+    padding: EdgeInsets.only(left: 20.w * scaleFactor, bottom: 16.h * scaleFactor),
+    child: Row(
+      children: [
+        Icon(Icons.access_time_filled, size: 18.sp * scaleFactor, color: const Color(0xFFE47830)),
+        SizedBox(width: 8.w),
+        Text(
+          "Total Duration: ${_durationLabel(booking.totalDuration)}",
+          style: TextStyle(
+            fontSize: 14.sp * scaleFactor,
+            fontWeight: FontWeight.w700,
+            color: Colors.black,
+            fontFamily: 'Inter',
+          ),
+        ),
+      ],
+    ),
+  ),
+
+// ADD THIS: Coupon Applied UI
+if (booking.coupon != null )
+  Padding(
+    padding: EdgeInsets.symmetric(horizontal: 16.w * scaleFactor),
+    child: Container(
+      margin: EdgeInsets.only(bottom: 16.h * scaleFactor),
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+      decoration: BoxDecoration(
+        color: const Color(0xFFE8F5E9),
+        borderRadius: BorderRadius.circular(8.r),
+        border: Border.all(color: Colors.green.shade200),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.local_offer, size: 16.sp, color: Colors.green.shade700),
+          SizedBox(width: 8.w),
+          Text(
+            '${booking!.coupon!.couponCode} Applied',
+            style: TextStyle(
+              color: Colors.green.shade700,
+              fontSize: 13.sp * scaleFactor,
+              fontWeight: FontWeight.w600,
+              fontFamily: 'Inter',
+            ),
+          ),
+        ],
+      ),
+    ),
+  ),
 
                   // Cancel reason only for cancelled bookings
                   if (isCancelled) _cancelReasonSection(scaleFactor),
@@ -320,26 +371,28 @@ class PreviousBookingScreen extends StatelessWidget {
   double scaleFactor, {
   required CustomerBooking booking,
 }) {
+  final services = booking?.bookingService ?? [];
+
   // 1. Prioritize backend-calculated amounts
-  final bool hasAmountData = booking.bookingAmount != null;
+ final bool hasAmountData = booking?.bookingAmount != null;
 
-  // Actual total of items (100% service price)
-  final double actualAmount = hasAmountData
-      ? booking.bookingAmount!.actualAmount.toDouble()
-      : booking.bookingService.fold<double>(0, (sum, s) => sum + s.discountPrice.toDouble());
+// 1. Total of items before any discount (Sum of 'price')
+final double itemTotal = services.fold<double>(0, (s, e) => s + e.price.toDouble());
 
-  // 20% Platform Fee (Internal logic, hidden from simplified UI)
-  final double platformFee = hasAmountData
-      ? booking.bookingAmount!.plateFormFee.toDouble()
-      : (actualAmount * 0.20);
+// 2. The amount after item-level/coupon discount
+final double actualAmount = hasAmountData 
+    ? booking!.bookingAmount!.actualAmount.toDouble() 
+    : services.fold<double>(0, (s, e) => s + e.discountPrice.toDouble());
 
-  // 18% GST ONLY on the platform fee portion
-  final int gstOnPlat = hasAmountData
-      ? booking.bookingAmount!.gstAmount.toInt()
-      : (platformFee * 0.18).round();
+// 3. Coupon Savings (Difference between original price and actual amount)
+final double couponDiscount = itemTotal - actualAmount;
 
-  // Total payable by user: (100% Items + calculated GST)
-  final int total = (actualAmount + gstOnPlat).round();
+// 4. Taxes & Fees (prioritize backend value)
+final int gstOnPlatform = hasAmountData 
+    ? booking!.bookingAmount!.gstAmount.toInt() 
+    : ((itemTotal * 0.20) * 0.18).round();
+// 5. Grand Total (Actual amount + taxes)
+final int total = (actualAmount + gstOnPlatform).round();
 
   final inr = NumberFormat.currency(locale: 'en_IN', symbol: '₹', decimalDigits: 0);
 
@@ -393,12 +446,20 @@ class PreviousBookingScreen extends StatelessWidget {
           // Simplified rows as per requirement
           _billingRow(
             'Item Total', 
-            inr.format(actualAmount), 
+            inr.format(itemTotal), 
             scaleFactor: scaleFactor,
           ),
+          if (booking?.coupon != null || couponDiscount > 0)
+  _billingRow(
+    'Coupon Discount', 
+    "- ${inr.format(couponDiscount)}",
+    color: Colors.green.shade700, // Make it green
+    scaleFactor: scaleFactor,
+  ),
+
           _billingRow(
             'Taxes & Fees (GST)', 
-            inr.format(gstOnPlat),
+            inr.format(gstOnPlatform),
             color: Colors.black87, 
             scaleFactor: scaleFactor,
           ),
