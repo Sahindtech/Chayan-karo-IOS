@@ -25,7 +25,7 @@ class RescheduleSummaryScreen extends StatefulWidget {
   final String currentTime; // Format: "HH:mm" (24h) or "hh:mm a"
 
   const RescheduleSummaryScreen({
-    Key? key,
+    super.key,
     required this.bookingId,
     required this.serviceName,
     required this.totalDuration,
@@ -33,7 +33,7 @@ class RescheduleSummaryScreen extends StatefulWidget {
     required this.serviceId,
     required this.currentDate, 
     required this.currentTime,
-  }) : super(key: key);
+  });
 
   @override
   State<RescheduleSummaryScreen> createState() => _RescheduleSummaryScreenState();
@@ -132,20 +132,18 @@ class _RescheduleSummaryScreenState extends State<RescheduleSummaryScreen> {
     // Find default, otherwise take the first one
     CustomerAddress? target = list.firstWhereOrNull((a) => a.isDefault) ?? list.first;
     
-    if (target != null) {
-      setState(() {
-        addressId = target.id;
-        locationId = target.locationId;
-        addressText = _formatAddress(
-          target.addressLine1 ?? "", 
-          target.addressLine2 ?? "", 
-          target.city ?? "", 
-          target.state ?? "", 
-          target.postCode ?? ""
-        );
-      });
+    setState(() {
+      addressId = target.id;
+      locationId = target.locationId;
+      addressText = _formatAddress(
+        target.addressLine1 ?? "", 
+        target.addressLine2 ?? "", 
+        target.city ?? "", 
+        target.state ?? "", 
+        target.postCode ?? ""
+      );
+    });
     }
-  }
 
   void _syncAddressToIds(String disp) {
     final list = locationController.addresses;

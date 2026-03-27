@@ -12,7 +12,7 @@ import '../../models/booking_read_models.dart';
 class PreviousBookingScreen extends StatelessWidget {
   final CustomerBooking booking; // inject from list "View details"
 
-  const PreviousBookingScreen({Key? key, required this.booking}) : super(key: key);
+  const PreviousBookingScreen({super.key, required this.booking});
 
   String _humanDate(String iso) {
     try {
@@ -60,9 +60,9 @@ class PreviousBookingScreen extends StatelessWidget {
     if (mins <= 0) return '0 min';
     final h = mins ~/ 60;
     final m = mins % 60;
-    if (h > 0 && m > 0) return '${h} hrs ${m} mins';
-    if (h > 0) return '${h} hrs';
-    return '${m} mins';
+    if (h > 0 && m > 0) return '$h hrs $m mins';
+    if (h > 0) return '$h hrs';
+    return '$m mins';
   }
   String _paymentModeLabel(CustomerBooking? b) {
     if (b == null) return 'Payment mode: N/A';
@@ -90,8 +90,9 @@ class PreviousBookingScreen extends StatelessWidget {
 
         // --- NEW: Dynamic Title Logic ---
         String headerTitle = 'Previous Booking';
-        if (isCancelled) headerTitle = 'Cancelled Booking';
-        else if (isCompleted) headerTitle = 'Completed Booking';
+        if (isCancelled) {
+          headerTitle = 'Cancelled Booking';
+        } else if (isCompleted) headerTitle = 'Completed Booking';
         // --------------------------------
 
         // Top date (keeps your header line style)
@@ -156,7 +157,7 @@ final duration = _durationLabel(svc.serviceDuration ?? 0);
                   SizedBox(height: 16.h * scaleFactor),
 
                   // Render each service card
-                  ...cards.expand((w) => [w, SizedBox(height: 16.h * scaleFactor)]).toList(),
+                  ...cards.expand((w) => [w, SizedBox(height: 16.h * scaleFactor)]),
                   // ADD THIS: Total Duration Summary
 if (booking.totalDuration > 0)
   Padding(
@@ -179,7 +180,7 @@ if (booking.totalDuration > 0)
   ),
 
 // ADD THIS: Coupon Applied UI
-if (booking?.coupon?.couponCode != null)
+if (booking.coupon?.couponCode != null)
   Padding(
     padding: EdgeInsets.symmetric(horizontal: 16.w * scaleFactor),
     child: Container(
@@ -196,7 +197,7 @@ if (booking?.coupon?.couponCode != null)
           Icon(Icons.local_offer, size: 16.sp, color: Colors.green.shade700),
           SizedBox(width: 8.w),
           Text(
-            '${booking!.coupon!.couponCode} Applied',
+            '${booking.coupon!.couponCode} Applied',
             style: TextStyle(
               color: Colors.green.shade700,
               fontSize: 13.sp * scaleFactor,
@@ -371,17 +372,17 @@ if (booking?.coupon?.couponCode != null)
   double scaleFactor, {
   required CustomerBooking booking,
 }) {
-  final services = booking?.bookingService ?? [];
+  final services = booking.bookingService ?? [];
 
   // 1. Prioritize backend-calculated amounts
- final bool hasAmountData = booking?.bookingAmount != null;
+ final bool hasAmountData = booking.bookingAmount != null;
 
 // 1. Total of items before any discount (Sum of 'price')
 final double itemTotal = services.fold<double>(0, (s, e) => s + e.price.toDouble());
 
 // 2. The amount after item-level/coupon discount
 final double actualAmount = hasAmountData 
-    ? booking!.bookingAmount!.actualAmount.toDouble() 
+    ? booking.bookingAmount!.actualAmount.toDouble() 
     : services.fold<double>(0, (s, e) => s + e.discountPrice.toDouble());
 
 // 3. Coupon Savings (Difference between original price and actual amount)
@@ -389,7 +390,7 @@ final double couponDiscount = itemTotal - actualAmount;
 
 // 4. Taxes & Fees (prioritize backend value)
 final int gstOnPlatform = hasAmountData 
-    ? booking!.bookingAmount!.gstAmount.toInt() 
+    ? booking.bookingAmount!.gstAmount.toInt() 
     : ((itemTotal * 0.20) * 0.18).round();
 // 5. Grand Total (Actual amount + taxes)
 final int total = (actualAmount + gstOnPlatform).round();
@@ -449,7 +450,7 @@ final int total = (actualAmount + gstOnPlatform).round();
             inr.format(itemTotal), 
             scaleFactor: scaleFactor,
           ),
-if ((booking?.coupon?.couponCode != null) || couponDiscount > 0)
+if ((booking.coupon?.couponCode != null) || couponDiscount > 0)
   _billingRow(
     'Coupon Discount', 
     "- ${inr.format(couponDiscount)}",

@@ -9,7 +9,7 @@ import '../../utils/test_extensions.dart';
 import '../../widgets/three_dot_loader.dart';
 
 class FinancialDetailsScreen extends StatefulWidget {
-  const FinancialDetailsScreen({Key? key}) : super(key: key);
+  const FinancialDetailsScreen({super.key});
 
   @override
   State<FinancialDetailsScreen> createState() => _FinancialDetailsScreenState();

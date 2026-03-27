@@ -197,10 +197,10 @@ class ProfileController extends GetxController {
     final c = _customer.value;
     if (c == null) return false;
 
-    String _clean(String? v) => (v ?? '').trim();
+    String clean(String? v) => (v ?? '').trim();
 
-    final firstName = _clean(c.firstName);
-    final gender = _clean(c.gender);
+    final firstName = clean(c.firstName);
+    final gender = clean(c.gender);
 
     if (firstName.isEmpty) return false;
     if (gender.isEmpty) return false;

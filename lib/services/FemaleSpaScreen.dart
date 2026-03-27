@@ -12,7 +12,7 @@ import '../controllers/cart_controller.dart';
 
 class FemaleSpaScreen extends StatefulWidget {
   final String? scrollToServiceId;
-  const FemaleSpaScreen({Key? key, this.scrollToServiceId}) : super(key: key);
+  const FemaleSpaScreen({super.key, this.scrollToServiceId});
 
   @override
   _FemaleSpaScreenState createState() => _FemaleSpaScreenState();

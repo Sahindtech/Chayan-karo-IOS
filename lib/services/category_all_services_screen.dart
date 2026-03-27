@@ -9,9 +9,9 @@ class CategoryAllServicesScreen extends StatelessWidget {
   final Category category;
 
   const CategoryAllServicesScreen({
-    Key? key,
+    super.key,
     required this.category,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

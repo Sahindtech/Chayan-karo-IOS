@@ -55,7 +55,7 @@ class CategoryRepository {
         return cachedCategories;
       }
       
-      throw e;
+      rethrow;
     }
   }
 
@@ -79,7 +79,7 @@ class CategoryRepository {
       return categories;
     } catch (e) {
       print('❌ Error refreshing categories: $e');
-      throw e;
+      rethrow;
     }
   }
 

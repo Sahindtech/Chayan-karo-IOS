@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../controllers/banner_controller.dart';
-import '../../../controllers/profile_controller.dart';
+//import '../../../controllers/profile_controller.dart';
 import '../../../services/universal_service_screen.dart';
 import '../../../controllers/category_controller.dart';
 
@@ -15,10 +15,10 @@ class HomeBannerWidget extends StatefulWidget {
   final double horizontalPadding;
 
   const HomeBannerWidget({
-    Key? key,
+    super.key,
     required this.scaleFactor,
     required this.horizontalPadding,
-  }) : super(key: key);
+  });
 
   @override
   State<HomeBannerWidget> createState() => _HomeBannerWidgetState();
@@ -30,7 +30,7 @@ class _HomeBannerWidgetState extends State<HomeBannerWidget> {
   @override
   Widget build(BuildContext context) {
     final bannerController = Get.find<BannerController>();
-    final profileController = Get.find<ProfileController>();
+   // final profileController = Get.find<ProfileController>();
 
     return Obx(() {
       if (bannerController.isLoading.value) return _buildShimmerLoading();
@@ -51,10 +51,10 @@ class _HomeBannerWidgetState extends State<HomeBannerWidget> {
             ),
             itemBuilder: (context, index, _) {
               final banner = bannerController.banners[index];
-              final customer = profileController.customer;
-              String userName = (customer?.fullName != null && customer!.fullName.isNotEmpty) 
-                  ? customer.fullName.trim().split(' ').first 
-                  : 'Customer';
+              // final customer = profileController.customer;
+              // String userName = (customer?.fullName != null && customer!.fullName.isNotEmpty) 
+              //     ? customer.fullName.trim().split(' ').first 
+              //     : 'Customer';
 
               return _buildBannerContent(
     title: banner.description ?? "Special Offer",

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../home/home_screen.dart';
 import 'booking_screen.dart';
 
 class BookingRescheduledScreen extends StatelessWidget {

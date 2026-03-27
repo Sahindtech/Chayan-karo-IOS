@@ -61,7 +61,7 @@ class ServiceRepository {
         return cachedServices;
       }
       
-      throw e;
+      rethrow;
     } catch (e) {
       print('❌ Error fetching services for category $serviceCategoryId: $e');
       
@@ -72,7 +72,7 @@ class ServiceRepository {
         return cachedServices;
       }
       
-      throw e;
+      rethrow;
     }
   }
 
@@ -104,10 +104,10 @@ class ServiceRepository {
       }
       
       print('❌ Error refreshing services for category $serviceCategoryId: $e');
-      throw e;
+      rethrow;
     } catch (e) {
       print('❌ Error refreshing services for category $serviceCategoryId: $e');
-      throw e;
+      rethrow;
     }
   }
 

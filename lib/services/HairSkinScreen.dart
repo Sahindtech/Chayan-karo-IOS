@@ -11,7 +11,7 @@ import '../views/booking/Summaryscreen.dart';
 
 class HairSkinScreen extends StatefulWidget {
   final String? scrollToServiceId;
-  const HairSkinScreen({Key? key, this.scrollToServiceId}) : super(key: key);
+  const HairSkinScreen({super.key, this.scrollToServiceId});
 
   @override
   _HairSkinScreenState createState() => _HairSkinScreenState();

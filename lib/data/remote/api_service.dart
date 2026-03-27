@@ -2,7 +2,6 @@
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
 import '../../models/auth_models.dart';
-import '../../models/home_models.dart';
 import '../../models/customer_models.dart';
 import '../../models/category_models.dart';
 import '../../models/service_models.dart';
@@ -21,7 +20,7 @@ import '../../models/booked_saathi_model.dart';
 import '../../models/saathi_rating_model.dart'; // Add this import
 import '../../models/provider_service_model.dart';
 import '../../models/check_availability_model.dart';
-import '../../models/bank_model.dart'; // Add this import
+// Add this import
 import '../../models/bank_response_model.dart';
 import '../../models/banner_model.dart'; // Add this import
 import '../../models/coupon_models.dart'; // Add this import

@@ -6,10 +6,10 @@ class ThreeDotLoader extends StatefulWidget {
   final double size;
 
   const ThreeDotLoader({
-    Key? key,
+    super.key,
     this.color = const Color(0xFFE47830), // Orange color
     this.size = 14.0,
-  }) : super(key: key);
+  });
 
   @override
   _ThreeDotLoaderState createState() => _ThreeDotLoaderState();

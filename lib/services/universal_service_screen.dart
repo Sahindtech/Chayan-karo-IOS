@@ -25,11 +25,11 @@ class CategoryServiceScreen extends StatefulWidget {
   final String? highlightServiceId; // 1. NEW PARAMETER
 
   const CategoryServiceScreen({
-    Key? key,
+    super.key,
     required this.category,
     this.scrollToServiceCategoryId,
     this.highlightServiceId, // 1. Add to constructor
-  }) : super(key: key);
+  });
 
   @override
   State<CategoryServiceScreen> createState() => _CategoryServiceScreenState();
@@ -184,7 +184,7 @@ void _addToCart(Service service) {
     final catId = widget.category.categoryId;
     final item = CartItem.fromService(
       service,
-      sourcePage: 'category_service_${catId}',
+      sourcePage: 'category_service_$catId',
       sourceTitle: widget.category.categoryName,
     ).copyWith(categoryId: catId);
 
@@ -1109,7 +1109,7 @@ Widget _buildServiceCategoryGrid(double scaleFactor) {
     final services = _servicesByCategory[serviceCategoryId] ?? [];
 
     if (isLoading && services.isEmpty) {
-      return Container(
+      return SizedBox(
         height: 100.h * scaleFactor,
         child: const Center(
           child: ThreeDotLoader(color: Color(0xFFFF6F00)),
@@ -1118,7 +1118,7 @@ Widget _buildServiceCategoryGrid(double scaleFactor) {
     }
 
     if (hasError && services.isEmpty) {
-      return Container(
+      return SizedBox(
         height: 100.h * scaleFactor,
         child: Center(
           child: Column(
@@ -1152,7 +1152,7 @@ Widget _buildServiceCategoryGrid(double scaleFactor) {
     }
 
     if (services.isEmpty) {
-      return Container(
+      return SizedBox(
         height: 60.h * scaleFactor,
         child: Center(
           child: Text(

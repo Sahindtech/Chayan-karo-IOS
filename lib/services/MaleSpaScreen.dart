@@ -11,7 +11,7 @@ import '../views/booking/Summaryscreen.dart';
 
 class MaleSpaScreen extends StatefulWidget {
   final String? scrollToServiceId;
-  const MaleSpaScreen({Key? key, this.scrollToServiceId}) : super(key: key);
+  const MaleSpaScreen({super.key, this.scrollToServiceId});
 
   @override
   _MaleSpaScreenState createState() => _MaleSpaScreenState();

@@ -23,7 +23,7 @@ class ReferAndEarnScreen extends StatefulWidget {
 }
 
 class _ReferAndEarnScreenState extends State<ReferAndEarnScreen> {
-  int _selectedIndex = 3;
+  final int _selectedIndex = 3;
   final ProfileController _profileController = Get.find<ProfileController>();
   String get _referralCode => _profileController.customer?.referralCode ?? "CHAYAN10";
 

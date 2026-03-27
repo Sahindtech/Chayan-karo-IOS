@@ -10,11 +10,12 @@ import '../../controllers/profile_controller.dart';
 import '../../utils/test_extensions.dart';
 import 'package:image_picker/image_picker.dart'; // <--- ADD THIS
 import '../../widgets/discard_changes_sheet.dart'; // <--- IMPORT YOUR DIALOG FILE HERE
+import '../../widgets/app_snackbar.dart';
 
 
 class EditProfileScreen extends StatefulWidget {
   final Customer? customer;
-  const EditProfileScreen({Key? key, this.customer}) : super(key: key);
+  const EditProfileScreen({super.key, this.customer});
 
   @override
   _EditProfileScreenState createState() => _EditProfileScreenState();
@@ -91,17 +92,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     // If the profile currently saved on the server is incomplete, BLOCK exit.
     // We check the controller because it holds the "source of truth" data.
     if (!_profileController.isBasicInfoComplete) {
-      Get.snackbar(
-        'Action Required',
-        'Please complete your profile details to continue.',
-        snackPosition: SnackPosition.TOP,
-        backgroundColor: Colors.orange[100],
-        colorText: Colors.orange[900],
-        margin: EdgeInsets.all(16.w),
-        borderRadius: 12,
-        icon: const Icon(Icons.info_outline, color: Colors.orange),
-        duration: const Duration(seconds: 4), // Stay visible longer
-      );
+    AppSnackbar.showWarning('Please complete your profile details to continue.');
       return; // <--- STOP. Do not pop.
     }
 
@@ -733,13 +724,7 @@ SizedBox(height: 4.h),
     // STOP execution here if there are errors (Visuals will update automatically)
     if (hasError) {
       // Optional: Keep a generic snackbar if you want extra feedback
-      Get.snackbar(
-        'Action Required',
-        'Please correct the highlighted fields',
-        snackPosition: SnackPosition.TOP,
-        backgroundColor: Colors.red[100],
-        colorText: Colors.red[800],
-      );
+      AppSnackbar.showError('Please correct the highlighted fields');
       return; 
     }
 
@@ -753,23 +738,11 @@ SizedBox(height: 4.h),
     );
 
     if (success) {
-      Get.snackbar(
-        'Success',
-        'Profile updated successfully',
-        snackPosition: SnackPosition.TOP,
-        backgroundColor: Colors.green[100],
-        colorText: Colors.green[800],
-      );
+     AppSnackbar.showSuccess('Profile updated successfully');
       await Future.delayed(const Duration(milliseconds: 500));
       Get.offAllNamed('/profile');
     } else {
-      Get.snackbar(
-        'Error',
-        _profileController.errorMessage,
-        snackPosition: SnackPosition.TOP,
-        backgroundColor: Colors.red[100],
-        colorText: Colors.red[800],
-      );
+      AppSnackbar.showError(_profileController.errorMessage);
     }
   }
 }

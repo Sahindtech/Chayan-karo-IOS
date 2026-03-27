@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../../controllers/most_used_service_controller.dart';
-import '../../../models/most_used_service_model.dart';
 import '../../all_most_used_services/all_most_used_services_screen.dart';
 
 class HorizontalServiceScroll extends StatelessWidget {

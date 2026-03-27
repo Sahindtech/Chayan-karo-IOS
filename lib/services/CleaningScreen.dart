@@ -11,7 +11,7 @@ import '../views/booking/Summaryscreen.dart';
 
 class CleaningScreen extends StatefulWidget {
   final String? scrollToServiceId;
-  const CleaningScreen({Key? key, this.scrollToServiceId}) : super(key: key);
+  const CleaningScreen({super.key, this.scrollToServiceId});
 
   @override
   _CleaningScreenState createState() => _CleaningScreenState();

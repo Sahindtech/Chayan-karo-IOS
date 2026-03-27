@@ -72,7 +72,7 @@ class HomeController extends GetxController {
       ]);
       
       print('🏠 Initialization completed successfully');
-      print('🔐 Auth State: ${_isLoggedIn.value} | User: ${userName}');
+      print('🔐 Auth State: ${_isLoggedIn.value} | User: $userName');
       print('📊 GoTo Services: ${_goToServices.length}');
       print('📊 Most Used Services: ${_mostUsedServices.length}');
       

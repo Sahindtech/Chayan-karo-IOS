@@ -13,10 +13,10 @@ class CategoriesGridWidget extends StatelessWidget {
   final double horizontalPadding;
 
   const CategoriesGridWidget({
-    Key? key,
+    super.key,
     required this.scaleFactor,
     required this.horizontalPadding,
-  }) : super(key: key);
+  });
 
   void _navigateToCategory(Category category) {
     Get.to(() => CategoryServiceScreen(category: category));

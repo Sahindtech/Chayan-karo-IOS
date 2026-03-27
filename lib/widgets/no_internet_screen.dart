@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 class NoInternetScreen extends StatelessWidget {
   final VoidCallback onRetry;
 
-  const NoInternetScreen({Key? key, required this.onRetry}) : super(key: key);
+  const NoInternetScreen({super.key, required this.onRetry});
 
   @override
   Widget build(BuildContext context) {

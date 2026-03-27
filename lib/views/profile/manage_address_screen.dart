@@ -206,7 +206,7 @@ class _ManageAddressScreenState extends State<ManageAddressScreen> {
                                         ),
                                         SizedBox(width: 8.w * scaleFactor),
                                         Text(
-                                          '${address.city}',
+                                          address.city,
                                           style: TextStyle(
                                             fontSize: 16.sp * scaleFactor,
                                             fontWeight: FontWeight.w600,
@@ -710,8 +710,7 @@ class _OutlinedIconField extends StatelessWidget {
     required this.hintText,
     required this.icon,
     required this.testId,
-    this.keyboardType,
-    super.key,
+    required this.keyboardType,
   });
 
   @override

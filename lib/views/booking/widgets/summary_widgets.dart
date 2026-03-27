@@ -32,7 +32,7 @@ class SummaryTopDetailsBlock extends StatelessWidget {
   final VoidCallback onEditSaathi;
 
   const SummaryTopDetailsBlock({
-    Key? key,
+    super.key,
     required this.scale,
     required this.address,
     required this.timeLabel,
@@ -40,7 +40,7 @@ class SummaryTopDetailsBlock extends StatelessWidget {
     required this.onEditAddress,
     required this.onEditTime,
     required this.onEditSaathi,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -138,11 +138,11 @@ class SummaryPaymentMethodBlock extends StatelessWidget {
   final ValueChanged<PaymentMethod?> onChanged;
 
   const SummaryPaymentMethodBlock({
-    Key? key,
+    super.key,
     required this.scale,
     required this.groupValue,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -202,13 +202,13 @@ class SummarySelectedServicesBlock extends StatelessWidget {
   final Function(String id, bool increment) onUpdateQty;
 
   const SummarySelectedServicesBlock({
-    Key? key,
+    super.key,
     required this.items,
     required this.scale,
     required this.onUpdateQty,
     this.isLocked = false,
     this.isLoading = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -233,7 +233,7 @@ class SummarySelectedServicesBlock extends StatelessWidget {
                     isLoading: isLoading,
                     onUpdateQty: onUpdateQty,
                   ))
-              .toList(),
+              ,
         ],
       ),
     );
@@ -433,7 +433,7 @@ class _SummaryServiceItem extends StatelessWidget {
 // 4. Empty Services Block
 class SummaryEmptyServicesBlock extends StatelessWidget {
   final double scale;
-  const SummaryEmptyServicesBlock({required this.scale});
+  const SummaryEmptyServicesBlock({super.key, required this.scale});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -472,7 +472,7 @@ class SummaryCouponsRow extends StatelessWidget {
   final Coupon? selectedCoupon;
   final double discountAmount;
 
-  const SummaryCouponsRow({
+  const SummaryCouponsRow({super.key, 
     required this.scale,
     required this.onTap,
     required this.onRemove, // ✅ Added
@@ -761,13 +761,13 @@ class CouponsBottomSheet extends StatefulWidget {
   final double orderAmount;
 
   const CouponsBottomSheet({
-    Key? key,
+    super.key,
     required this.scale,
     required this.onApply,
     required this.onRemove,
     this.selectedCoupon,
     required this.orderAmount,
-  }) : super(key: key);
+  });
 
   @override
   State<CouponsBottomSheet> createState() => _CouponsBottomSheetState();
@@ -871,7 +871,7 @@ class _CouponsBottomSheetState extends State<CouponsBottomSheet> {
                       SizedBox(height: 16.h * scale),
                       ...couponController.coupons
                           .map((coupon) => _buildCouponItem(coupon, scale))
-                          .toList(),
+                          ,
                     ] else
                       // ✅ BEAUTIFUL EMPTY STATE
                       _buildEmptyState(scale),

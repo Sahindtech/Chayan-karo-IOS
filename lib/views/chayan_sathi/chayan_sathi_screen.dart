@@ -306,7 +306,7 @@ Widget _buildSaathiCard(SaathiItem saathi, double scaleFactor) {
             ),
             child: hasNetImage
                 ? Image.network(
-                    img!,
+                    img,
                     height: 115.h * scaleFactor,
                     width: double.infinity,
                     fit: BoxFit.cover,
@@ -392,7 +392,7 @@ Widget _buildSaathiCard(SaathiItem saathi, double scaleFactor) {
                     ),
                     SizedBox(width: 4.w * scaleFactor),
                     Text(
-                      '${(saathi.rating ?? 0.0).toStringAsFixed(1)}',
+                      (saathi.rating ?? 0.0).toStringAsFixed(1),
                       style: TextStyle(
                         fontFamily: 'SFPro',
                         fontSize: 12.sp * scaleFactor,
@@ -442,7 +442,7 @@ Widget _buildEmptySaathiState(BuildContext context, double scaleFactor) {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
+          SizedBox(
             width: 110.w * scaleFactor,
             height: 110.h * scaleFactor,
             child: ClipOval(

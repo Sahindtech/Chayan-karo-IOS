@@ -1,7 +1,6 @@
 import '../remote/api_service.dart';
 import '../remote/network_client.dart';
 import '../../data/local/database.dart';
-import '../../models/bank_model.dart';
 import '../../models/bank_response_model.dart';
 
 class FinancialRepository {

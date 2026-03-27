@@ -6,7 +6,7 @@ import '../../controllers/otp_controller.dart';
 import '../../utils/test_extensions.dart'; // Adjust path if needed
 
 class OtpVerificationScreen extends StatelessWidget {
-  const OtpVerificationScreen({Key? key}) : super(key: key);
+  const OtpVerificationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -207,76 +207,70 @@ Obx(() {
     );
   }
 
- Widget _buildOtpFields(OtpController controller, double scaleFactor) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: List.generate(4, (index) {
-        return SizedBox(
-          width: 55.w * scaleFactor,
-          height: 55.h * scaleFactor,
-          child: KeyboardListener(
-            focusNode: FocusNode(), // Required for listener to work
-            onKeyEvent: (event) {
-              // Check if key is Backspace and event is KeyDown
-              if (event is KeyDownEvent && 
-                  event.logicalKey == LogicalKeyboardKey.backspace) {
-                controller.handleBackspace(index);
-              }
-            },
+// 1. Create a static or persistent list of FocusNodes for the listeners 
+// OR better yet, pass the TextField focusNode to the listener.
+
+Widget _buildOtpFields(OtpController controller, double scaleFactor) {
+  return GestureDetector(
+    onTap: () {
+      controller.otpFocusNode.requestFocus();
+    },
+    child: Stack(
+      children: [
+        // 🔥 HIDDEN TEXTFIELD
+        Opacity(
+          opacity: 0,
           child: TextField(
-            controller: controller.otpControllers[index],
-            focusNode: controller.focusNodes[index],
+            controller: controller.otpController,
+            focusNode: controller.otpFocusNode,
             keyboardType: TextInputType.number,
-            textAlign: TextAlign.center,
-            
-            // 1. CHANGE THIS TO 4: Allows the full "1234" string to enter temporarily
-            maxLength: 60, 
-            
-            // 2. ENSURE THIS IS TRUE: Allows long-press to show "Paste"
-            enableInteractiveSelection: true, 
-            
-            showCursor: true,
-            style: TextStyle(
-              fontSize: 22.sp * scaleFactor,
-              fontFamily: 'SFProSemibold',
-              color: Colors.black,
-            ),
-            decoration: InputDecoration(
-              counterText: '', // Hides the character counter 0/4
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12.r * scaleFactor),
-                borderSide: BorderSide(color: Colors.grey[300]!),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12.r * scaleFactor),
-                borderSide: BorderSide(color: Colors.grey[300]!),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Color(0xFFFF6F00),
-                  width: 2.w * scaleFactor,
-                ),
-                borderRadius: BorderRadius.circular(12.r * scaleFactor),
-              ),
-              filled: true,
-              fillColor: Colors.grey[50],
-            ),
-            
-            onChanged: (value) => controller.onOtpChanged(value, index),
-            
-            onTap: () {
-              // Keeps cursor at the end
-              if (controller.otpControllers[index].text.isNotEmpty) {
-                 controller.otpControllers[index].selection = TextSelection.fromPosition(
-                    TextPosition(offset: controller.otpControllers[index].text.length)
-                 );
-              }
-            },
-          ).withId('otp_input_$index'),
+            autofocus: true,
+            enableSuggestions: false,
+            autocorrect: false,
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+            ],
           ),
-        );
-        
-      }),
-    );
-  }
-}
+        ),
+
+        // 🎯 VISIBLE OTP BOXES
+        Obx(() {
+          final otp = controller.otp;
+
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: List.generate(4, (index) {
+              final isFilled = index < otp.length;
+              final digit = isFilled ? otp[index] : '';
+
+              return Container(
+                width: (55.w * scaleFactor).roundToDouble(),
+                height: (55.h * scaleFactor).roundToDouble(),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.circular(12.r * scaleFactor),
+                  border: Border.all(
+                    color: isFilled
+                        ? const Color(0xFFFF6F00)
+                        : Colors.grey[300]!,
+                    width: 2,
+                  ),
+                  color: Colors.grey[50],
+                ),
+                child: Text(
+                  digit,
+                  style: TextStyle(
+                    fontSize: 22.sp * scaleFactor,
+                    fontFamily: 'SFProSemibold',
+                    color: Colors.black,
+                  ),
+                ),
+              );
+            }),
+          );
+        }),
+      ],
+    ),
+  );
+}}

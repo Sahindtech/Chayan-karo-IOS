@@ -22,7 +22,7 @@ class RewardsScreen extends StatefulWidget {
 }
 
 class _RewardsScreenState extends State<RewardsScreen> {
-  int _selectedIndex = 3;
+  final int _selectedIndex = 3;
 
 void _onItemTapped(BuildContext context, int index) {
     if (index == 3) return;

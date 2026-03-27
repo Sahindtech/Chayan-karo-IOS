@@ -25,7 +25,7 @@ Future<String?> showScheduleAddressPopup(BuildContext context) {
 }
 
 class _ScheduleAddressSheet extends StatefulWidget {
-  const _ScheduleAddressSheet({Key? key}) : super(key: key);
+  const _ScheduleAddressSheet({super.key});
 
   @override
   State<_ScheduleAddressSheet> createState() => _ScheduleAddressSheetState();

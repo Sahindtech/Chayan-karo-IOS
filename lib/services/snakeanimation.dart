@@ -8,11 +8,11 @@ class AnimatedAddButton extends StatefulWidget {
   final double scaleFactor;
 
   const AnimatedAddButton({
-    Key? key,
+    super.key,
     required this.onTap,
     required this.isLoading,
     required this.scaleFactor,
-  }) : super(key: key);
+  });
 
   @override
   State<AnimatedAddButton> createState() => _AnimatedAddButtonState();
@@ -119,11 +119,11 @@ class AnimatedBorderWrapper extends StatefulWidget {
   final double scaleFactor;
 
   const AnimatedBorderWrapper({
-    Key? key,
+    super.key,
     required this.child,
     required this.isAnimating,
     required this.scaleFactor,
-  }) : super(key: key);
+  });
 
   @override
   State<AnimatedBorderWrapper> createState() => _AnimatedBorderWrapperState();

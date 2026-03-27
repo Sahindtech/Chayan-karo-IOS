@@ -814,7 +814,7 @@ _billingRow(
                     ),
                     SizedBox(width: 8.w * scaleFactor),
                     Text(
-                      "${durationMinutes} mins",
+                      "$durationMinutes mins",
                       style: TextStyle(
                         fontSize: 12.sp * scaleFactor,
                         color:

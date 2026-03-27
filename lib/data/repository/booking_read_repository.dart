@@ -45,7 +45,7 @@ class BookingReadRepository {
     if (data == null || data is! Map<String, dynamic>) {
       throw Exception('Invalid response format from server');
     }
-    final Map<String, dynamic> raw = data as Map<String, dynamic>;
+    final Map<String, dynamic> raw = data;
 
     // Common wrappers
     dynamic payload =
@@ -66,7 +66,7 @@ class BookingReadRepository {
       }
     }
 
-    final payloadList = (payload as List).whereType<Map<String, dynamic>>().map((e) {
+    final payloadList = (payload).whereType<Map<String, dynamic>>().map((e) {
       // Normalize fields the model expects (status is required in model)
       e['status'] = (e['status'] ?? '').toString();
       e['rescheduleReason'] = e['rescheduleReason']?.toString();

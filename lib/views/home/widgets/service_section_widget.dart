@@ -11,10 +11,10 @@ class ServiceSectionWidget extends StatelessWidget {
   final double scaleFactor;
 
   const ServiceSectionWidget({
-    Key? key,
+    super.key,
     required this.title,
     required this.scaleFactor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +53,7 @@ class ServiceSectionWidget extends StatelessWidget {
 
               // Handle loading state
               if (homeController.isLoading && goToServices.isEmpty) {
-                return Container(
+                return SizedBox(
                   height: cardHeight,
                   child: const Center(
                     child: CircularProgressIndicator(
@@ -65,7 +65,7 @@ class ServiceSectionWidget extends StatelessWidget {
 
               // Handle empty state
               if (goToServices.isEmpty) {
-                return Container(
+                return SizedBox(
                   height: cardHeight,
                   child: Center(
                     child: Column(

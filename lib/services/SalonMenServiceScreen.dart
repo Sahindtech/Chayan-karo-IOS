@@ -11,7 +11,7 @@ import '../views/booking/Summaryscreen.dart';
 
 class SalonMenServiceScreen extends StatefulWidget {
   final String? scrollToServiceId;
-  const SalonMenServiceScreen({Key? key, this.scrollToServiceId}) : super(key: key);
+  const SalonMenServiceScreen({super.key, this.scrollToServiceId});
 
   @override
   _SalonMenServiceScreenState createState() => _SalonMenServiceScreenState();

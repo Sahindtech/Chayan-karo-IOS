@@ -12,9 +12,9 @@ class MostUsedServicesWidget extends StatelessWidget {
   final double scaleFactor;
 
   const MostUsedServicesWidget({
-    Key? key,
+    super.key,
     required this.scaleFactor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

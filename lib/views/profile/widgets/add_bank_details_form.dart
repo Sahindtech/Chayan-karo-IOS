@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import '../../../controllers/financial_controller.dart';
 
 class AddBankDetailsForm extends StatefulWidget {
-  const AddBankDetailsForm({Key? key}) : super(key: key);
+  const AddBankDetailsForm({super.key});
 
   @override
   _AddBankDetailsFormState createState() => _AddBankDetailsFormState();

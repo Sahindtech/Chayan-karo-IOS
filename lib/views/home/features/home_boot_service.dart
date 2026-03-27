@@ -17,13 +17,13 @@ class HomeBootService {
     }
 
     // 2) Choose a safe initial category id (never "all")
-    String? _pickInitialCategoryId() {
+    String? pickInitialCategoryId() {
       if (svc.currentServiceCategoryId.isNotEmpty) return svc.currentServiceCategoryId;
       if (cat.categories.isNotEmpty) return cat.categories.first.categoryId;
       return null; // no valid id yet
     }
 
-    final initialCid = _pickInitialCategoryId();
+    final initialCid = pickInitialCategoryId();
 
     // 3) Load services only when a valid category id exists
     if (initialCid != null && initialCid.isNotEmpty) {
@@ -34,12 +34,12 @@ class HomeBootService {
 
     // 4) Precache above-the-fold images (skip svgs/invalid URLs)
     final List<ImageProvider> images = [];
-    bool _validUrl(String? u) =>
+    bool validUrl(String? u) =>
         u != null && u.trim().isNotEmpty && u.startsWith('http') && !u.toLowerCase().endsWith('.svg');
 
     for (final c in cat.categories.take(8)) {
       final url = c.imgLink;
-      if (_validUrl(url)) {
+      if (validUrl(url)) {
         images.add(CachedNetworkImageProvider(url, cacheManager: AppImageCache.manager));
       }
     }
@@ -47,7 +47,7 @@ class HomeBootService {
     if (initialCid != null && initialCid.isNotEmpty && svc.services.isNotEmpty) {
       for (final s in svc.services.take(8)) {
         final url = s.imgLink; // your Service model exposes imgLink
-        if (_validUrl(url)) {
+        if (validUrl(url)) {
           images.add(CachedNetworkImageProvider(url, cacheManager: AppImageCache.manager));
         }
       }

@@ -283,7 +283,7 @@ class AppDatabase extends _$AppDatabase {
       print('✅ Location saved to cache: $label - $address');
     } catch (e) {
       print('❌ Error saving location: $e');
-      throw e;
+      rethrow;
     }
   }
 
@@ -376,7 +376,7 @@ class AppDatabase extends _$AppDatabase {
       print('🗑️ Location deleted: $locationId');
     } catch (e) {
       print('❌ Error deleting location: $e');
-      throw e;
+      rethrow;
     }
   }
 
@@ -425,7 +425,7 @@ class AppDatabase extends _$AppDatabase {
       print('🗑️ All location data cleared');
     } catch (e) {
       print('❌ Error clearing location data: $e');
-      throw e;
+      rethrow;
     }
   }
 
@@ -479,7 +479,7 @@ class AppDatabase extends _$AppDatabase {
       print('✅ Login state saved: isLoggedIn=$isLoggedIn, userId=$userId');
     } catch (e) {
       print('❌ Error saving login state: $e');
-      throw e;
+      rethrow;
     }
   }
 
@@ -491,7 +491,7 @@ class AppDatabase extends _$AppDatabase {
       print('✅ Onboarding marked as complete');
     } catch (e) {
       print('❌ Error marking onboarding complete: $e');
-      throw e;
+      rethrow;
     }
   }
 
@@ -514,7 +514,7 @@ class AppDatabase extends _$AppDatabase {
       print('✅ Authentication data cleared');
     } catch (e) {
       print('❌ Error clearing auth data: $e');
-      throw e;
+      rethrow;
     }
   }
 
@@ -579,7 +579,7 @@ class AppDatabase extends _$AppDatabase {
       print('✅ User profile updated');
     } catch (e) {
       print('❌ Error updating user profile: $e');
-      throw e;
+      rethrow;
     }
   }
 
@@ -630,7 +630,7 @@ class AppDatabase extends _$AppDatabase {
       print('💾 Inserted ${categories.length} API categories into database');
     } catch (e) {
       print('❌ Error inserting API categories: $e');
-      throw e;
+      rethrow;
     }
   }
 
@@ -669,7 +669,7 @@ class AppDatabase extends _$AppDatabase {
       print('🗑️ Cleared API categories table');
     } catch (e) {
       print('❌ Error clearing API categories: $e');
-      throw e;
+      rethrow;
     }
   }
 
@@ -786,7 +786,7 @@ class AppDatabase extends _$AppDatabase {
       print('💾 Inserted ${services.length} API services for category $categoryId into database');
     } catch (e) {
       print('❌ Error inserting API services: $e');
-      throw e;
+      rethrow;
     }
   }
 
@@ -846,7 +846,7 @@ class AppDatabase extends _$AppDatabase {
       print('🗑️ Cleared services for category $categoryId');
     } catch (e) {
       print('❌ Error clearing services by category: $e');
-      throw e;
+      rethrow;
     }
   }
 
@@ -857,7 +857,7 @@ class AppDatabase extends _$AppDatabase {
       print('🗑️ Cleared all API services table');
     } catch (e) {
       print('❌ Error clearing API services: $e');
-      throw e;
+      rethrow;
     }
   }
 
@@ -1181,7 +1181,7 @@ class AppDatabase extends _$AppDatabase {
       print('💾 Cart item saved: ${item.name}');
     } catch (e) {
       print('❌ Error inserting/updating cart item: $e');
-      throw e;
+      rethrow;
     }
   }
 
@@ -1315,7 +1315,7 @@ class AppDatabase extends _$AppDatabase {
       print('🔑 Auth token saved: ${token.substring(0, 20)}...');
     } catch (e) {
       print('❌ Error saving auth token: $e');
-      throw e;
+      rethrow;
     }
   }
 
@@ -1358,7 +1358,7 @@ class AppDatabase extends _$AppDatabase {
       print('✅ User data saved: ${userData.keys.join(', ')}');
     } catch (e) {
       print('❌ Error saving user data: $e');
-      throw e;
+      rethrow;
     }
   }
 
@@ -1390,7 +1390,7 @@ class AppDatabase extends _$AppDatabase {
       print('✅ User login status saved: $isLoggedIn');
     } catch (e) {
       print('❌ Error saving user login status: $e');
-      throw e;
+      rethrow;
     }
   }
 
@@ -1417,7 +1417,7 @@ class AppDatabase extends _$AppDatabase {
       print('✅ All user and auth data cleared');
     } catch (e) {
       print('❌ Error clearing user and auth data: $e');
-      throw e;
+      rethrow;
     }
   }
 
@@ -1450,7 +1450,7 @@ class AppDatabase extends _$AppDatabase {
       print('✅ Refresh token saved');
     } catch (e) {
       print('❌ Error saving refresh token: $e');
-      throw e;
+      rethrow;
     }
   }
 
@@ -1597,7 +1597,7 @@ class AppDatabase extends _$AppDatabase {
       print('✅ Secure Logout Complete: User data wiped, Onboarding preserved.');
     } catch (e) {
       print('❌ Error during secure logout: $e');
-      throw e;
+      rethrow;
     }
   }
 }

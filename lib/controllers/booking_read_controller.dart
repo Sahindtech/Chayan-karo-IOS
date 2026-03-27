@@ -113,9 +113,8 @@ class BookingReadController extends GetxController {
     String spId = booking.spId ?? '';
     String serviceName = 'Service';
 
-    if (booking.bookingService != null &&
-        booking.bookingService!.isNotEmpty) {
-      var s = booking.bookingService!.first;
+    if (booking.bookingService.isNotEmpty) {
+      var s = booking.bookingService.first;
       serviceName = s.serviceIName ?? 'Service';
     }
 

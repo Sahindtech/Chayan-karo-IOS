@@ -37,13 +37,13 @@ class _MergedBookingSheet extends StatefulWidget {
   final int currentBookingDuration; // ✅ Add this
 
   const _MergedBookingSheet({
-    Key? key,
+    super.key,
     required this.initialDateStr,
     this.initialTime,
     this.minTimeConstraint,
     this.blockedSlot, // <--- ADD THIS LINE
     this.currentBookingDuration = 0, // ✅ Add this with default value
-  }) : super(key: key);
+  });
 
   @override
   State<_MergedBookingSheet> createState() => _MergedBookingSheetState();
@@ -426,8 +426,9 @@ class _DateCard extends StatelessWidget {
     final diff = cardDate.difference(today).inDays;
     
     String label = DateFormat('EEE').format(date); 
-    if (diff == 0) label = 'Today'; 
-    else if (diff == 1) label = 'Tomorrow';
+    if (diff == 0) {
+      label = 'Today';
+    } else if (diff == 1) label = 'Tomorrow';
 
     return GestureDetector(
       onTap: onTap,

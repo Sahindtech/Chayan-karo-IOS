@@ -8,13 +8,13 @@ class ReadMoreText extends StatelessWidget {
   final TextStyle? textStyle;
 
   const ReadMoreText({
-    Key? key,
+    super.key,
     required this.text,
     required this.isExpanded,
     required this.onToggle,
     this.trimLines = 2,
     this.textStyle,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

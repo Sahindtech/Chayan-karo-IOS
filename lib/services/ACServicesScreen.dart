@@ -11,7 +11,7 @@ import '../views/booking/Summaryscreen.dart';
 
 class ACServicesScreen extends StatefulWidget {
   final String? scrollToServiceId;
-  const ACServicesScreen({Key? key, this.scrollToServiceId}) : super(key: key);
+  const ACServicesScreen({super.key, this.scrollToServiceId});
 
   @override
   _ACServicesScreenState createState() => _ACServicesScreenState();

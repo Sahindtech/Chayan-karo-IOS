@@ -19,7 +19,7 @@ class PlacesSearchWidget extends StatefulWidget {
   final LatLng? locationBias;
 
   const PlacesSearchWidget({
-    Key? key,
+    super.key,
     required this.controller,
     required this.focusNode,
     required this.googleApiKey,
@@ -28,7 +28,7 @@ class PlacesSearchWidget extends StatefulWidget {
     this.onClearPressed,
     this.showResultsOnly = false,
     this.locationBias,
-  }) : super(key: key);
+  });
 
   @override
   State<PlacesSearchWidget> createState() => _PlacesSearchWidgetState();

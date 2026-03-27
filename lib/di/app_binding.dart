@@ -1,6 +1,5 @@
 // lib/core/bindings/app_binding.dart
 import 'package:get/get.dart';
-import 'package:dio/dio.dart';
 import '../controllers/financial_controller.dart';
 import '../data/repository/financial_repository.dart';
 // Controllers

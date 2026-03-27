@@ -8,11 +8,11 @@ class LegalModal extends StatelessWidget {
   final String content;
 
   const LegalModal({
-    Key? key,
+    super.key,
     required this.title,
     required this.lastUpdated,
     required this.content,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

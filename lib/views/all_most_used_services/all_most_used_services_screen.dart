@@ -3,7 +3,6 @@ import 'package:flutter/services.dart'; // For HapticFeedback
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:collection/collection.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../services/snakeanimation.dart';
 import '../../utils/test_extensions.dart';
@@ -19,7 +18,7 @@ import '../../controllers/cart_controller.dart';
 // Models
 import '../../models/category_models.dart';
 import '../../models/service_models.dart' as service_models; // Alias Service model
-import '../../models/cart_models.dart' as cart_models; // Alias CartItem model
+// Alias CartItem model
 
 // Screens
 import '../../services/universal_service_screen.dart';

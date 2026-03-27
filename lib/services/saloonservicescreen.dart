@@ -11,7 +11,7 @@ import '../views/cart/cart_screen.dart';
 
 class SalonServiceScreen extends StatefulWidget {
   final String? scrollToServiceId;
-  const SalonServiceScreen({Key? key, this.scrollToServiceId}) : super(key: key);
+  const SalonServiceScreen({super.key, this.scrollToServiceId});
 
   @override
   _SalonServiceScreenState createState() => _SalonServiceScreenState();

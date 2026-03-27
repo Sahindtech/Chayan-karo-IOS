@@ -80,7 +80,14 @@ Widget build(BuildContext context) {
           color: Colors.black87,
           size: 20,
         ),
-        onPressed: () => Get.back(),
+        onPressed: () {
+  if (Navigator.canPop(context)) {
+    Navigator.pop(context);
+  } else {
+    // If it can't pop, manually route them where they belong
+    Get.offAllNamed('/home'); 
+  }
+}
       ),
 
       title: const Text(

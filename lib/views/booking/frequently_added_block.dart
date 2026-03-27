@@ -15,13 +15,13 @@ class FrequentlyAddedBlock extends StatelessWidget {
   final void Function(String serviceId)? onAdded; // NEW: notify parent
 
   const FrequentlyAddedBlock({
-    Key? key,
+    super.key,
     required this.scale,
     required this.categoryId,
     required this.categoryName,
     required this.services,
     this.onAdded,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

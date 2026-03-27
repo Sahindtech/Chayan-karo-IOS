@@ -15,7 +15,7 @@ Future<String?> showReschedulePopup(BuildContext context, {String? initialSlot})
 
 class _RescheduleContent extends StatefulWidget {
   final String? initialSlot;
-  const _RescheduleContent({Key? key, this.initialSlot}) : super(key: key);
+  const _RescheduleContent({super.key, this.initialSlot});
 
   @override
   State<_RescheduleContent> createState() => _RescheduleContentState();

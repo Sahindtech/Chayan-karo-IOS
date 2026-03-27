@@ -80,7 +80,8 @@ class LoginController extends GetxController {
         Get.toNamed('/otp', arguments: {
           'phone': phone,
           'message': response.message, 
-         'isExistingUser': response.isExistingUser
+         'isExistingUser': response.isExistingUser,
+         "userExists": response.isExistingUser,
         });
       } else {
         _errorMessage.value = response.message;

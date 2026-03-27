@@ -50,8 +50,8 @@ class _CancelBookingScreenState extends State<CancelBookingScreen> {
     super.initState();
 
     // Strict booking id resolution
-    bookingId = (widget.booking?.id?.toString().trim().isNotEmpty ?? false)
-        ? widget.booking!.id!.toString()
+    bookingId = (widget.booking?.id.toString().trim().isNotEmpty ?? false)
+        ? widget.booking!.id.toString()
         : (widget.bookingId ?? '').trim();
 
     // Derive UI fields safely

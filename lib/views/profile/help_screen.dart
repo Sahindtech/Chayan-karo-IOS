@@ -6,7 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../widgets/chayan_header.dart';
 
 class HelpScreen extends StatefulWidget {
-  const HelpScreen({Key? key}) : super(key: key);
+  const HelpScreen({super.key});
 
   @override
   State<HelpScreen> createState() => _HelpScreenState();
@@ -118,11 +118,11 @@ class HelpExpansionTile extends StatelessWidget {
   final double scaleFactor;
 
   const HelpExpansionTile({
-    Key? key,
+    super.key,
     required this.topic,
     required this.launchUrl,
     this.scaleFactor = 1.0,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

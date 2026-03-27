@@ -11,7 +11,7 @@ import '../views/booking/Summaryscreen.dart';
 
 class HomeRepairsScreen extends StatefulWidget {
   final String? scrollToServiceId;
-  const HomeRepairsScreen({Key? key, this.scrollToServiceId}) : super(key: key);
+  const HomeRepairsScreen({super.key, this.scrollToServiceId});
 
   @override
   _HomeRepairsScreenState createState() => _HomeRepairsScreenState();

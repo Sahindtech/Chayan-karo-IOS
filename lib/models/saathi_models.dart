@@ -128,7 +128,7 @@ class SaathiProviderDto {
       name: fullName,
       mobileNo: mobileNo, // Mapped in case UI needs it
       imageUrl: (imgLink ?? '').trim().isNotEmpty ? imgLink : null,
-      rating: averageRating == null ? null : averageRating!.toDouble(),
+      rating: averageRating?.toDouble(),
       jobsCompleted: totalReview,
       description: null,
       isLocked: isLocked, 

@@ -24,7 +24,7 @@ Future<BankDetail?> showBankSelectorPopup(BuildContext context) {
 }
 
 class _BankSelectorSheet extends StatefulWidget {
-  const _BankSelectorSheet({Key? key}) : super(key: key);
+  const _BankSelectorSheet({super.key});
 
   @override
   State<_BankSelectorSheet> createState() => _BankSelectorSheetState();

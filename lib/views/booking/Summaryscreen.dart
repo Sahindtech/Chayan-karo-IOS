@@ -51,7 +51,7 @@ class SummaryScreen extends StatefulWidget {
   final String? rebookingAddressId;
 
   const SummaryScreen({
-    Key? key,
+    super.key,
     this.currentPageSelectedServices,
     this.initialAddress = 'Default Address',
     this.initialTimeSlot = 'Select time slot',
@@ -60,7 +60,7 @@ class SummaryScreen extends StatefulWidget {
     this.isRebooking = false,
     this.rebookingLocationId,
     this.rebookingAddressId,
-  }) : super(key: key);
+  });
 
   @override
   State<SummaryScreen> createState() => _SummaryScreenState();
@@ -290,8 +290,9 @@ Coupon? _selectedCoupon;
     final diff = checkDate.difference(today).inDays;
 
     String dayPrefix = '';
-    if (diff == 0) dayPrefix = 'Today';
-    else if (diff == 1) dayPrefix = 'Tomorrow';
+    if (diff == 0) {
+      dayPrefix = 'Today';
+    } else if (diff == 1) dayPrefix = 'Tomorrow';
     else dayPrefix = DateFormat('EEE').format(datePart); 
 
     final dayMonth = DateFormat('d MMM').format(datePart);

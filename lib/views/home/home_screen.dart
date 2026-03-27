@@ -29,7 +29,7 @@ import '../../data/repository/location_repository.dart';
 import '../../controllers/service_controller.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();

@@ -16,10 +16,10 @@ class HomeHeaderWidget extends StatelessWidget {
   final double horizontalPadding;
 
   const HomeHeaderWidget({
-    Key? key,
+    super.key,
     required this.scaleFactor,
     required this.horizontalPadding,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

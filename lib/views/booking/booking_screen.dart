@@ -20,12 +20,14 @@ import '../../controllers/booking_read_controller.dart';
 import '../../models/booking_read_models.dart';
 
 class BookingScreen extends StatefulWidget {
+  const BookingScreen({super.key});
+
   @override
   _BookingScreenState createState() => _BookingScreenState();
 }
 
 class _BookingScreenState extends State<BookingScreen> {
-  int _selectedIndex = 1;
+  final int _selectedIndex = 1;
   bool showUpcoming = true;
 
   // UPDATED: Start both as false to represent "Show All" by default

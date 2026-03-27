@@ -231,9 +231,9 @@ class ProfileRepository {
           final ageInHours = DateTime.now().difference(cachedAt).inHours;
 
           if (ageInHours > 24) {
-            print('⚠️ Cached data is ${ageInHours} hours old, might be stale');
+            print('⚠️ Cached data is $ageInHours hours old, might be stale');
           } else {
-            print('✅ Using fresh cached data (${ageInHours} hours old)');
+            print('✅ Using fresh cached data ($ageInHours hours old)');
           }
         }
 

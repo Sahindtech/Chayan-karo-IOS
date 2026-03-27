@@ -18,9 +18,10 @@ import '../rewards/ReferAndEarnScreen.dart';
 import '../chayan_sathi/chayan_sathi_screen.dart';
 import '../booking/Summaryscreen.dart';
 import './widgets/read_more_text.dart';
+import '../../widgets/app_snackbar.dart';
 
 class CartScreen extends StatefulWidget {
-  const CartScreen({Key? key}) : super(key: key);
+  const CartScreen({super.key});
 
   @override
   State<CartScreen> createState() => _CartScreenState();
@@ -186,7 +187,7 @@ onBack: () {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
+            SizedBox(
               width: 110.w * scaleFactor,
               height: 110.h * scaleFactor,
               child: ClipOval(
@@ -279,7 +280,7 @@ onBack: () {
                     ...items
                         .map((item) =>
                             _buildCartItemCard(context, item, scaleFactor))
-                        .toList(),
+                        ,
                     if (groupIndex < sourceKeys.length - 1)
                       SizedBox(height: 16.h * scaleFactor),
                   ],
@@ -735,16 +736,7 @@ Widget _buildCartItemCard(
                         onTap: () {
                           cartController.clearCart();
                           Navigator.pop(context);
-                          Get.snackbar(
-                            'Cart Cleared',
-                            'All items have been removed',
-                            snackPosition: SnackPosition.TOP,
-                            backgroundColor: Color(0xFFE47830),
-                            colorText: Colors.white,
-                            duration: Duration(seconds: 2),
-                            margin: EdgeInsets.only(top: 16, left: 16, right: 16),
-                            borderRadius: 12,
-                          );
+                         AppSnackbar.showSuccess('All items have been removed');
                         },
                         child: Container(
                           padding: EdgeInsets.symmetric(vertical: 14),
@@ -779,32 +771,16 @@ Widget _buildCartItemCard(
     final groupedItems = cartController.getItemsGroupedBySource();
     // 1. Restriction: Minimum Order Value Check
     if (cartController.totalPrice < 99) {
-      Get.snackbar(
-        'Minimum Order Required',
-        'You cannot purchase below ₹99. Please add more items to your cart.',
-        snackPosition: SnackPosition.TOP,
-        backgroundColor: Colors.green[100],
-        colorText: Colors.green[900],
-        icon: const Icon(Icons.warning_amber_rounded, color: Colors.red),
-        margin: const EdgeInsets.only(top: 16, left: 16, right: 16),
-        borderRadius: 12,
-        duration: const Duration(seconds: 3),
-      );
+      AppSnackbar.showWarning(
+  'Minimum order ₹99 required. Please add more items.'
+);
       return;
     }
 
     if (groupedItems.length > 1) {
-      Get.snackbar(
-        '',
-        'You can purchase services from only one category at a time. Please remove the other selected services to Proceed',
-        titleText: const SizedBox.shrink(),
-        snackPosition: SnackPosition.TOP,
-        backgroundColor: Colors.green[100],
-        colorText: Colors.green[800],
-        margin: const EdgeInsets.only(top: 16, left: 16, right: 16),
-        borderRadius: 12,
-        duration: const Duration(seconds: 3),
-      );
+     AppSnackbar.showWarning(
+  'You can purchase services from only one category at a time.'
+);
 
       return;
     }
@@ -813,9 +789,9 @@ Widget _buildCartItemCard(
     if (!isValid) return;
 
     final List<String> selectedServiceIds = [];
-    groupedItems.values.forEach((items) {
+    for (var items in groupedItems.values) {
       selectedServiceIds.addAll(items.map((item) => item.id));
-    });
+    }
 
     Navigator.push(
       context,

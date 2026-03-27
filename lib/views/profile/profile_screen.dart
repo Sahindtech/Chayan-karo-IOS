@@ -29,14 +29,14 @@ import '../../controllers/profile_controller.dart';
 import '../../data/local/database.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({super.key});
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  int _selectedIndex = 4;
+  final int _selectedIndex = 4;
   bool _isLoggingOut = false;
   
   // Profile Controller Dependency
@@ -190,7 +190,7 @@ Widget _buildUserProfile(double scaleFactor) {
         else if (customer?.imageUrl != null && customer!.imageUrl!.isNotEmpty) {
           // FIX: Append the version timestamp to the URL to force a refresh
           imageProvider = NetworkImage(
-             '${customer!.imageUrl!}?v=${_profileController.imageVersion.value}'
+             '${customer.imageUrl!}?v=${_profileController.imageVersion.value}'
           );
         } 
         // 3. Fallback Default

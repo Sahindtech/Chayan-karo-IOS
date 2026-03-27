@@ -313,10 +313,10 @@ class _SaathiServiceScreenState extends State<SaathiServiceScreen> {
     final selectedAddressObj = locationController.addresses.firstWhereOrNull((a) {
        final parts = <String>[
          a.addressLine1 ?? "", 
-         if ((a.addressLine2 ?? "").trim().isNotEmpty) a.addressLine2!,
-         if ((a.city ?? "").trim().isNotEmpty) a.city!, 
-         if ((a.state ?? "").trim().isNotEmpty) a.state!, 
-         if ((a.postCode ?? "").trim().isNotEmpty) a.postCode!
+         if ((a.addressLine2 ?? "").trim().isNotEmpty) a.addressLine2,
+         if ((a.city ?? "").trim().isNotEmpty) a.city, 
+         if ((a.state ?? "").trim().isNotEmpty) a.state, 
+         if ((a.postCode ?? "").trim().isNotEmpty) a.postCode
        ];
        final constructed = parts.join(', ');
        return constructed.toLowerCase().trim() == selectedAddressString.toLowerCase().trim();
@@ -403,8 +403,8 @@ class _SaathiServiceScreenState extends State<SaathiServiceScreen> {
   Map<String, List<ProviderServiceItem>> _groupServices(List<ProviderServiceItem> list) {
     final Map<String, List<ProviderServiceItem>> grouped = {};
     for (var item in list) {
-      final key = (item.serviceCategoryId != null && item.serviceCategoryId!.isNotEmpty) 
-          ? item.serviceCategoryId! 
+      final key = (item.serviceCategoryId.isNotEmpty) 
+          ? item.serviceCategoryId 
           : "Other";
       if (!grouped.containsKey(key)) {
         grouped[key] = [];
@@ -522,7 +522,7 @@ class _SaathiServiceScreenState extends State<SaathiServiceScreen> {
                                       
                                       ...entry.value.map((service) => 
                                         _buildServiceCard(service, scaleFactor)
-                                      ).toList(),
+                                      ),
                                       
                                       if (showHeader) SizedBox(height: 8.h * scaleFactor),
                                     ],

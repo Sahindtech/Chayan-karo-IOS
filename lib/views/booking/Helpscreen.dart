@@ -12,7 +12,7 @@ class HelpScreen extends StatefulWidget {
 }
 
 class _HelpScreenState extends State<HelpScreen> {
-  List<bool> _isExpanded = [false, false, false, false, false, false];
+  final List<bool> _isExpanded = [false, false, false, false, false, false];
 
   final List<Map<String, String>> faqs = [
     {

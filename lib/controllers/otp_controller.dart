@@ -21,10 +21,11 @@ class OtpController extends GetxController {
   final _errorMessage = ''.obs; // Kept to avoid breaking existing bindings, but we rely on Snackbar now
   final _isButtonEnabled = false.obs;
   final _canResend = false.obs;
-  final _secondsRemaining = 60.obs;
+  final _secondsRemaining = 30.obs;
   // 1. Add these observables
    final _referralController = TextEditingController();
    final _isExistingUser = false.obs; // This will come from your Login API
+   late List<FocusNode> keyboardFocusNodes;
 
 // 2. Add getters
 TextEditingController get referralController => _referralController;
@@ -33,6 +34,8 @@ bool get isExistingUser => _isExistingUser.value;
   // Controllers and focus nodes for OTP input
   late List<TextEditingController> otpControllers;
   late List<FocusNode> focusNodes;
+  final TextEditingController otpController = TextEditingController();
+final FocusNode otpFocusNode = FocusNode();
 
   Timer? _resendTimer;
 
@@ -53,11 +56,36 @@ bool get isExistingUser => _isExistingUser.value;
     final args = Get.arguments as Map<String, dynamic>?;
     if (args != null && args.containsKey('phone')) {
       _phoneNumber.value = args['phone'];
-_isExistingUser.value = args['isExistingUser'] ?? false;    }
+      _isExistingUser.value = args['userExists'] ?? false; // Catch the boolean here
+    }
 
     // Initialize OTP controllers and focus nodes
     otpControllers = List.generate(4, (index) => TextEditingController());
     focusNodes = List.generate(4, (index) => FocusNode());
+    
+  // FIX: Initialize the missing field here
+  keyboardFocusNodes = List.generate(4, (index) => FocusNode());
+  otpController.addListener(() {
+  String text = otpController.text;
+
+  // ✅ keep only digits
+  text = text.replaceAll(RegExp(r'\D'), '');
+
+  // ✅ limit to 4 digits
+  if (text.length > 4) {
+    text = text.substring(0, 4);
+  }
+
+  // ✅ update controller safely
+  if (otpController.text != text) {
+    otpController.text = text;
+    otpController.selection =
+        TextSelection.collapsed(offset: text.length);
+  }
+
+  _otp.value = text;
+  _isButtonEnabled.value = text.length == 4;
+});
 
     // Start resend timer
     _startResendTimer();
@@ -75,107 +103,180 @@ _isExistingUser.value = args['isExistingUser'] ?? false;    }
     for (var focusNode in focusNodes) {
       focusNode.dispose();
     }
+    for (var focusNode in keyboardFocusNodes) {
+    focusNode.dispose();
+  }
+  otpController.dispose();
+otpFocusNode.dispose();
 
     super.onClose();
   }
 
-  // --- NEW HELPER METHOD FOR SNACKBAR ---
-  void _showErrorSnackbar(String message) {
-    if (Get.isSnackbarOpen) return; // Prevent stacking
-    Get.snackbar(
-      "Error",
-      message,
-      snackPosition: SnackPosition.TOP,
-      backgroundColor: Colors.red,
-      colorText: Colors.white,
-      margin: const EdgeInsets.all(10),
-      borderRadius: 10,
-      icon: const Icon(Icons.error_outline, color: Colors.white),
-      duration: const Duration(seconds: 3),
-    );
+void _showErrorSnackbar(String message) {
+  final overlay = Navigator.of(Get.key.currentContext!, rootNavigator: true).overlay;
+
+  if (overlay == null) {
+    print("❌ Overlay still null");
+    return;
   }
 
+  OverlayEntry? entry;
+
+  entry = OverlayEntry(
+    builder: (context) => Positioned(
+      top: MediaQuery.of(context).padding.top + 10,
+      left: 10,
+      right: 10,
+      child: Material(
+        color: Colors.transparent,
+        child: TweenAnimationBuilder(
+          duration: const Duration(milliseconds: 300),
+          tween: Tween(begin: -100.0, end: 0.0),
+          builder: (context, value, child) {
+            return Transform.translate(
+              offset: Offset(0, value),
+              child: child,
+            );
+          },
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            decoration: BoxDecoration(
+              color: Colors.red,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: const [
+                BoxShadow(color: Colors.black26, blurRadius: 8),
+              ],
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.error_outline, color: Colors.white),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    message,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+
+  overlay.insert(entry);
+
+  Future.delayed(const Duration(seconds: 3), () {
+    entry?.remove();
+  });
+}
+void _showSuccessSnackbar(String message) {
+  final overlay = Navigator.of(Get.key.currentContext!, rootNavigator: true).overlay;
+
+  if (overlay == null) {
+    print("❌ Overlay still null");
+    return;
+  }
+
+  OverlayEntry? entry;
+
+  entry = OverlayEntry(
+    builder: (context) => Positioned(
+      top: MediaQuery.of(context).padding.top + 10,
+      left: 10,
+      right: 10,
+      child: Material(
+        color: Colors.transparent,
+        child: TweenAnimationBuilder(
+          duration: const Duration(milliseconds: 300),
+          tween: Tween(begin: -100.0, end: 0.0),
+          builder: (context, value, child) {
+            return Transform.translate(
+              offset: Offset(0, value),
+              child: child,
+            );
+          },
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            decoration: BoxDecoration(
+              color: Colors.green, // ✅ SUCCESS COLOR
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: const [
+                BoxShadow(color: Colors.black26, blurRadius: 8),
+              ],
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.check_circle, color: Colors.white), // ✅ SUCCESS ICON
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    message,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+
+  overlay.insert(entry);
+
+  Future.delayed(const Duration(seconds: 3), () {
+    entry?.remove();
+  });
+}
 void onOtpChanged(String value, int index) {
-    // --- 1. 🧹 SMART PASTE HANDLING (THE FIX) ---
-    // Regex: Finds the first sequence of exactly 4 digits in the pasted text
-    // Example: Pasting "Your OTP is 1234" will extract "1234"
-    final codeMatch = RegExp(r'\d{4}').firstMatch(value);
+  // ✅ SMART PASTE SUPPORT
+  final codeMatch = RegExp(r'\d{4}').firstMatch(value);
 
-    if (codeMatch != null) {
-      final String cleanCode = codeMatch.group(0)!;
-      
-      // Auto-fill all 4 fields
-      for (int i = 0; i < 4; i++) {
-        if (i < otpControllers.length) {
-          otpControllers[i].text = cleanCode[i];
-        }
-      }
-      _updateOtpValue();
-      Get.focusScope?.unfocus(); // Close keyboard immediately
-      // Optional: verifyOTP(); // Uncomment if you want auto-submit
-      return;
-    }
-    // --------------------------------------------
+  if (codeMatch != null) {
+    final cleanCode = codeMatch.group(0)!;
 
-    // 2. 🚫 VALIDATION (Single Digit Enforcement)
-    // If the input is just one character, ensure it's a number
-    if (value.length == 1) {
-      if (!RegExp(r'^[0-9]$').hasMatch(value)) {
-        otpControllers[index].text = ''; // Reject non-numbers
-        return;
-      }
-    } 
-    // If input is long but NOT a valid OTP (e.g., just text "Your OTP"), clear it
-    else if (value.length > 1) {
-       otpControllers[index].text = ''; 
-       return;
+    for (int i = 0; i < 4; i++) {
+      otpControllers[i].text = cleanCode[i];
     }
 
-    // Clear error if user starts typing again
-    if (_errorMessage.value.isNotEmpty) {
-      _errorMessage.value = '';
-    }
-
-    // 3. ⏩ SMOOTH AUTO FORWARD
-    if (value.length == 1 && index < 3) {
-      Future.microtask(() {
-        focusNodes[index].unfocus();
-        focusNodes[index + 1].requestFocus();
-      });
-    }
-
-   /* // 4. ⏪ SMOOTH AUTO BACKSPACE
-    else if (value.isEmpty && index > 0) {
-      Future.microtask(() {
-        focusNodes[index].unfocus();
-        focusNodes[index - 1].requestFocus();
-        
-        // Ensure cursor is at the end to prevent weird selection issues
-        if (otpControllers[index - 1].text.isNotEmpty) {
-          otpControllers[index - 1].selection = TextSelection.collapsed(
-              offset: otpControllers[index - 1].text.length);
-        }
-      });
-    }  */
-
-    // Update OTP Observable
     _updateOtpValue();
+
+    // ✅ Keep keyboard open
+    focusNodes[3].requestFocus();
+    return;
   }
+
+  // ✅ Handle multiple input (paste or fast typing)
+  if (value.length > 1) {
+    otpControllers[index].text = value.characters.last;
+  }
+
+  // ✅ MOVE TO NEXT FIELD (SAFE WAY)
+  if (value.isNotEmpty && index < 3) {
+    // 🔥 CRITICAL FIX: use addPostFrameCallback instead of delay
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      focusNodes[index + 1].requestFocus();
+    });
+  }
+
+  _updateOtpValue();
+}
   // --- ADD THIS METHOD FOR BUG-014 (BACKSPACE LOGIC) ---
-  void handleBackspace(int index) {
-    // If we are not in the first box, and the current box is empty...
-    if (index > 0 && otpControllers[index].text.isEmpty) {
-      // Move focus back to the previous box
-      focusNodes[index].unfocus();
-      focusNodes[index - 1].requestFocus();
-    }
+void handleBackspace(int index) {
+  if (index > 0 && otpControllers[index].text.isEmpty) {
+    focusNodes[index - 1].requestFocus();
   }
+}
   
-  void _updateOtpValue() {
-    final otpValue = otpControllers.map((controller) => controller.text).join();
-    _otp.value = otpValue;
-    _isButtonEnabled.value = otpValue.length == 4;
-  }
+ void _updateOtpValue() {
+  final otpValue =
+      otpControllers.map((controller) => controller.text).join();
+
+  _otp.value = otpValue;
+  _isButtonEnabled.value = otpValue.length == 4;
+}
 
   Future<void> verifyOTP() async {
   if (_secondsRemaining.value <= 0) {
@@ -387,14 +488,7 @@ void onOtpChanged(String value, int index) {
           arguments: profileController.customer,
         );
 
-        Get.snackbar(
-          'Complete profile',
-          'Please complete your profile to continue',
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.green[100],
-          colorText: Colors.green[800],
-          duration: const Duration(seconds: 3),
-        );
+        _showSuccessSnackbar("Please complete your profile to continue");
         return;
       }
 
@@ -405,25 +499,11 @@ void onOtpChanged(String value, int index) {
       if (hasAnyAddress) {
         print('✅ Address found on server - navigating to home');
         Get.offAllNamed('/home');
-        Get.snackbar(
-          'Success',
-          'Login successful!',
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.green[100],
-          colorText: Colors.green[800],
-          duration: const Duration(seconds: 2),
-        );
+       _showSuccessSnackbar("Login successful!");
       } else {
         print('📍 No server address - navigating to location screen');
         Get.offAllNamed('/location_popup');
-        Get.snackbar(
-          'Success',
-          'Login successful! Please set your location',
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.green[100],
-          colorText: Colors.green[800],
-          duration: const Duration(seconds: 2),
-        );
+       _showSuccessSnackbar("Login successful! Please set your location");
       }
     } catch (e) {
       print('❌ Error in _navigateToCorrectScreen: $e');
@@ -511,18 +591,14 @@ void onOtpChanged(String value, int index) {
   }
 
   void _clearOtpFields() {
-  for (var controller in otpControllers) {
-    controller.clear();
-  }
-
+  otpController.clear();
   _otp.value = '';
   _isButtonEnabled.value = false;
 
   Future.microtask(() {
-    focusNodes[0].requestFocus();
+    otpFocusNode.requestFocus();
   });
 }
-
 
   Future<void> resendOTP() async {
     if (!_canResend.value || _phoneNumber.value.isEmpty) {
@@ -551,14 +627,7 @@ void onOtpChanged(String value, int index) {
         _startResendTimer();
 
         // Show success message
-        Get.snackbar(
-          'OTP Sent',
-          'A new OTP has been sent to +91 ${_phoneNumber.value}',
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.green[100],
-          colorText: Colors.green[800],
-          duration: const Duration(seconds: 2),
-        );
+        _showSuccessSnackbar("A new OTP has been sent");
       } else {
         _showErrorSnackbar('Failed to resend OTP. Please try again.');
         print('❌ Resend OTP failed: $message');
@@ -575,7 +644,7 @@ void onOtpChanged(String value, int index) {
 
   void _startResendTimer() {
     _canResend.value = false;
-    _secondsRemaining.value = 60;
+    _secondsRemaining.value = 30;
 
     _resendTimer?.cancel();
     _resendTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -608,7 +677,7 @@ void onOtpChanged(String value, int index) {
         final statusCode = error.response?.statusCode;
         
         // --- CUSTOM HANDLER FOR WRONG OTP ---
-        if (statusCode == 403 || statusCode == 401 || statusCode == 400) {
+        if (statusCode == 403 || statusCode == 401 || statusCode == 400 ||statusCode == 412) {
           // You explicitly asked for this message for wrong OTP
           _showErrorSnackbar("Wrong OTP, please write valid OTP");
         } 

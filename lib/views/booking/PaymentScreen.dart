@@ -80,11 +80,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
       final chosenPhone = [
         fromProfilePhone,
         fromArgsPhone,
-      ].firstWhere((v) => (v != null && v.toString().trim().isNotEmpty), orElse: () => '');
+      ].firstWhere((v) => (v.toString().trim().isNotEmpty), orElse: () => '');
       final chosenEmail = [
         fromProfileEmail,
         fromArgsEmail,
-      ].firstWhere((v) => (v != null && v.toString().trim().isNotEmpty), orElse: () => '');
+      ].firstWhere((v) => (v.toString().trim().isNotEmpty), orElse: () => '');
 
       final contact = _toE164(chosenPhone);
       final email = chosenEmail.trim();

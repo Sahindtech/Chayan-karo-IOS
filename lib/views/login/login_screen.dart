@@ -8,7 +8,7 @@ import 'package:flutter/gestures.dart';
 import '../../utils/test_extensions.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   void _showPrivacyPolicy() {
     Get.bottomSheet(

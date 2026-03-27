@@ -9,8 +9,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-  // Note: We don't need to show a notification here manually. 
-  // Firebase handles the background display automatically using the Manifest settings.
   print("Background message ID: ${message.messageId}");
 }
 
@@ -23,12 +21,11 @@ class NotificationService {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   final FlutterLocalNotificationsPlugin _localNotifications = FlutterLocalNotificationsPlugin();
 
-  // Defines the "High Importance" Channel for Android
   final AndroidNotificationChannel _androidChannel = const AndroidNotificationChannel(
-    'high_importance_channel_v2', // Must match the value in AndroidManifest.xml
+    'high_importance_channel_v2', 
     'High Importance Notifications', 
     description: 'This channel is used for important notifications.',
-    importance: Importance.max, // <--- MAKES IT POP UP (Heads-up)
+    importance: Importance.max, 
     playSound: true,
   );
 
@@ -37,59 +34,78 @@ class NotificationService {
   Future<void> init() async {
     if (_isInitialized) return;
 
-    // 1. Request Permissions
-    NotificationSettings settings = await _firebaseMessaging.requestPermission(
-      alert: true,
-      badge: true,
-      sound: true,
-      provisional: false,
-    );
+    try {
+      // 1. Request Permissions (This triggers the Apple Pop-up!)
+      NotificationSettings settings = await _firebaseMessaging.requestPermission(
+        alert: true,
+        badge: true,
+        sound: true,
+        provisional: false,
+      );
 
-    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      print('User granted permission');
-      // ✅ ADD THIS BLOCK TO PRINT THE TOKEN
-      String? token = await _firebaseMessaging.getToken();
-      print("========================================");
-      print("FCM TOKEN: $token");
-      print("========================================");
-      
-      // 2. Setup Local Notifications (Creates the channel on the phone)
-      await _setupLocalNotifications();
+      if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+        print('User granted permission');
 
-      // 3. Register Background Handler
-      FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+        // 🔥 FIX: Removed the "Free Account Escape Hatch" here.
+        // We let Firebase handle the APNs token automatically in the background.
+        print("APNS TOKEN: ${await _firebaseMessaging.getAPNSToken()}");
 
-      // 4. Handle Foreground Messages (The "Pop-up" when app is open)
-      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-        _showForegroundNotification(message);
-      });
+        // 2. Get the FCM Token
+        String? token = await _firebaseMessaging.getToken();
+        print("========================================");
+        print("FCM TOKEN: $token");
+        print("========================================");
+        
+        // 3. Setup Local Notifications (For foreground pop-ups)
+        await _setupLocalNotifications();
 
-      // 5. Handle Taps
-      FirebaseMessaging.onMessageOpenedApp.listen(_handleNotificationTap);
-      
-      // 6. Check if app was opened from terminated state
-      final initialMessage = await _firebaseMessaging.getInitialMessage();
-      if (initialMessage != null) {
-        _handleNotificationTap(initialMessage);
+        // 4. Register Background Handler
+        FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+        // 5. Handle Foreground Messages (When app is open)
+        FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+          // iOS 10+ handles foreground presentation automatically if configured properly,
+          // but flutter_local_notifications ensures it shows up customized.
+          _showForegroundNotification(message);
+        });
+
+        // 6. Handle Taps
+        FirebaseMessaging.onMessageOpenedApp.listen(_handleNotificationTap);
+        
+        // 7. Check if app was opened from terminated state
+        final initialMessage = await _firebaseMessaging.getInitialMessage();
+        if (initialMessage != null) {
+          _handleNotificationTap(initialMessage);
+        }
+
+      } else {
+        print("User declined notification permissions.");
       }
-
+      
       _isInitialized = true;
+      
+    } catch (e) {
+      print("🚨 CRITICAL ERROR in NotificationService init: $e");
+      _isInitialized = true; 
     }
   }
 
   Future<void> _setupLocalNotifications() async {
-    // Create the high importance channel on Android
     if (Platform.isAndroid) {
       await _localNotifications
           .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
           ?.createNotificationChannel(_androidChannel);
     }
 
-    // Initialization Settings
     const AndroidInitializationSettings androidSettings =
         AndroidInitializationSettings('@mipmap/ic_launcher');
     
-    const DarwinInitializationSettings iosSettings = DarwinInitializationSettings();
+    // IMPORTANT: Request permissions for local notifications on iOS
+    const DarwinInitializationSettings iosSettings = DarwinInitializationSettings(
+        requestAlertPermission: true,
+        requestBadgePermission: true,
+        requestSoundPermission: true,
+    );
 
     const InitializationSettings initSettings =
         InitializationSettings(android: androidSettings, iOS: iosSettings);
@@ -97,18 +113,22 @@ class NotificationService {
     await _localNotifications.initialize(
       initSettings,
       onDidReceiveNotificationResponse: (NotificationResponse response) {
-        // Handle tap on the local foreground notification
         print("Foreground Local Notification Tapped: ${response.payload}");
       },
+    );
+    
+    // 🔥 NEW FIX: Force iOS to show foreground notifications natively
+    await _firebaseMessaging.setForegroundNotificationPresentationOptions(
+      alert: true, 
+      badge: true, 
+      sound: true,
     );
   }
 
   void _showForegroundNotification(RemoteMessage message) {
     RemoteNotification? notification = message.notification;
-    AndroidNotification? android = message.notification?.android;
 
-    // If notification data is present, show a local notification
-    if (notification != null && android != null) {
+    if (notification != null) {
       _localNotifications.show(
         notification.hashCode,
         notification.title,
@@ -119,11 +139,16 @@ class NotificationService {
             _androidChannel.name,
             channelDescription: _androidChannel.description,
             icon: '@mipmap/ic_launcher',
-            importance: Importance.max, // Priority High
-            priority: Priority.high,    // Priority High
+            importance: Importance.max, 
+            priority: Priority.high,    
             playSound: true,
           ),
-          iOS: const DarwinNotificationDetails(),
+          // iOS settings for the local notification package
+          iOS: const DarwinNotificationDetails(
+             presentAlert: true,
+             presentBadge: true,
+             presentSound: true,
+          ),
         ),
         payload: message.data.toString(),
       );
@@ -132,7 +157,6 @@ class NotificationService {
 
   void _handleNotificationTap(RemoteMessage message) {
     print("Notification Tapped. Payload: ${message.data}");
-    // Add your navigation logic here
   }
 
   Future<String?> getToken() async {

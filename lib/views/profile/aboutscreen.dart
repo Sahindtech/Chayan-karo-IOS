@@ -6,7 +6,7 @@ import '../../widgets/chayan_header.dart';
 import '../home/home_screen.dart';
 
 class AboutChaynkaroServicesScreen extends StatelessWidget {
-  const AboutChaynkaroServicesScreen({Key? key}) : super(key: key);
+  const AboutChaynkaroServicesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -257,7 +257,7 @@ class AboutChaynkaroServicesScreen extends StatelessWidget {
           ),
         ),
         SizedBox(height: 24.h * scaleFactor),
-        Container(
+        SizedBox(
           width: double.infinity,
           height: 47.h * scaleFactor,
           child: ElevatedButton(

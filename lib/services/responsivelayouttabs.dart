@@ -9,11 +9,11 @@ class ResponsiveLayout extends StatelessWidget {
   final Size designSize;
 
   const ResponsiveLayout({
-    Key? key,
+    super.key,
     required this.child,
     this.maxWidth = 420,
     this.designSize = const Size(360, 800),
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
